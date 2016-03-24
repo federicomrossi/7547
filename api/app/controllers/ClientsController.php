@@ -1,5 +1,5 @@
 <?php
-
+use Faker\Factory as Faker;
 class ClientController extends \BaseController {
 
 	/**
@@ -82,5 +82,16 @@ class ClientController extends \BaseController {
 		//
 	}
 
+
+	// Especials functions //
+
+	public function getFromToday($sellerId)
+	{
+		$today = date('Y-m-d');
+		$clients = Client::where('id_vendedor',$sellerId)
+				->where('fecha_visita', $today)
+				->get();
+		return $clients->toJson();
+	}
 
 }
