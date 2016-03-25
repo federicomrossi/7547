@@ -2,7 +2,6 @@ package com.example.scampa.starbuzzapp;
 
 import android.app.ListActivity;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -15,17 +14,14 @@ import java.util.List;
 
 import retrofit2.Call;
 
-public class LimpiezaActivity extends ListActivity {
-
+/**
+ * Created by scampa on 24/3/2016.
+ */
+public class Cliente2Activity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ListView listClientesView = getListView();
-
-        if (android.os.Build.VERSION.SDK_INT > 9) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
 
         ClienteService cs = new ClienteService();
 
