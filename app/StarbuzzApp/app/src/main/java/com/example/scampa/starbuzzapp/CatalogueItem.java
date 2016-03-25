@@ -10,6 +10,7 @@ public class CatalogueItem {
     private int imageResourceId;
     private String stock;
 
+    // TODO traer de la base!!
     // catalogueItems es un array de items/productos del catálogo
     public static final CatalogueItem[] catalogueItems = {
             new CatalogueItem("Latte", "Bebida preparada con una mitad de café y otra de leche caliente",
@@ -46,7 +47,7 @@ public class CatalogueItem {
     }
 
     public String getStock() {
-        return stock;
+        return "Stock: " + stock;
     }
 
     public String toString() {

@@ -25,10 +25,10 @@ public class MainActivity extends Activity {
                             Intent intent = new Intent(MainActivity.this, CatalogueActivity.class);
                             startActivity(intent);
                         }
-                        /*if (position == 1) {
-                            Intent intent = new Intent(MainActivity.this, FoodCategoryActivity.class);
+                        if (position == 1) {
+                            Intent intent = new Intent(MainActivity.this, ClientsPortfolioActivity.class);
                             startActivity(intent);
-                        }*/
+                        }
                     }
                 };
 

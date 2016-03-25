@@ -8,5 +8,6 @@
     </string-array>
     <string name="title_activity_catalogue">CatalogueActivity</string>
     <string name="title_activity_catalogue_item">CatalogueItemActivity</string>
-
+    <string name="title_activity_clients_portfolio">ClientsPortfolioActivity</string>
+    <string name="title_activity_clients">ClientsActivity</string>
 </resources>

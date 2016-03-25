@@ -9,29 +9,28 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 /**
- * Created by scampa on 24/3/2016.
- * Representa la Activity del catálogo de productos
+ * Created by scampa on 25/3/2016.
  */
-public class CatalogueActivity extends ListActivity {
+public class ClientsPortfolioActivity extends ListActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ListView listCatalogueItems = getListView();
-        listCatalogueItems.setBackgroundColor(Color.rgb(172,225,175)); // @color/mainListOptions
-        ArrayAdapter<CatalogueItem> listAdapter = new ArrayAdapter<CatalogueItem>(this, android.R.layout.simple_list_item_1,
-                CatalogueItem.catalogueItems);
+        listCatalogueItems.setBackgroundColor(Color.rgb(172, 225, 175)); // @color/mainListOptions
+        ArrayAdapter<Client> listAdapter = new ArrayAdapter<Client>(this, android.R.layout.simple_list_item_1,
+                Client.clients);
         listCatalogueItems.setAdapter(listAdapter);
     }
 
     /**
-     * Metodo que se dispara al hacer click sobre un elemento del catálogo
+     * Metodo que se dispara al hacer click sobre un cliente
      */
     @Override
     public void onListItemClick(ListView listView, View itemView, int position,long id) {
         itemView.setBackgroundColor(Color.rgb(222, 225, 172)); //@color/selectedOptionList
-        Intent intent = new Intent(CatalogueActivity.this, CatalogueItemActivity.class);
-        intent.putExtra(CatalogueItemActivity.ITEM_ID, (int) id);
+        Intent intent = new Intent(ClientsPortfolioActivity.this, ClientsActivity.class);
+        intent.putExtra(ClientsActivity.CLIENT_ID, (int) id);
         startActivity(intent);
     }
 
