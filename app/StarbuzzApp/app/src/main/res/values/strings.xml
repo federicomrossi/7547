@@ -10,4 +10,5 @@
     <string name="title_activity_drink">DrinkActivity</string>
     <string name="title_activity_food_category">FoodCategoryActivity</string>
     <string name="title_activity_food">FoodActivity</string>
+    <string name="title_activity_limpieza">LimpiezaActivity</string>
 </resources>

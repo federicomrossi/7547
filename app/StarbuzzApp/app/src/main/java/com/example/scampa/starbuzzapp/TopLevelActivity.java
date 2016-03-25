@@ -26,6 +26,10 @@ public class TopLevelActivity extends Activity {
                             Intent intent = new Intent(TopLevelActivity.this, FoodCategoryActivity.class);
                             startActivity(intent);
                         }
+                        if (position == 2) {
+                            Intent intent = new Intent(TopLevelActivity.this, LimpiezaActivity.class);
+                            startActivity(intent);
+                        }
                     }
                 };
 
