@@ -91,7 +91,7 @@ class ClientController extends \BaseController {
 		$clients = Client::where('id_vendedor',$sellerId)
 				->where('fecha_visita', $today)
 				->get();
-		return json_encode(array('cl' => $clients));
+		return $clients->toJson();
 	}
 
 }
