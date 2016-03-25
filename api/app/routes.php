@@ -16,6 +16,7 @@ Route::post('/login', 'AuthController@login');
 Route::get('/login', 'AuthController@login');
 Route::resource('client', 'ClientController');
 Route::get('/client/getFromToday/{sellerId}', 'ClientController@getFromToday');
+Route::resource('products', 'ProductsController');
 Route::group(array('before' => 'tokenauth'), function()
 {
     Route::get('/', 'HomeController@showHome');
