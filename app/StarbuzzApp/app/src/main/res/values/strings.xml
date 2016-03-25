@@ -1,13 +1,12 @@
 <resources>
     <string name="app_name">Starbuzz App</string>
-    <string name="starbuzz_logo">Starbuzz logo</string>
-    <string-array name="productos">
-        <item>Bebida</item>
-        <item>Comida</item>
-        <item>Limpieza</item>
+    <string name="ordertracker_logo">Ordertracker logo</string>
+
+    <string-array name="menu_principal">
+        <item>Catálogo</item>
+        <item>Clientes</item>
     </string-array>
-    <string name="title_activity_drink_category">DrinkCategoryActivity</string>
-    <string name="title_activity_drink">DrinkActivity</string>
-    <string name="title_activity_food_category">FoodCategoryActivity</string>
-    <string name="title_activity_food">FoodActivity</string>
+    <string name="title_activity_catalogue">CatalogueActivity</string>
+    <string name="title_activity_catalogue_item">CatalogueItemActivity</string>
+
 </resources>
