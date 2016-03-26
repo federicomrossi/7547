@@ -9,7 +9,7 @@ class ClientController extends \BaseController {
 	 */
 	public function index()
 	{
-		$clients = Client::getSellerClient();
+		$clients = Client::getList(Input::all());
 		return $clients->toJson();
 	}
 
