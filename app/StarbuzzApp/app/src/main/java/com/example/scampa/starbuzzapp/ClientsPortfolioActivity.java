@@ -16,6 +16,7 @@ public class ClientsPortfolioActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_clients_list);
         ListView listCatalogueItems = getListView();
         listCatalogueItems.setBackgroundColor(Color.rgb(172, 225, 175)); // @color/mainListOptions
         ArrayAdapter<Client> listAdapter = new ArrayAdapter<Client>(this, android.R.layout.simple_list_item_1,
@@ -28,7 +29,6 @@ public class ClientsPortfolioActivity extends ListActivity {
      */
     @Override
     public void onListItemClick(ListView listView, View itemView, int position,long id) {
-        itemView.setBackgroundColor(Color.rgb(222, 225, 172)); //@color/selectedOptionList
         Intent intent = new Intent(ClientsPortfolioActivity.this, ClientsActivity.class);
         intent.putExtra(ClientsActivity.CLIENT_ID, (int) id);
         startActivity(intent);

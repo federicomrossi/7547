@@ -17,6 +17,7 @@ public class CatalogueActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_catalogue_items_list);
         ListView listCatalogueItems = getListView();
         listCatalogueItems.setBackgroundColor(Color.rgb(172,225,175)); // @color/mainListOptions
         ArrayAdapter<CatalogueItem> listAdapter = new ArrayAdapter<CatalogueItem>(this, android.R.layout.simple_list_item_1,
@@ -29,7 +30,6 @@ public class CatalogueActivity extends ListActivity {
      */
     @Override
     public void onListItemClick(ListView listView, View itemView, int position,long id) {
-        itemView.setBackgroundColor(Color.rgb(222, 225, 172)); //@color/selectedOptionList
         Intent intent = new Intent(CatalogueActivity.this, CatalogueItemActivity.class);
         intent.putExtra(CatalogueItemActivity.ITEM_ID, (int) id);
         startActivity(intent);
