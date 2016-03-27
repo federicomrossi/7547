@@ -6,10 +6,12 @@
         <item>Catálogo</item>
         <item>Clientes</item>
         <item>Mapa</item>
+        <item>QRScan</item>
     </string-array>
     <string name="title_activity_catalogue">CatalogueActivity</string>
     <string name="title_activity_catalogue_item">CatalogueItemActivity</string>
     <string name="title_activity_clients_portfolio">ClientsPortfolioActivity</string>
     <string name="title_activity_clients">ClientsActivity</string>
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_qrscan">QRScan</string>
 </resources>

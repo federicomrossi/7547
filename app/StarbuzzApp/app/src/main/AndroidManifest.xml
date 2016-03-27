@@ -24,16 +24,16 @@
         </activity>
         <activity
             android:name=".CatalogueActivity"
-            android:label="@string/title_activity_catalogue"></activity>
+            android:label="@string/title_activity_catalogue" />
         <activity
             android:name=".CatalogueItemActivity"
-            android:label="@string/title_activity_catalogue_item"></activity>
+            android:label="@string/title_activity_catalogue_item" />
         <activity
             android:name=".ClientsPortfolioActivity"
-            android:label="@string/title_activity_clients_portfolio"></activity>
+            android:label="@string/title_activity_clients_portfolio" />
         <activity
             android:name=".ClientsActivity"
-            android:label="@string/title_activity_clients"></activity>
+            android:label="@string/title_activity_clients" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -48,7 +48,11 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps" />
+        <activity
+            android:name=".QRScan"
+            android:label="@string/title_activity_qrscan"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

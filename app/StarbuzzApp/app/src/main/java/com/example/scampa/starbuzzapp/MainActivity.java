@@ -17,6 +17,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        MainActivity self_ = this;
         // Crea un OnItemClickListener
         AdapterView.OnItemClickListener itemClickListener =
                 new AdapterView.OnItemClickListener() {
@@ -31,6 +33,10 @@ public class MainActivity extends Activity {
                         }
                         if (position == 2) {
                             Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                            startActivity(intent);
+                        }
+                        if (position == 3) {
+                            Intent intent = new Intent(MainActivity.this, QRScan.class);
                             startActivity(intent);
                         }
                     }
