@@ -78,7 +78,7 @@ return array(
 	|
 	*/
 
-	'key' => 'i4bSnLHvNYFGdaUc4YeTiLpr1LXawdS6',
+	'key' => 'doI6ok6S5fCD9AA3YXaluRjtOToyWzl2',
 
 	'cipher' => MCRYPT_RIJNDAEL_128,
 
@@ -94,7 +94,7 @@ return array(
 	*/
 
 	'providers' => array(
-
+		'Way\Generators\GeneratorsServiceProvider',
 		'Illuminate\Foundation\Providers\ArtisanServiceProvider',
 		'Illuminate\Auth\AuthServiceProvider',
 		'Illuminate\Cache\CacheServiceProvider',
