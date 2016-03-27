@@ -37,7 +37,7 @@ public final class CategorieService {
         return instance;
     }
 
-    //productos
+    //categorias
     public interface Categories {
         @GET("categories")
         Call<List<Categorie>> Categories();
