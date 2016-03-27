@@ -10,11 +10,8 @@ class ProductsController extends \BaseController {
 	 */
 	public function index()
 	{
-		if (!$category = Input::get('c')){
-			$products = Product::all();
-		} else {
-			$products = Product::getCollectionBy('categoria', $category);
-		}
+		$data = Input::all();
+		$products = Product::getList($data);
 		return $products->toJson();
 	}
 

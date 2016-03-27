@@ -1,13 +1,15 @@
 <?php
 
-class Product extends \Eloquent {
+class Product extends Model {
 	protected $fillable = ['nombre','descripcion', 'marca', 'categoria', 'stock', 'precio'];
 
 	protected $table = 'productos';
 
-	public static function getCollectionBy($filter,$value)
+	protected $allowedFilters = array('categoria', 'descripcion', 'marca', 'stock', 'precio','nombre');
+
+	public static function getList($filters)
 	{
-		return self::where($filter, $value)
-				->get();
+		$model = new self;
+		return $model->_getList($filters);
 	}
 }

@@ -12,7 +12,7 @@ abstract class Model extends \Eloquent
 		$model = $this;
 		$filtersToCompare =  self::getFilters($filters);
 		foreach ($filtersToCompare as $filter){
-			if (in_array($filter['name'],$model->allowedFilters)){
+			if (in_array($filter['name'],$this->allowedFilters)){
 				$model = $model->where($filter['name'],$filter['compare'], $filter['value']);
 			}
 		}
@@ -23,20 +23,20 @@ abstract class Model extends \Eloquent
 	protected static function getFilters($data)
 	{
 		$filters = array();
-		foreach ($data as $name => $value){
-			if (strpos($name,'>') == false && strpos($name,'<') == false && strpos($name,'%') == false){
-				$filters[] = array('name' => $name, 'compare' => "=", 'value' => $value);
+		foreach ($data as $filterName => $value){
+			if (strpos($filterName,'>') == false && strpos($filterName,'<') == false && strpos($filterName,'%') == false){
+				$filters[] = array('name' => $filterName, 'compare' => "=", 'value' => $value);
 				continue;
 			}
-			if ($name = self::explodeFilter($name, ">")){
+			if ($name = self::explodeFilter($filterName, ">")){
 				$filters[] = array('name' => $name, 'compare' => ">", 'value' => $value);
 				continue;
 			}
-			if ($name = self::explodeFilter($name, "<")){
+			if ($name = self::explodeFilter($filterName, "<")){
 				$filters[] = array('name' => $name, 'compare' => "<=", 'value' => $value);
 				continue;
 			}
-			if ($name = self::explodeFilter($name, "%")){
+			if ($name = self::explodeFilter($filterName, "%")){
 				$filters[] = array('name' => $name, 'compare' => 'like', 'value' => "%" . $value ."%");
 				continue;
 			}
