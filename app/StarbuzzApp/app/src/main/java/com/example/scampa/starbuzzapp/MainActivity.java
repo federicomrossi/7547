@@ -29,6 +29,10 @@ public class MainActivity extends Activity {
                             Intent intent = new Intent(MainActivity.this, ClientsPortfolioActivity.class);
                             startActivity(intent);
                         }
+                        if (position == 2) {
+                            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                            startActivity(intent);
+                        }
                     }
                 };
 
