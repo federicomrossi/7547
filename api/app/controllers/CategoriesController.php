@@ -10,7 +10,9 @@ class CategoriesController extends \BaseController {
 	 */
 	public function index()
 	{
-		//
+		$data = Input::all();
+		$categories = Category::getList($data);
+		return $categories->toJson();
 	}
 
 	/**
