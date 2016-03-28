@@ -44,7 +44,7 @@ class ClientController extends \BaseController {
 	 */
 	public function show($id)
 	{
-		//
+		return Client::findOrFail($id)->toJson();
 	}
 
 
