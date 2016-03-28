@@ -24,7 +24,8 @@
         </activity>
         <activity
             android:name=".CatalogueActivity"
-            android:label="@string/title_activity_catalogue" />
+            android:label="@string/title_activity_catalogue"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".CatalogueItemActivity"
             android:label="@string/title_activity_catalogue_item" />
@@ -51,8 +52,8 @@
             android:label="@string/title_activity_maps" />
         <activity
             android:name=".QRScan"
-            android:label="@string/title_activity_qrscan"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:label="@string/title_activity_qrscan"></activity>
+            <!-- android:theme="@style/AppTheme.NoActionBar"></activity> -->
     </application>
 
 </manifest>

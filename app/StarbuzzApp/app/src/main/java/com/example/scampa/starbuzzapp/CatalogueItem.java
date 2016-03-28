@@ -54,4 +54,11 @@ public class CatalogueItem {
         return this.name;
     }
 
+    public static int itemPosition(CatalogueItem item){
+        for (int i = 0; i < catalogueItems.length; i++){
+            if (catalogueItems[i].name.equals(item.name))
+                return i;
+        }
+        return -1;
+    }
 }
