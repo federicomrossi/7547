@@ -46,7 +46,7 @@ class ProductsController extends \BaseController {
 	 */
 	public function show($id)
 	{
-		//
+		return Product::findOrFail($id)->toJson();
 	}
 
 	/**
