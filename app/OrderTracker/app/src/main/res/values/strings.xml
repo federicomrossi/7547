@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Order Tracker</string>
+    <string name="activity_client_list">Clientes</string>
+    <string name="search_client">Buscar cliente</string>
+</resources>
