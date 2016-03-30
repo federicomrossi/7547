@@ -27,7 +27,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/progressBar"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:background="#851010" />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

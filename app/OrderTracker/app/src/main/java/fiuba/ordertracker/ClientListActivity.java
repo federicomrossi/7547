@@ -62,7 +62,7 @@ public class ClientListActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Client>> call, Throwable t) {
-                //Aca tenemos que agregar el msj de error a mostrar... todos putos
+                //Aca tenemos que agregar el msj de error a mostrar... puto el que lee
             }
         });
     }
