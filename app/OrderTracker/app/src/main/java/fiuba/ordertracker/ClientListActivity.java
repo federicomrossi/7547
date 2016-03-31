@@ -1,9 +1,12 @@
 package fiuba.ordertracker;
 
+import android.app.SearchManager;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -71,6 +74,11 @@ public class ClientListActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_menu, menu);
+
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
         return true;
     }
 
@@ -79,30 +87,5 @@ public class ClientListActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         return super.onOptionsItemSelected(item);
-    }
-
-
-    /**
-     * TEMP!!!
-     */
-
-    private List<Client> getData() {
-        /*List<ClientModel> data = new ArrayList<>();
-
-        String[] names = {"Sabrina Campa", "Pablo Ascarza", "Ezequier Reyes", "Federico Rossi"};
-        String[] addresses = {"Av. Mitre 123, Bs. As.", "Av. Mitre 123, Bs. As.", "Av. Mitre 123, Bs. As.", "Av. Mitre 123, Bs. As."};
-        String[] distances = {"1 km", "2 km", "3 km", "4 km"};
-
-        for(int i = 0; i < names.length; i++) {
-            ClientModel c = new ClientModel();
-            c.name = names[i];
-            c.address = addresses[i];
-            c.distance = distances[i];
-            data.add(c);
-        }
-
-        return data;
-        */
-        return null;
     }
 }
