@@ -11,6 +11,10 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorPrimary">@android:color/primary_text_dark</item>
+
+        <item name="textAppearanceLargePopupMenu">@style/TextAppearance.AppCompat.Widget.PopupMenu.Large</item>
+        <item name="textAppearanceSmallPopupMenu">@style/TextAppearance.AppCompat.Widget.PopupMenu.Small</item>
+
     </style>
 
     <!-- Toolbar style -->
@@ -22,6 +26,17 @@
     <!-- Launcher -->
     <style name="LauncherTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/launcher</item>
+    </style>
+
+    <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <!-- Gets rid of the search icon -->
+        <item name="searchIcon">@drawable/ic_search_24dp</item>
+        <!-- Gets rid of the "underline" in the text -->
+        <item name="queryBackground">@android:color/white</item>
+        <!-- Gets rid of the search icon when the SearchView is expanded -->
+        <item name="searchHintIcon">@null</item>
+        <!-- The hint text that appears when the user has not typed anything -->
+        <!--<item name="queryHint">@nullt</item>-->
     </style>
 
 </resources>
