@@ -6,7 +6,8 @@ class Client extends Model {
 
 	protected $table = "clientes";
 
-	protected $allowedFilters = array('id_vendedor');
+	protected $allowedFilters = array('apenom', 'direccion','telefono', 'observaciones','id_vendedor','fecha_visita',
+		'razon_social', 'cod_cliente');
 
 	public $timestamps = false;
 
