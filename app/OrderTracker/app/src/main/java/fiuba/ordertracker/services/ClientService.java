@@ -9,6 +9,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by pablo on 26/3/2016.
@@ -49,7 +50,9 @@ public final class ClientService {
     //clientes
     public interface Clients {
         @GET("client")
-        Call<List<Client>> Clients();
+        //id_vendedor
+        Call<List<Client>> Clients(@Query("id_vendedor") String id_vendedor, @Query("razon_social") String razon_social, @Query("orderby") String orderby,
+                                   @Query("orientation") String orientation );
     }
 
 
@@ -68,7 +71,7 @@ public final class ClientService {
 
         System.out.println("||||||||||||||||||||||||||||||||||||||||");
 
-        call = cs.clients.Clients();
+        call = cs.clients.Clients(null,null,null,null);
 
         clientList = call.execute().body();
         for (Client client : clientList) {

@@ -41,7 +41,10 @@ public final class ProductService {
     //productos
     public interface Products {
         @GET("products")
-        Call<List<Product>> Products(@Query("categoria") String categoria);
+        //Integer: categoria, stock, precio. String: nombre, descripcion, marca
+        Call<List<Product>> Products(@Query("categoria") String categoria, @Query("stock") String stock, @Query("precio") String precio,
+                                     @Query("nombre%") String nombre, @Query("descripcion%") String descripcion, @Query("marca%") String marca,
+                                     @Query("orderby") String orderby, @Query("orientation") String orientation);
     }
 
 
@@ -50,7 +53,7 @@ public final class ProductService {
         ProductService prods = ProductService.getInstance();
 
         // Create a call instance for looking up Retrofit contributors.
-        Call<List<Product>> call = prods.products.Products(null);
+        Call<List<Product>> call = prods.products.Products("1", null, null, "Televisor",null,null,null,null);
 
         // Fetch and print a list of the contributors to the library.
         List<Product> clientList = call.execute().body();

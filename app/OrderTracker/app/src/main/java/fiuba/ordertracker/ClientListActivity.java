@@ -50,7 +50,7 @@ public class ClientListActivity extends AppCompatActivity {
         ClientService cs = ClientService.getInstance();
 
         // Create a call instance for looking up Retrofit contributors.
-        Call<List<Client>> call = cs.clients.Clients();
+        Call<List<Client>> call = cs.clients.Clients(null,null,null,null);
 
         final ClientListActivity self_ = this;
         call.enqueue(new Callback<List<Client>>() {
