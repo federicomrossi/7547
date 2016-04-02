@@ -44,7 +44,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         Client current = this.data.get(position);
-        holder.name.setText(current.getApenom());
+        holder.name.setText(current.getSocialReason());
         holder.address.setText(current.getDireccion());
         holder.clientNumber.setText(current.getCode());
         holder.distance.setText(String.valueOf(current.getDistance())+ Constants.COMPLETE_UNIT);

@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.content.Intent;
 
 import java.util.List;
 
@@ -47,8 +48,11 @@ public class ClientListActivity extends AppCompatActivity {
 
         ClientService cs = ClientService.getInstance();
 
+        Intent intent = getIntent();
+
         // Create a call instance for looking up Retrofit contributors.
-        Call<List<Client>> call = cs.clients.Clients(null,null,null,null);
+        String orderBy = intent.getStringExtra("orderBy") != null ? intent.getStringExtra("orderBy") : "razon_social";
+        Call<List<Client>> call = cs.clients.Clients(null,null,orderBy,null);
 
         final ClientListActivity self_ = this;
         call.enqueue(new Callback<List<Client>>() {

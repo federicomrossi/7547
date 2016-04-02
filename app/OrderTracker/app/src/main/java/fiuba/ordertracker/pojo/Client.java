@@ -43,7 +43,9 @@ public class Client {
     @SerializedName("cod_cliente")
     @Expose
     private String code;
-
+    @SerializedName("razon_social")
+    @Expose
+    private String socialReason;
 
     /**
      * 
@@ -206,5 +208,13 @@ public class Client {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getSocialReason() {
+        return socialReason;
+    }
+
+    public void setSocialReason(String socialReason) {
+        this.socialReason = socialReason;
     }
 }
