@@ -46,6 +46,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         Client current = this.data.get(position);
         holder.name.setText(current.getApenom());
         holder.address.setText(current.getDireccion());
+        holder.clientNumber.setText(current.getCode());
         holder.distance.setText(String.valueOf(current.getDistance())+ Constants.COMPLETE_UNIT);
 
         // Set listener to manage clicks on items from the RecyclerView
@@ -58,6 +59,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
                 intent.putExtra("name", selectedClient.getApenom());
                 intent.putExtra("address", selectedClient.getDireccion());
                 intent.putExtra("distance", String.valueOf(selectedClient.getDistance()));
+                intent.putExtra("clientNumber", selectedClient.getCode());
 
                 view.getContext().startActivity(intent);
             }
@@ -72,6 +74,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView name;
         TextView address;
+        TextView clientNumber;
         TextView distance;
         private OnItemClickListener clickListener;
 
@@ -80,6 +83,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
 
             name = (TextView) itemView.findViewById(R.id.client_list_row_name);
             address = (TextView) itemView.findViewById(R.id.client_list_row_address);
+            clientNumber = (TextView) itemView.findViewById(R.id.client_list_row_client_number);
             distance = (TextView) itemView.findViewById(R.id.client_list_row_distance);
 
             // Set listener to the item view
