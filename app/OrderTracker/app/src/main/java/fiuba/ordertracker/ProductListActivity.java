@@ -51,7 +51,7 @@ public class ProductListActivity extends AppCompatActivity {
         // Create a call instance for looking up Retrofit contributors.
         Intent intent = getIntent();
 
-        Call<List<Product>> call = ps.products.Products(intent.getStringExtra("category"), null, null, null, null, null, null, null);
+        Call<List<Product>> call = ps.products.Products(intent.getStringExtra("category"), null, null, null, null, null, "nombre", null);
 
         final ProductListActivity self_ = this;
         call.enqueue(new Callback<List<Product>>() {
@@ -73,6 +73,10 @@ public class ProductListActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
                 //Aca tenemos que agregar el msj de error a mostrar... puto el que lee
+                TextView textNoProducts = (TextView) findViewById(R.id.text_no_products);
+                textNoProducts.setText("Hubo un error al cargar los productos por favor reintente mas tarde");
+                textNoProducts.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
             }
         });
     }
