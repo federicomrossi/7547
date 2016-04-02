@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +31,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.client_list_row, null);
+        View view = inflater.inflate(R.layout.product_list_row, null);
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }
@@ -39,12 +40,12 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         Product current = this.data.get(position);
-        holder.name.setText(current.getNombre());
-        holder.brand.setText(current.getMarca());
-        holder.description.setText(current.getDescripcion());
+        holder.nameAndBrand.setText(current.getNombre() + ", " + current.getMarca());
+        //holder.description.setText(current.getDescripcion());
         holder.category.setText(current.getCategoria());
         holder.price.setText(current.getPrecio());
         holder.stock.setText(current.getStock());
+        //holder.thumbnail.setImageResource(current.getSomething()); // TODO implement method in Product class
 
         // Set listener to manage clicks on items from the RecyclerView
         holder.setOnItemClickListener(new OnItemClickListener() {
@@ -52,12 +53,13 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             public void onItemClick(View view, int position) {
                 System.out.println("*********** Click on item ***********");
 
-                Intent intent = new Intent(view.getContext(), ClientDetailActivity.class);
+                // TODO store info into the intent and start activity ProductDetailActivity
+                //Intent intent = new Intent(view.getContext(), ClientDetailActivity.class); // TODO! Change activity!
                 /*intent.putExtra("name", data.get(position).getApenom());
                 intent.putExtra("address", data.get(position).getDireccion());
                 intent.putExtra("distance", data.get(position).getTelefono());*/
 
-                view.getContext().startActivity(intent);
+                //view.getContext().startActivity(intent);
             }
         });
     }
@@ -68,18 +70,20 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        TextView name, brand, description, category, price, stock;
+        TextView nameAndBrand, description, category, price, stock;
+        ImageView thumbnail;
+
         private OnItemClickListener clickListener;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            /*name = (TextView) itemView.findViewById(R.id.product_list_row_name);
-            brand = (TextView) itemView.findViewById(R.id.product_list_row_brand);
-            description = (TextView) itemView.findViewById(R.id.product_list_row_description);
+            nameAndBrand = (TextView) itemView.findViewById(R.id.product_list_row_name_brand);
             category = (TextView) itemView.findViewById(R.id.product_list_row_category);
-            price = (TextView) itemView.findViewById(R.id.product_list_row_price);
-            stock = (TextView) itemView.findViewById(R.id.product_list_row_stock);*/
+            //description = (TextView) itemView.findViewById(R.id.product_list_row_description);
+            price = (TextView) itemView.findViewById(R.id.product_list_row_price_value);
+            stock = (TextView) itemView.findViewById(R.id.product_list_row_stock);
+            thumbnail = (ImageView) itemView.findViewById(R.id.product_list_row_thumbnail);
 
             // Set listener to the item view
             itemView.setOnClickListener(this);

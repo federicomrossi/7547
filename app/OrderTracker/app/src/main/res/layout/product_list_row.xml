@@ -53,6 +53,14 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textSize="13dp" />
 
+            <TextView
+                android:id="@+id/product_list_row_stock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Stock"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="13dp" />
+
         </LinearLayout>
 
         <LinearLayout

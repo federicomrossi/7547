@@ -13,8 +13,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import fiuba.ordertracker.pojo.Client;
-import fiuba.ordertracker.services.ClientService;
+import fiuba.ordertracker.pojo.Product;
+import fiuba.ordertracker.services.ProductService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,30 +45,30 @@ public class ProductListActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.productsList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        ClientService cs = ClientService.getInstance();
+        ProductService ps = ProductService.getInstance();
 
         // Create a call instance for looking up Retrofit contributors.
-        Call<List<Client>> call = cs.clients.Clients(null,null,null,null);
+        Call<List<Product>> call = ps.products.Products(null, null, null, null, null, null, null, null);
 
         final ProductListActivity self_ = this;
-        call.enqueue(new Callback<List<Client>>() {
+        call.enqueue(new Callback<List<Product>>() {
             @Override
-            public void onResponse(Call<List<Client>> call, Response<List<Client>> response) {
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 // Get result Repo from response.body()
-               /* List<Client> listClients = response.body();
-                clientListAdapter = new ClientListAdapter(self_, listClients);
+                List<Product> listProducts = response.body();
+                productListAdapter = new ProductListAdapter(self_, listProducts);
                 progressBar.setVisibility(View.GONE);
 
-                if(listClients.size() == 0) {
-                    TextView textNoClients = (TextView) findViewById(R.id.text_no_clients);
-                    textNoClients.setVisibility(View.VISIBLE);
-                }*/
+                if(listProducts.size() == 0) {
+                    TextView textNoProducts = (TextView) findViewById(R.id.text_no_products);
+                    textNoProducts.setVisibility(View.VISIBLE);
+                }
 
                 recyclerView.setAdapter(productListAdapter);
             }
 
             @Override
-            public void onFailure(Call<List<Client>> call, Throwable t) {
+            public void onFailure(Call<List<Product>> call, Throwable t) {
                 //Aca tenemos que agregar el msj de error a mostrar... puto el que lee
             }
         });

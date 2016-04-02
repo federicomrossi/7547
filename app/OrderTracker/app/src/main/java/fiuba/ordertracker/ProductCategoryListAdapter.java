@@ -48,7 +48,7 @@ public class ProductCategoryListAdapter extends RecyclerView.Adapter<ProductCate
             public void onItemClick(View view, int position) {
                 System.out.println("*********** Click on item ***********");
 
-                Intent intent = new Intent(view.getContext(), ClientDetailActivity.class);
+                Intent intent = new Intent(view.getContext(), ProductListActivity.class);
                 /*intent.putExtra("name", data.get(position).getApenom());
                 intent.putExtra("address", data.get(position).getDireccion());
                 intent.putExtra("distance", data.get(position).getTelefono());*/

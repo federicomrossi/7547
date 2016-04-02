@@ -26,7 +26,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         inflater = LayoutInflater.from(context);
         this.data = data;
 
-        // Show message notifying there are no clients
+        // Show message notifying there are no clients // TODO Remove!
         if (this.data.size() == 0){
             Toast.makeText(context, "No hay clientes en el sistema", Toast.LENGTH_LONG).show();
         }
