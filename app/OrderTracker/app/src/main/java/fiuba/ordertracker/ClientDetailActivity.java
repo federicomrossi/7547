@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
 
+
 public class ClientDetailActivity extends AppCompatActivity {
 
     @Override
@@ -25,13 +26,17 @@ public class ClientDetailActivity extends AppCompatActivity {
         Intent i = getIntent();
 
         //TextView name = (TextView) findViewById(R.id.client_name);
+        TextView clientId = (TextView) findViewById(R.id.client_code);
         TextView address = (TextView) findViewById(R.id.client_address);
+        TextView telephone = (TextView) findViewById(R.id.client_telephone);
         TextView distance = (TextView) findViewById(R.id.client_distance);
 
         // Set data from intent
         collapsingToolbar.setTitle(i.getStringExtra("name"));
         //name.setText(i.getStringExtra("name"));
+        clientId.setText(i.getStringExtra("client_id"));
         address.setText(i.getStringExtra("address"));
+        telephone.setText(i.getStringExtra("telephone"));
         distance.setText(i.getStringExtra("distance"));
 
 

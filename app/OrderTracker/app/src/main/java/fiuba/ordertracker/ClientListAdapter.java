@@ -55,7 +55,9 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
 
                 Intent intent = new Intent(view.getContext(), ClientDetailActivity.class);
                 intent.putExtra("name", data.get(position).getApenom());
+                intent.putExtra("client_id", data.get(position).getId());
                 intent.putExtra("address", data.get(position).getDireccion());
+                intent.putExtra("telephone", data.get(position).getTelefono());
                 intent.putExtra("distance", data.get(position).getTelefono());
 
                 view.getContext().startActivity(intent);
