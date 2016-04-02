@@ -8,6 +8,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
+
 public class ClientDetailActivity extends AppCompatActivity {
 
     @Override
@@ -30,6 +33,8 @@ public class ClientDetailActivity extends AppCompatActivity {
         //name.setText(i.getStringExtra("name"));
         address.setText(i.getStringExtra("address"));
         distance.setText(i.getStringExtra("distance"));
+
+
     }
 
     //Call when the user clicks the button
