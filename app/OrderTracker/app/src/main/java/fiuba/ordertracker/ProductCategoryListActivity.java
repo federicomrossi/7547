@@ -13,8 +13,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import fiuba.ordertracker.pojo.Client;
-import fiuba.ordertracker.services.ClientService;
+import fiuba.ordertracker.pojo.Categorie;
+import fiuba.ordertracker.services.CategorieService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -26,7 +26,7 @@ public class ProductCategoryListActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private RecyclerView recyclerView;
-    private ClientListAdapter clientListAdapter;
+    private ProductCategoryListAdapter productCategoryListAdapter;
     private ProgressBar progressBar;
 
     @Override
@@ -37,41 +37,41 @@ public class ProductCategoryListActivity extends AppCompatActivity {
         // Toolbar
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setSubtitle(getString(R.string.activity_client_list));
+        getSupportActionBar().setSubtitle(getString(R.string.activity_product_category_list));
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
         setProgressBarIndeterminateVisibility(true);
 
-        // Clients list
-        recyclerView = (RecyclerView) findViewById(R.id.clientsList);
+        // Categories list
+        recyclerView = (RecyclerView) findViewById(R.id.productsCategoriesList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        ClientService cs = ClientService.getInstance();
+        CategorieService cs = CategorieService.getInstance();
 
         // Create a call instance for looking up Retrofit contributors.
-        Call<List<Client>> call = cs.clients.Clients(null,null,null,null);
+        Call<List<Categorie>> call = cs.categories.Categories(null,null,null);
 
         final ProductCategoryListActivity self_ = this;
-        call.enqueue(new Callback<List<Client>>() {
+        call.enqueue(new Callback<List<Categorie>>() {
             @Override
-            public void onResponse(Call<List<Client>> call, Response<List<Client>> response) {
+            public void onResponse(Call<List<Categorie>> call, Response<List<Categorie>> response) {
                 // Get result Repo from response.body()
-                List<Client> listClients = response.body();
-                clientListAdapter = new ClientListAdapter(self_, listClients);
+                List<Categorie> listCategories = response.body();
+                productCategoryListAdapter = new ProductCategoryListAdapter(self_, listCategories);
                 progressBar.setVisibility(View.GONE);
 
-                if(listClients.size() == 0) {
-                    TextView textNoClients = (TextView) findViewById(R.id.text_no_clients);
-                    textNoClients.setVisibility(View.VISIBLE);
+                if(listCategories.size() == 0) {
+                    TextView textNoCategories = (TextView) findViewById(R.id.text_no_categories);
+                    textNoCategories.setVisibility(View.VISIBLE);
                 }
 
-                recyclerView.setAdapter(clientListAdapter);
+                recyclerView.setAdapter(productCategoryListAdapter);
             }
 
             @Override
-            public void onFailure(Call<List<Client>> call, Throwable t) {
+            public void onFailure(Call<List<Categorie>> call, Throwable t) {
                 //Aca tenemos que agregar el msj de error a mostrar... puto el que lee
             }
         });
