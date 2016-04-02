@@ -4,4 +4,5 @@
     <string name="search_client">Buscar cliente</string>
     <string name="company">Razón social</string>
     <string name="client_code">Código de cliente</string>
+    <string name="activity_product_list">Productos</string>
 </resources>
