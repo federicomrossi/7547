@@ -34,7 +34,7 @@ public class ClientDetailActivity extends AppCompatActivity {
         // Set data from intent
         collapsingToolbar.setTitle(i.getStringExtra("name"));
         //name.setText(i.getStringExtra("name"));
-        clientId.setText(i.getStringExtra("client_id"));
+        clientId.setText(String.format("%07d", Integer.parseInt(i.getStringExtra("client_id"))));
         address.setText(i.getStringExtra("address"));
         telephone.setText(i.getStringExtra("telephone"));
         distance.setText(i.getStringExtra("distance"));

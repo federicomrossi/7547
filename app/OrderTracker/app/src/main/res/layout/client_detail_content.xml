@@ -115,6 +115,7 @@
                 android:id="@+id/client_telephone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_toEndOf="@id/ivContactItem1"
                 android:layout_toRightOf="@id/ivContactItem1"
@@ -122,22 +123,11 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="#212121" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/client_telephone"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_toEndOf="@id/ivContactItem1"
-                android:layout_toRightOf="@id/ivContactItem1"
-                android:text="Home"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="#727272" />
         </RelativeLayout>
 
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/client_map"
             xmlns:map="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/client_map"
             android:name="com.google.android.gms.maps.MapFragment"
             android:layout_width="match_parent"
             android:layout_height="600dp"
@@ -152,7 +142,7 @@
             map:uiScrollGestures="false"
             map:uiTiltGestures="true"
             map:uiZoomControls="true"
-            map:uiZoomGestures="true"/>
+            map:uiZoomGestures="true" />
 
     </LinearLayout>
 
