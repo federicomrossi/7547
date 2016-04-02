@@ -39,4 +39,13 @@
         android:layout_marginLeft="72dp"
         android:text="client_distance"/>
 
+    <ImageButton
+        android:id="@+id/go_cart_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_search_24dp"
+        android:layout_below="@+id/client_distance"
+        android:layout_centerHorizontal="true"
+        android:onClick="onClickShoppingCart"/>
+
 </RelativeLayout>
