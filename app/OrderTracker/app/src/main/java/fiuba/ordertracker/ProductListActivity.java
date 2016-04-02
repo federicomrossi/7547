@@ -1,5 +1,6 @@
 package fiuba.ordertracker;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -48,7 +49,9 @@ public class ProductListActivity extends AppCompatActivity {
         ProductService ps = ProductService.getInstance();
 
         // Create a call instance for looking up Retrofit contributors.
-        Call<List<Product>> call = ps.products.Products(null, null, null, null, null, null, null, null);
+        Intent intent = getIntent();
+
+        Call<List<Product>> call = ps.products.Products(intent.getStringExtra("category"), null, null, null, null, null, null, null);
 
         final ProductListActivity self_ = this;
         call.enqueue(new Callback<List<Product>>() {
