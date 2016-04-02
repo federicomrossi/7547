@@ -12,7 +12,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fiuba.ordertracker.pojo.Client;
@@ -60,6 +62,12 @@ public class ClientListActivity extends AppCompatActivity {
                 List<Client> listClients = response.body();
                 clientListAdapter = new ClientListAdapter(self_, listClients);
                 progressBar.setVisibility(View.GONE);
+
+                if(listClients.size() == 0) {
+                    TextView textNoClients = (TextView) findViewById(R.id.text_no_clients);
+                    textNoClients.setVisibility(View.VISIBLE);
+                }
+
                 recyclerView.setAdapter(clientListAdapter);
             }
 
