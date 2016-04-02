@@ -40,6 +40,9 @@ public class Client {
     @SerializedName("longitud")
     @Expose
     private Double longitude;
+    @SerializedName("cod_cliente")
+    @Expose
+    private String code;
 
 
     /**
@@ -197,4 +200,11 @@ public class Client {
         return Math.round(distance * 100.0) / 100.0;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 }

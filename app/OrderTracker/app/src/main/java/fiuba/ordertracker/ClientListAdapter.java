@@ -12,6 +12,7 @@ import android.widget.Toast;
 import java.util.Collections;
 import java.util.List;
 
+import fiuba.ordertracker.helpers.Constants;
 import fiuba.ordertracker.pojo.Client;
 
 /**
@@ -45,7 +46,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         Client current = this.data.get(position);
         holder.name.setText(current.getApenom());
         holder.address.setText(current.getDireccion());
-        holder.distance.setText(current.getId());
+        holder.distance.setText(String.valueOf(current.getDistance())+ Constants.COMPLETE_UNIT);
 
         // Set listener to manage clicks on items from the RecyclerView
         holder.setOnItemClickListener(new OnItemClickListener() {
