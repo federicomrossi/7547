@@ -3,6 +3,7 @@ package fiuba.ordertracker;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 public class ClientDetailActivity extends AppCompatActivity {
@@ -23,4 +24,12 @@ public class ClientDetailActivity extends AppCompatActivity {
         address.setText("Address: " + i.getStringExtra("address"));
         distance.setText("Distance: " + i.getStringExtra("distance"));
     }
+
+    //Call when the user clicks the button
+    public void onClickShoppingCart(View view){
+        Intent intent = new Intent(view.getContext(), ProductCategoryListActivity.class);
+        view.getContext().startActivity(intent);
+
+    }
+
 }
