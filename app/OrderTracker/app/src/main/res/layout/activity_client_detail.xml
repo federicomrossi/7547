@@ -9,4 +9,34 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".ClientDetailActivity">
 
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar" />
+
+    <TextView
+        android:id="@+id/client_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="72dp"
+        android:gravity="center_vertical"
+        android:layout_below="@+id/app_bar" />
+
+    <TextView
+        android:id="@+id/client_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/client_name"
+        android:layout_marginLeft="72dp"
+        android:gravity="center_vertical"
+        android:text="client_address" />
+
+    <TextView
+        android:id="@+id/client_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/client_address"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="72dp"
+        android:text="client_distance"/>
+
 </RelativeLayout>

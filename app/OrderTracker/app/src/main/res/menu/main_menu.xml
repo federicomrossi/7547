@@ -2,23 +2,35 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!--<item
-        android:id="@+id/action_settings"
+    <!--<item android:id="@+id/action_search"
         android:orderInCategory="100"
-        android:title="Settings"
-        app:showAsAction="never"></item>
+        android:title="Search"
+        android:icon="@drawable/ic_search_24dp"
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="android.support.v7.widget.SearchView" />
 
     <item
-        android:id="@+id/navigate"
-        android:title="Navigate"
-        android:orderInCategory="200"
-        app:showAsAction="always"
-        android:icon="@mipmap/ic_launcher"/>-->
-
-    <item
-        android:id="@+id/search"
-        android:title="@string/search_client"
+        android:id="@+id/action_filter"
         android:orderInCategory="100"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_search_24dp"/>
+        android:title="Filtrar"
+        android:icon="@mipmap/ic_filter_outline"
+        app:showAsAction="always">
+
+        <menu>
+
+            <item
+                android:id="@+id/action_filter_company"
+                android:title="@string/company"
+                app:showAsAction="ifRoom|collapseActionView"
+                app:actionViewClass="android.support.v7.widget.SearchView" />
+            <item
+                android:id="@+id/action_filter_client_code"
+                android:title="@string/client_code"
+                app:showAsAction="ifRoom|collapseActionView"
+                app:actionViewClass="android.support.v7.widget.SearchView" />
+
+        </menu>
+
+    </item>-->
+
 </menu>

@@ -2,4 +2,6 @@
     <string name="app_name">Order Tracker</string>
     <string name="activity_client_list">Clientes</string>
     <string name="search_client">Buscar cliente</string>
+    <string name="company">Razón social</string>
+    <string name="client_code">Código de cliente</string>
 </resources>
