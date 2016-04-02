@@ -223,4 +223,21 @@ public class Product {
     public void setUrlImageMini(String urlImageMini) {
         this.urlImageMini = urlImageMini;
     }
+
+    public String stockState(){
+        String res;
+        try{
+            Integer stock = new Integer(this.stock);
+            if(stock.intValue() == 0){
+                res = "Agotado";
+            }else if(stock.intValue() > 5){
+                res = "Disponible";
+            }else{
+                res = "Por Agotarse";
+            }
+        }catch(Exception e){
+            res = "Agotado";
+        }
+        return res;
+    }
 }
