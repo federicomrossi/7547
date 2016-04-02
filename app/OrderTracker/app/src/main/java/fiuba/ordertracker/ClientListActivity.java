@@ -1,12 +1,9 @@
 package fiuba.ordertracker;
 
-import android.app.SearchManager;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,7 +11,6 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import fiuba.ordertracker.pojo.Client;
@@ -74,6 +70,10 @@ public class ClientListActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<Client>> call, Throwable t) {
                 //Aca tenemos que agregar el msj de error a mostrar... puto el que lee
+                TextView textNoClients = (TextView) findViewById(R.id.text_no_clients);
+                textNoClients.setText("Hubo un error al cargar los clientes por favor reintente mas tarde");
+                textNoClients.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
             }
         });
     }
