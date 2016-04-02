@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import fiuba.ordertracker.helpers.Constants;
+
 public class ClientDetailActivity extends AppCompatActivity {
 
     @Override
@@ -21,6 +23,6 @@ public class ClientDetailActivity extends AppCompatActivity {
         // Set data from intent
         name.setText("Name: " + i.getStringExtra("name"));
         address.setText("Address: " + i.getStringExtra("address"));
-        distance.setText("Distance: " + i.getStringExtra("distance"));
+        distance.setText("Distance: " + i.getStringExtra("distance") + Constants.COMPLETE_UNIT);
     }
 }

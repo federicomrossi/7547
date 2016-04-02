@@ -52,11 +52,11 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
             @Override
             public void onItemClick(View view, int position) {
                 System.out.println("*********** Click on item ***********");
-
+                Client selectedClient = data.get(position);
                 Intent intent = new Intent(view.getContext(), ClientDetailActivity.class);
-                intent.putExtra("name", data.get(position).getApenom());
-                intent.putExtra("address", data.get(position).getDireccion());
-                intent.putExtra("distance", data.get(position).getTelefono());
+                intent.putExtra("name", selectedClient.getApenom());
+                intent.putExtra("address", selectedClient.getDireccion());
+                intent.putExtra("distance", String.valueOf(selectedClient.getDistance()));
 
                 view.getContext().startActivity(intent);
             }
