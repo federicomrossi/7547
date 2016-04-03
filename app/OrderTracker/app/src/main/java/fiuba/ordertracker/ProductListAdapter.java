@@ -13,6 +13,7 @@ import android.widget.Toast;
 import java.util.Collections;
 import java.util.List;
 
+import fiuba.ordertracker.helpers.ImageLoadTask;
 import fiuba.ordertracker.pojo.Client;
 import fiuba.ordertracker.pojo.Product;
 
@@ -23,6 +24,15 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     private LayoutInflater inflater;
     List<Product> data = Collections.emptyList();
+    private String category = "";
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     public ProductListAdapter(Context context, List<Product> data) {
         inflater = LayoutInflater.from(context);
@@ -42,9 +52,10 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         Product current = this.data.get(position);
         holder.nameAndBrand.setText(current.getNombre() + ", " + current.getMarca());
         //holder.description.setText(current.getDescripcion());
-        holder.category.setText(current.getCategoria());
+        holder.category.setText(this.category);
         holder.price.setText(current.getPrecio());
-        holder.stock.setText(current.getStock());
+        holder.stock.setText(current.stockState());
+        new ImageLoadTask(current.getUrlImageMini(), holder.thumbnail).execute();
         //holder.thumbnail.setImageResource(current.getSomething()); // TODO implement method in Product class
 
         // Set listener to manage clicks on items from the RecyclerView
@@ -54,12 +65,12 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 System.out.println("*********** Click on item ***********");
 
                 // TODO store info into the intent and start activity ProductDetailActivity
-                Intent intent = new Intent(view.getContext(), ProductDetailActivity.class); // TODO! Change activity!
+                //Intent intent = new Intent(view.getContext(), ClientDetailActivity.class); // TODO! Change activity!
                 /*intent.putExtra("name", data.get(position).getApenom());
                 intent.putExtra("address", data.get(position).getDireccion());
                 intent.putExtra("distance", data.get(position).getTelefono());*/
 
-                view.getContext().startActivity(intent);
+                //view.getContext().startActivity(intent);
             }
         });
     }

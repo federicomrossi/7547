@@ -4,10 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".ProductListActivity">
 
 
@@ -58,7 +54,8 @@
                             android:layout_marginRight="16dp"
                             android:layout_weight="1"
                             android:background="#00000000"
-                            android:src="@mipmap/ic_launcher" />
+                            android:src="@drawable/ic_settings_gray_24dp"
+                            android:onClick="onClickShowHideFilters" />
 
                     </LinearLayout>
 
@@ -68,9 +65,10 @@
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
                         android:orientation="vertical"
-                        android:visibility="gone">
+                        android:visibility="gone"
+                        android:id="@+id/filters_container">
 
-                        <LinearLayout
+                        <!--<LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="horizontal">
@@ -83,7 +81,7 @@
                                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
                             <EditText
-                                android:id="@+id/editText"
+                                android:id="@+id/editText_brand"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content" />
                         </LinearLayout>
@@ -101,10 +99,10 @@
                                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
                             <EditText
-                                android:id="@+id/editText2"
+                                android:id="@+id/editText_client_code"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content" />
-                        </LinearLayout>
+                        </LinearLayout>-->
                     </LinearLayout>
 
                 </LinearLayout>
@@ -118,7 +116,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="30dp"
-            android:text="No hay productos en el sistema."
+            android:text="No hay productos disponibles."
             android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:visibility="gone" />
