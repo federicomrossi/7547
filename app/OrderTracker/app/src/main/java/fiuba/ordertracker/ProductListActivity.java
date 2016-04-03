@@ -35,11 +35,12 @@ public class ProductListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product_list);
 
         String CATEGORIA = "TECNOLOGÍA";
+        final Intent intent = getIntent();
 
         // Toolbar
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setSubtitle(getString(R.string.activity_product_list) + " de " + CATEGORIA);
+        getSupportActionBar().setSubtitle(getString(R.string.activity_product_list) + " de " + intent.getStringExtra("categoryName"));
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
@@ -51,9 +52,6 @@ public class ProductListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         ProductService ps = ProductService.getInstance();
-
-        // Create a call instance for looking up Retrofit contributors.
-        final Intent intent = getIntent();
 
         Call<List<Product>> call = ps.products.Products(intent.getStringExtra("category"), null, null, null, null, null, "nombre", null);
 
