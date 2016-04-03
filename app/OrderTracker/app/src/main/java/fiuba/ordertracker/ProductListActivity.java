@@ -9,6 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -114,5 +116,22 @@ public class ProductListActivity extends AppCompatActivity {
 
     private void toolbar_filter() {
 
+    }
+
+    public void onClickShowHideFilters(View view) {
+
+        LinearLayout button_filter = (LinearLayout) findViewById(R.id.filters_container);
+
+        if(button_filter.getVisibility() == View.GONE)
+            button_filter.setVisibility(View.VISIBLE);
+        else {
+            button_filter.setVisibility(View.GONE);
+
+            /*EditText editText_brand = (EditText) findViewById(R.id.editText_brand);
+            editText_brand.clearFocus();
+
+            EditText editText_client_code = (EditText) findViewById(R.id.editText_client_code);
+            editText_client_code.clearFocus();*/
+        }
     }
 }

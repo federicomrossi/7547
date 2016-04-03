@@ -5,6 +5,11 @@ package fiuba.ordertracker.pojo;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.math.BigDecimal;
+
+import fiuba.ordertracker.helpers.Constants;
+import fiuba.ordertracker.helpers.DistanceCalculator;
+
 
 public class Client {
 
@@ -29,6 +34,18 @@ public class Client {
     @SerializedName("fecha_visita")
     @Expose
     private String fechaVisita;
+    @SerializedName("latitud")
+    @Expose
+    private Double latitude;
+    @SerializedName("longitud")
+    @Expose
+    private Double longitude;
+    @SerializedName("cod_cliente")
+    @Expose
+    private String code;
+    @SerializedName("razon_social")
+    @Expose
+    private String socialReason;
 
     /**
      * 
@@ -161,4 +178,43 @@ public class Client {
         return this.getId();
     }
 
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Double getDistance()
+    {
+        double currentLatitude = Constants.FIUBA_LATITUDE;
+        double currentLongitude = Constants.FIUBA_LONGITUDE;
+        double distance = DistanceCalculator.distance(currentLatitude,currentLongitude,this.getLatitude(),this.getLongitude(),Constants.UNIT);
+        return Math.round(distance * 100.0) / 100.0;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getSocialReason() {
+        return socialReason;
+    }
+
+    public void setSocialReason(String socialReason) {
+        this.socialReason = socialReason;
+    }
 }
