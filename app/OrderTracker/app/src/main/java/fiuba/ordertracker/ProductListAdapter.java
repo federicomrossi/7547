@@ -51,7 +51,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
         Product current = this.data.get(position);
         holder.nameAndBrand.setText(current.getNombre() + ", " + current.getMarca());
-        //holder.description.setText(current.getDescripcion());
         holder.category.setText(this.category);
         holder.price.setText(current.getPrecio());
         holder.stock.setText(current.stockState());
@@ -64,13 +63,15 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             public void onItemClick(View view, int position) {
                 System.out.println("*********** Click on item ***********");
 
-                // TODO store info into the intent and start activity ProductDetailActivity
-                //Intent intent = new Intent(view.getContext(), ClientDetailActivity.class); // TODO! Change activity!
-                /*intent.putExtra("name", data.get(position).getApenom());
-                intent.putExtra("address", data.get(position).getDireccion());
-                intent.putExtra("distance", data.get(position).getTelefono());*/
+                Intent intent = new Intent(view.getContext(), ProductDetailActivity.class);
+                //intent.putExtra("thumbnail", data.get(position).getThumbnail()); // TODO show picture
+                intent.putExtra("name", data.get(position).getNombre());
+                intent.putExtra("brand", data.get(position).getMarca());
+                intent.putExtra("description", data.get(position).getDescripcion());
+                intent.putExtra("category", data.get(position).getCategoria());
+                intent.putExtra("availability", data.get(position).getStock()); // TODO it has to be availability, not stock
 
-                //view.getContext().startActivity(intent);
+                view.getContext().startActivity(intent);
             }
         });
     }
@@ -91,7 +92,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
             nameAndBrand = (TextView) itemView.findViewById(R.id.product_list_row_name_brand);
             category = (TextView) itemView.findViewById(R.id.product_list_row_category);
-            //description = (TextView) itemView.findViewById(R.id.product_list_row_description);
             price = (TextView) itemView.findViewById(R.id.product_list_row_price_value);
             stock = (TextView) itemView.findViewById(R.id.product_list_row_stock);
             thumbnail = (ImageView) itemView.findViewById(R.id.product_list_row_thumbnail);
