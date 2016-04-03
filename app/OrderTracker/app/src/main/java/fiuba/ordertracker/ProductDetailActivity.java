@@ -27,6 +27,23 @@ public class ProductDetailActivity extends AppCompatActivity {
         //collapsingToolbar.setTitle(i.getStringExtra("name"));
         //name.setText(i.getStringExtra("name"));
 
+        /*TextView name = (TextView) findViewById(R.id.product_name);
+        TextView brand = (TextView) findViewById(R.id.product_brand);
+        TextView description = (TextView) findViewById(R.id.product_description);
+        TextView price = (TextView) findViewById(R.id.product_price);
+        TextView category = (TextView) findViewById(R.id.product_category);
+        TextView availability = (TextView) findViewById(R.id.product_availability);
+
+        // Set data from intent
+        //collapsingToolbar.setTitle(i.getStringExtra("name"));
+
+        name.setText(i.getStringExtra("name"));
+        brand.setText(i.getStringExtra("brand"));
+        description.setText(i.getStringExtra("description"));
+        price.setText(i.getStringExtra("price"));
+        category.setText(i.getStringExtra("category"));
+        category.setText(i.getStringExtra("availability")); */
+
     }
 
 }
