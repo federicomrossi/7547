@@ -8,6 +8,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.content.Intent;
@@ -31,6 +34,8 @@ public class ClientListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_list);
+
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         // Toolbar
         toolbar = (Toolbar) findViewById(R.id.app_bar);
@@ -114,5 +119,22 @@ public class ClientListActivity extends AppCompatActivity {
 
     private void toolbar_filter() {
 
+    }
+
+    public void onClickShowHideFilters(View view) {
+
+        LinearLayout button_filter = (LinearLayout) findViewById(R.id.filters_container);
+
+        if(button_filter.getVisibility() == View.GONE)
+            button_filter.setVisibility(View.VISIBLE);
+        else {
+            button_filter.setVisibility(View.GONE);
+
+            EditText editText_brand = (EditText) findViewById(R.id.editText_brand);
+            editText_brand.clearFocus();
+
+            EditText editText_client_code = (EditText) findViewById(R.id.editText_client_code);
+            editText_client_code.clearFocus();
+        }
     }
 }

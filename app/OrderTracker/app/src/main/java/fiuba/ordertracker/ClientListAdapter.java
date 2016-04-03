@@ -47,7 +47,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         holder.name.setText(current.getSocialReason());
         holder.address.setText(current.getDireccion());
         holder.clientCode.setText(current.getCode());
-        holder.distance.setText(String.valueOf(current.getDistance())+ Constants.COMPLETE_UNIT);
+        holder.distance.setText(String.valueOf(current.getDistance())+ " " + Constants.COMPLETE_UNIT);
 
         // Set listener to manage clicks on items from the RecyclerView
         holder.setOnItemClickListener(new OnItemClickListener() {
