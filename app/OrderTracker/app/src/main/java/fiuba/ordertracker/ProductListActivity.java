@@ -34,7 +34,6 @@ public class ProductListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
 
-        String CATEGORIA = "TECNOLOGÍA";
         final Intent intent = getIntent();
 
         // Toolbar
