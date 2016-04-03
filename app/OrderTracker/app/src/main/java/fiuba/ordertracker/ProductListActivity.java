@@ -1,6 +1,7 @@
 package fiuba.ordertracker;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -33,13 +35,15 @@ public class ProductListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
-
         final Intent intent = getIntent();
-
         // Toolbar
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setSubtitle(getString(R.string.activity_product_list) + " de " + intent.getStringExtra("categoryName"));
+
+        final SearchView searchView = (SearchView) findViewById(R.id.searchView);
+
+        String toolbarSubtitle = this.getToolbarSubtitle(intent);
+        getSupportActionBar().setSubtitle(toolbarSubtitle);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
@@ -53,7 +57,9 @@ public class ProductListActivity extends AppCompatActivity {
 
         ProductService ps = ProductService.getInstance();
 
-        Call<List<Product>> call = ps.products.Products(intent.getStringExtra("category"), null, null, null, null, null, "nombre", null);
+        // Create a call instance for looking up Retrofit contributors.
+
+        Call<List<Product>> call = ps.products.Products(intent.getStringExtra("category"), null, null, intent.getStringExtra("nameFilter"), null, null, "nombre", null);
 
         final ProductListActivity self_ = this;
         call.enqueue(new Callback<List<Product>>() {
@@ -82,6 +88,27 @@ public class ProductListActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
             }
         });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if(query != "")
+                {
+                    Intent intent = new Intent(searchView.getContext(), ProductListActivity.class);
+                    intent.putExtra("nameFilter",query);
+                    searchView.getContext().startActivity(intent);
+                }
+                return false;
+            }
+
+        });
+
+
     }
 
     @Override
@@ -133,5 +160,17 @@ public class ProductListActivity extends AppCompatActivity {
             EditText editText_client_code = (EditText) findViewById(R.id.editText_client_code);
             editText_client_code.clearFocus();*/
         }
+    }
+
+    private String getToolbarSubtitle(Intent intent)
+    {
+        String subtitle =  getString(R.string.activity_product_list) + " filtrado por ";
+        if(intent.getStringExtra("nameFilter") != null)
+        {
+            subtitle += "nombre: " + intent.getStringExtra("nameFilter");
+        } else if(intent.getStringExtra("categoryName") != null) {
+            subtitle += "categoria:  " + intent.getStringExtra("categoryName");
+        }
+        return subtitle;
     }
 }
