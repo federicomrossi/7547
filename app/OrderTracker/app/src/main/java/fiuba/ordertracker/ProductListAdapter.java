@@ -13,6 +13,7 @@ import android.widget.Toast;
 import java.util.Collections;
 import java.util.List;
 
+import fiuba.ordertracker.helpers.ImageLoadTask;
 import fiuba.ordertracker.pojo.Client;
 import fiuba.ordertracker.pojo.Product;
 
@@ -54,6 +55,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         holder.category.setText(this.category);
         holder.price.setText(current.getPrecio());
         holder.stock.setText(current.stockState());
+        new ImageLoadTask(current.getUrlImageMini(), holder.thumbnail).execute();
         //holder.thumbnail.setImageResource(current.getSomething()); // TODO implement method in Product class
 
         // Set listener to manage clicks on items from the RecyclerView
