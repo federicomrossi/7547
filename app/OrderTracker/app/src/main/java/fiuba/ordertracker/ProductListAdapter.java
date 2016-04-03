@@ -23,6 +23,15 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     private LayoutInflater inflater;
     List<Product> data = Collections.emptyList();
+    private String category = "";
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     public ProductListAdapter(Context context, List<Product> data) {
         inflater = LayoutInflater.from(context);
@@ -42,9 +51,9 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         Product current = this.data.get(position);
         holder.nameAndBrand.setText(current.getNombre() + ", " + current.getMarca());
         //holder.description.setText(current.getDescripcion());
-        holder.category.setText(current.getCategoria());
+        holder.category.setText(this.category);
         holder.price.setText(current.getPrecio());
-        holder.stock.setText(current.getStock());
+        holder.stock.setText(current.stockState());
         //holder.thumbnail.setImageResource(current.getSomething()); // TODO implement method in Product class
 
         // Set listener to manage clicks on items from the RecyclerView

@@ -49,7 +49,7 @@ public class ProductListActivity extends AppCompatActivity {
         ProductService ps = ProductService.getInstance();
 
         // Create a call instance for looking up Retrofit contributors.
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
 
         Call<List<Product>> call = ps.products.Products(intent.getStringExtra("category"), null, null, null, null, null, "nombre", null);
 
@@ -60,6 +60,7 @@ public class ProductListActivity extends AppCompatActivity {
                 // Get result Repo from response.body()
                 List<Product> listProducts = response.body();
                 productListAdapter = new ProductListAdapter(self_, listProducts);
+                productListAdapter.setCategory(intent.getStringExtra("categoryName"));
                 progressBar.setVisibility(View.GONE);
 
                 if(listProducts.size() == 0) {

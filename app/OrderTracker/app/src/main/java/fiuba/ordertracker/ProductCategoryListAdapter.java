@@ -50,6 +50,7 @@ public class ProductCategoryListAdapter extends RecyclerView.Adapter<ProductCate
                 Categorie currentClicked = data.get(position);
                 Intent intent = new Intent(view.getContext(), ProductListActivity.class);
                 intent.putExtra("category", currentClicked.getId());
+                intent.putExtra("categoryName", currentClicked.getNombre());
                 /*intent.putExtra("name", data.get(position).getApenom());
                 intent.putExtra("address", data.get(position).getDireccion());
                 intent.putExtra("distance", data.get(position).getTelefono());*/
