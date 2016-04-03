@@ -12,6 +12,7 @@ import android.widget.Toast;
 import java.util.Collections;
 import java.util.List;
 
+import fiuba.ordertracker.helpers.Constants;
 import fiuba.ordertracker.pojo.Client;
 
 /**
@@ -43,22 +44,23 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         Client current = this.data.get(position);
-        holder.name.setText(current.getApenom());
+        holder.name.setText(current.getSocialReason());
         holder.address.setText(current.getDireccion());
-        holder.distance.setText(current.getId());
+        holder.clientCode.setText(current.getCode());
+        holder.distance.setText(String.valueOf(current.getDistance())+ " " + Constants.COMPLETE_UNIT);
 
         // Set listener to manage clicks on items from the RecyclerView
         holder.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 System.out.println("*********** Click on item ***********");
-
+                Client selectedClient = data.get(position);
                 Intent intent = new Intent(view.getContext(), ClientDetailActivity.class);
-                intent.putExtra("name", data.get(position).getApenom());
-                intent.putExtra("client_id", data.get(position).getId());
-                intent.putExtra("address", data.get(position).getDireccion());
-                intent.putExtra("telephone", data.get(position).getTelefono());
-                intent.putExtra("distance", data.get(position).getTelefono());
+                intent.putExtra("name", selectedClient.getApenom());
+                intent.putExtra("clientCode", selectedClient.getCode());
+                intent.putExtra("address", selectedClient.getDireccion());
+                intent.putExtra("telephone", selectedClient.getTelefono());
+                intent.putExtra("distance", String.valueOf(selectedClient.getDistance()));
 
                 view.getContext().startActivity(intent);
             }
@@ -73,6 +75,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView name;
         TextView address;
+        TextView clientCode;
         TextView distance;
         private OnItemClickListener clickListener;
 
@@ -81,6 +84,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
 
             name = (TextView) itemView.findViewById(R.id.client_list_row_name);
             address = (TextView) itemView.findViewById(R.id.client_list_row_address);
+            clientCode = (TextView) itemView.findViewById(R.id.client_list_row_client_code);
             distance = (TextView) itemView.findViewById(R.id.client_list_row_distance);
 
             // Set listener to the item view

@@ -3,6 +3,7 @@ package fiuba.ordertracker.services;
 import java.io.IOException;
 import java.util.List;
 
+import fiuba.ordertracker.helpers.Constants;
 import fiuba.ordertracker.pojo.Client;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -16,7 +17,6 @@ import retrofit2.http.Query;
  */
 
 public final class ClientService {
-    public static final String API_URL = "http://ec2-54-207-103-117.sa-east-1.compute.amazonaws.com/";
     public ClientsFromTodayByVendIdService clientsFromTodayByVendIdService;
     public Clients  clients;
     private static ClientService instance = null;
@@ -24,7 +24,7 @@ public final class ClientService {
     private ClientService(){
         // Create a very simple REST adapter which points the GitHub API.
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_URL)
+                .baseUrl(Constants.URL_SERVER)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
