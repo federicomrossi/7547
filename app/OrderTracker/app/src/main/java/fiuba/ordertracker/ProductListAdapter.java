@@ -68,6 +68,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 intent.putExtra("name", data.get(position).getNombre());
                 intent.putExtra("brand", data.get(position).getMarca());
                 intent.putExtra("description", data.get(position).getDescripcion());
+                intent.putExtra("price", data.get(position).getPrecio());
                 intent.putExtra("category", data.get(position).getCategoria());
                 intent.putExtra("availability", data.get(position).getStock()); // TODO it has to be availability, not stock
 
