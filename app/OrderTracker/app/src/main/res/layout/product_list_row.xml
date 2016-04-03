@@ -94,9 +94,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="99"
+                android:text="00"
                 android:id="@+id/product_list_row_price_decimal"
-                android:paddingBottom="16dp" />
+                android:paddingBottom="16dp"
+                android:visibility="gone" />
 
         </LinearLayout>
     </LinearLayout>
