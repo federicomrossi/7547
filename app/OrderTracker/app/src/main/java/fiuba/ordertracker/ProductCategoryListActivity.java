@@ -74,6 +74,10 @@ public class ProductCategoryListActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<Categorie>> call, Throwable t) {
                 //Aca tenemos que agregar el msj de error a mostrar... puto el que lee
+                progressBar.setVisibility(View.GONE);
+                TextView textNoCategories = (TextView) findViewById(R.id.text_no_categories);
+                textNoCategories.setText("Hubo un error al cargar las categorias por favor reintente mas tarde");
+                textNoCategories.setVisibility(View.VISIBLE);
             }
         });
     }
