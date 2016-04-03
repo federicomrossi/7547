@@ -34,6 +34,12 @@ public class Product {
     @SerializedName("updated_at")
     @Expose
     private String updatedAt;
+    @SerializedName("url_image_normal")
+    @Expose
+    private String urlImageNormal;
+    @SerializedName("url_image_mini")
+    @Expose
+    private String urlImageMini;
 
     /**
      * 
@@ -202,4 +208,36 @@ public class Product {
         return this.getId();
     }
 
+    public String getUrlImageNormal() {
+        return urlImageNormal;
+    }
+
+    public void setUrlImageNormal(String urlImageNormal) {
+        this.urlImageNormal = urlImageNormal;
+    }
+
+    public String getUrlImageMini() {
+        return urlImageMini;
+    }
+
+    public void setUrlImageMini(String urlImageMini) {
+        this.urlImageMini = urlImageMini;
+    }
+
+    public String stockState(){
+        String res;
+        try{
+            Integer stock = new Integer(this.stock);
+            if(stock.intValue() == 0){
+                res = "Agotado";
+            }else if(stock.intValue() > 5){
+                res = "Disponible";
+            }else{
+                res = "Por Agotarse";
+            }
+        }catch(Exception e){
+            res = "Agotado";
+        }
+        return res;
+    }
 }

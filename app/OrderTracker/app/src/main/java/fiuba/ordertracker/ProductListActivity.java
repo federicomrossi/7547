@@ -9,6 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -32,10 +34,12 @@ public class ProductListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
 
+        final Intent intent = getIntent();
+
         // Toolbar
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setSubtitle(getString(R.string.activity_product_list));
+        getSupportActionBar().setSubtitle(getString(R.string.activity_product_list) + " de " + intent.getStringExtra("categoryName"));
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
@@ -48,9 +52,6 @@ public class ProductListActivity extends AppCompatActivity {
 
         ProductService ps = ProductService.getInstance();
 
-        // Create a call instance for looking up Retrofit contributors.
-        Intent intent = getIntent();
-
         Call<List<Product>> call = ps.products.Products(intent.getStringExtra("category"), null, null, null, null, null, "nombre", null);
 
         final ProductListActivity self_ = this;
@@ -60,6 +61,7 @@ public class ProductListActivity extends AppCompatActivity {
                 // Get result Repo from response.body()
                 List<Product> listProducts = response.body();
                 productListAdapter = new ProductListAdapter(self_, listProducts);
+                productListAdapter.setCategory(intent.getStringExtra("categoryName"));
                 progressBar.setVisibility(View.GONE);
 
                 if(listProducts.size() == 0) {
@@ -113,5 +115,22 @@ public class ProductListActivity extends AppCompatActivity {
 
     private void toolbar_filter() {
 
+    }
+
+    public void onClickShowHideFilters(View view) {
+
+        LinearLayout button_filter = (LinearLayout) findViewById(R.id.filters_container);
+
+        if(button_filter.getVisibility() == View.GONE)
+            button_filter.setVisibility(View.VISIBLE);
+        else {
+            button_filter.setVisibility(View.GONE);
+
+            /*EditText editText_brand = (EditText) findViewById(R.id.editText_brand);
+            editText_brand.clearFocus();
+
+            EditText editText_client_code = (EditText) findViewById(R.id.editText_client_code);
+            editText_client_code.clearFocus();*/
+        }
     }
 }
