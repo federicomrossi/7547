@@ -50,6 +50,7 @@ public class ClientListActivity extends AppCompatActivity {
         // Clients list
         recyclerView = (RecyclerView) findViewById(R.id.clientsList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
         ClientService cs = ClientService.getInstance();
 

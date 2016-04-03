@@ -49,6 +49,7 @@ public class ProductListActivity extends AppCompatActivity {
         // Clients list
         recyclerView = (RecyclerView) findViewById(R.id.productsList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
         ProductService ps = ProductService.getInstance();
 

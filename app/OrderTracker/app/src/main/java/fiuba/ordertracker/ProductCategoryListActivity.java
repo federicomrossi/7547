@@ -47,6 +47,7 @@ public class ProductCategoryListActivity extends AppCompatActivity {
         // Categories list
         recyclerView = (RecyclerView) findViewById(R.id.productsCategoriesList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
         CategorieService cs = CategorieService.getInstance();
 
