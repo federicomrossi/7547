@@ -34,10 +34,12 @@ public class ProductListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
 
+        String CATEGORIA = "TECNOLOGÍA";
+
         // Toolbar
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setSubtitle(getString(R.string.activity_product_list));
+        getSupportActionBar().setSubtitle(getString(R.string.activity_product_list) + " de " + CATEGORIA);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
