@@ -12,6 +12,8 @@ import android.widget.TextView;
  */
 public class ProductDetailActivity extends AppCompatActivity {
 
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,6 +22,11 @@ public class ProductDetailActivity extends AppCompatActivity {
         //Toolbar toolbar = (Toolbar) findViewById(R.id.client_detail_toolbar); // TODO change for the toolbar in the product layout
         //setSupportActionBar(toolbar);
         //CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+
+        // Toolbar
+        toolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setSubtitle("Detalle de producto");
 
         Intent i = getIntent();
 
