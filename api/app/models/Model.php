@@ -16,6 +16,11 @@ abstract class Model extends \Eloquent
 				$model = $model->where($filter['name'],$filter['compare'], $filter['value']);
 			}
 		}
+		if (isset($filters['orderby'])){
+			$orderBy = $filters['orderby'];
+			$orientation = isset($filters['orientation']) ? $filters['orientation'] : 'asc';
+			$model = $model->orderBy($orderBy,$orientation);
+		}
 		return $model->get();
 	}
 

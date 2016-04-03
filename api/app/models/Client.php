@@ -1,11 +1,15 @@
 <?php
 
 class Client extends Model {
-	protected $fillable = ['apenom', 'direccion','telefono', 'observaciones','id_vendedor','fecha_visita'];
+	protected $fillable = ['apenom', 'direccion','telefono', 'observaciones','id_vendedor','fecha_visita',
+							'razon_social', 'cod_cliente'];
 
 	protected $table = "clientes";
 
-	protected $allowedFilters = array('id_vendedor');
+	protected $allowedFilters = array('apenom', 'direccion','telefono', 'observaciones','id_vendedor','fecha_visita',
+		'razon_social', 'cod_cliente');
+
+	public $timestamps = false;
 
 	public static function getList($filters)
 	{
