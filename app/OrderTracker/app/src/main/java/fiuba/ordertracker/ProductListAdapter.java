@@ -64,14 +64,13 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 System.out.println("*********** Click on item ***********");
 
                 Intent intent = new Intent(view.getContext(), ProductDetailActivity.class);
-                //intent.putExtra("thumbnail", data.get(position).getThumbnail()); // TODO show picture
+                intent.putExtra("url_image_normal", data.get(position).getUrlImageNormal()); // TODO show picture
                 intent.putExtra("name", data.get(position).getNombre());
                 intent.putExtra("brand", data.get(position).getMarca());
                 intent.putExtra("description", data.get(position).getDescripcion());
                 intent.putExtra("price", data.get(position).getPrecio());
-                intent.putExtra("category", data.get(position).getCategoria());
+                intent.putExtra("category", category);
                 intent.putExtra("availability", data.get(position).getStock()); // TODO it has to be availability, not stock
-
                 view.getContext().startActivity(intent);
             }
         });
