@@ -99,9 +99,11 @@ public class ProductListActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 if(query != "")
                 {
-                    Intent intent = new Intent(searchView.getContext(), ProductListActivity.class);
-                    intent.putExtra("nameFilter",query);
-                    searchView.getContext().startActivity(intent);
+
+                    Intent newIntent= new Intent(searchView.getContext(), ProductListActivity.class);
+                    newIntent.putExtra("nameFilter",query);
+                    newIntent.putExtra("category", intent.getStringExtra("category"));
+                    searchView.getContext().startActivity(newIntent);
                 }
                 return false;
             }
