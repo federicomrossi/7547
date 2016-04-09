@@ -40,7 +40,7 @@ public final class CategorieService {
     //categorias
     public interface Categories {
         @GET("categories")
-        Call<List<Categorie>> Categories(@Query("nombre") String nombre, @Query("orderby") String orderby, @Query("orientation") String orientation);
+        Call<List<Categorie>> Categories(@Query("nombre%") String nombre, @Query("orderby") String orderby, @Query("orientation") String orientation);
     }
 
 

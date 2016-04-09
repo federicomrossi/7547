@@ -1,5 +1,6 @@
 package fiuba.ordertracker;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -31,23 +33,24 @@ public class ProductCategoryListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ProductCategoryListAdapter productCategoryListAdapter;
     private ProgressBar progressBar;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_category_list);
-
+        final SearchView searchView = (SearchView)findViewById(R.id.searchView);
+        intent = getIntent();
         // Toolbar
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setSubtitle(getString(R.string.activity_product_category_list));
-        final SearchView searchView = (SearchView)findViewById(R.id.searchView);
         this.changeSearchViewTextColorBlack(searchView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
         setProgressBarIndeterminateVisibility(true);
-
+        setFiltersValues(searchView, null);
         // Categories list
         recyclerView = (RecyclerView) findViewById(R.id.productsCategoriesList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -56,7 +59,7 @@ public class ProductCategoryListActivity extends AppCompatActivity {
         CategorieService cs = CategorieService.getInstance();
 
         // Create a call instance for looking up Retrofit contributors.
-        Call<List<Categorie>> call = cs.categories.Categories(null,null,null);
+        Call<List<Categorie>> call = cs.categories.Categories(intent.getStringExtra("nameFilter"),null,null);
 
         final ProductCategoryListActivity self_ = this;
         call.enqueue(new Callback<List<Categorie>>() {
@@ -83,6 +86,23 @@ public class ProductCategoryListActivity extends AppCompatActivity {
                 textNoCategories.setText("Hubo un error al cargar las categorias por favor reintente mas tarde");
                 textNoCategories.setVisibility(View.VISIBLE);
             }
+
+        });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (query != "") {
+                    setIntentsInFilters(searchView, null);
+                }
+                return false;
+            }
+
         });
     }
 
@@ -116,5 +136,24 @@ public class ProductCategoryListActivity extends AppCompatActivity {
         }
     }
 
+    protected void setIntentsInFilters(SearchView searchView, EditText marcaFilterView)
+    {
+        Intent newIntent = new Intent(searchView.getContext(), ProductCategoryListActivity.class);
+        if (!searchView.getQuery().toString().equals("")) {
+            newIntent.putExtra("nameFilter", searchView.getQuery().toString());
+        }
+        searchView.getContext().startActivity(newIntent);
+        finish();
+    }
+
+    private void setFiltersValues(SearchView searchView, EditText marcaFilterView) {
+        if(intent.getStringExtra("nameFilter") != null)
+        {
+            searchView.setQuery(intent.getStringExtra("nameFilter"), false);
+            searchView.setQueryHint(intent.getStringExtra("nameFilter"));
+            searchView.setHovered(true);
+            searchView.setSelected(true);
+        }
+    }
 
 }
