@@ -7,15 +7,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.view.View.OnKeyListener;
 
 import java.util.List;
 
@@ -40,17 +43,20 @@ public class ProductListActivity extends AppCompatActivity {
         final Intent intent = getIntent();
         // Toolbar
         toolbar = (Toolbar) findViewById(R.id.app_bar);
-        SearchView searchView = (SearchView)findViewById(R.id.searchView);
-        EditText filter = (EditText)findViewById(R.id.editText_brand);
+        final SearchView searchView = (SearchView)findViewById(R.id.searchView);
+        final EditText marcaFilterView = (EditText)findViewById(R.id.editText_brand);
         this.changeSearchViewTextColorBlack(searchView);
-        this.changeSearchViewTextColorBlack(filter);
+        this.changeSearchViewTextColorBlack(marcaFilterView);
+        searchView.setQuery(intent.getStringExtra("nameFilter"), false);
+        marcaFilterView.setText(intent.getStringExtra("marca"));
+        if(intent.getStringExtra("marca") != null )
+        {
+            View filtersContainer = findViewById(R.id.filters_container);
+            filtersContainer.setVisibility(View.VISIBLE);
+        }
         setSupportActionBar(toolbar);
-
-        final SearchView searchView = (SearchView) findViewById(R.id.searchView);
-
         String toolbarSubtitle = this.getToolbarSubtitle(intent);
         getSupportActionBar().setSubtitle(toolbarSubtitle);
-
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
@@ -65,7 +71,7 @@ public class ProductListActivity extends AppCompatActivity {
 
         // Create a call instance for looking up Retrofit contributors.
 
-        Call<List<Product>> call = ps.products.Products(intent.getStringExtra("category"), null, null, intent.getStringExtra("nameFilter"), null, null, "nombre", null);
+        Call<List<Product>> call = ps.products.Products(intent.getStringExtra("category"), null, null, intent.getStringExtra("nameFilter"), null, intent.getStringExtra("marca"), "nombre", null);
 
         final ProductListActivity self_ = this;
         call.enqueue(new Callback<List<Product>>() {
@@ -103,20 +109,52 @@ public class ProductListActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if(query != "")
-                {
-
-                    Intent newIntent= new Intent(searchView.getContext(), ProductListActivity.class);
-                    newIntent.putExtra("nameFilter",query);
-                    newIntent.putExtra("category", intent.getStringExtra("category"));
-                    searchView.getContext().startActivity(newIntent);
+                if (query != "") {
+                    setIntentsInFilters(searchView,marcaFilterView,intent);
                 }
                 return false;
             }
 
         });
 
+        marcaFilterView.setOnKeyListener(new OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                    setIntentsInFilters(searchView,marcaFilterView,intent);
+                    return true;
+                }
+                return false;
+            }
+        });
 
+        marcaFilterView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((actionId == EditorInfo.IME_ACTION_DONE) || ((event.getKeyCode() == KeyEvent.KEYCODE_ENTER) && (event.getAction() == KeyEvent.ACTION_DOWN ))){
+                   setIntentsInFilters(searchView,marcaFilterView,intent);
+                    return true;
+                }
+                else{
+                    return false;
+                }
+
+            }
+        });
+
+    }
+
+    protected void setIntentsInFilters(SearchView searchView, EditText marcaFilterView, Intent intent)
+    {
+        Intent newIntent = new Intent(searchView.getContext(), ProductListActivity.class);
+        if (searchView.getQuery().toString() != "") {
+            newIntent.putExtra("nameFilter", searchView.getQuery().toString());
+        }
+        if (marcaFilterView.getText().toString() != "") {
+            newIntent.putExtra("marca", marcaFilterView.getText().toString());
+        }
+        newIntent.putExtra("category", intent.getStringExtra("category"));
+        searchView.getContext().startActivity(newIntent);
     }
 
     @Override
