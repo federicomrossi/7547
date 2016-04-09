@@ -3,6 +3,7 @@ package fiuba.ordertracker;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -129,6 +130,15 @@ public class LoginActivity extends AppCompatActivity {
                         User user = response.body();
                         Intent intent = new Intent(self_, ClientListActivity.class);
                         startActivity(intent);
+                        SharedPreferences pref = getApplicationContext().getSharedPreferences("OrderTrackerPref", 0);
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.clear();
+                        editor.commit();
+                        editor.putInt("id", new Integer(user.getId()));
+                        editor.putString("token", user.getRememberToken());
+                        editor.putString("nombre",user.getNombreUsuario());
+                        editor.putString("email",user.getEmail());
+                        editor.commit();
                         finish();
                     }
                 }
