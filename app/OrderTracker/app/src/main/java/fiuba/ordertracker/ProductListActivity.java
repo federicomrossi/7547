@@ -132,4 +132,11 @@ public class ProductListActivity extends AppCompatActivity {
             }
         }
     }
+
+    //Call when the user clicks the "Agregar" button
+    public void addProductToCart(View view){
+        System.out.println("***** Add to cart *****");
+
+    }
+
 }

@@ -11,4 +11,6 @@
 
     <color name="buttonShoppingCart">#4DD0E1</color>
     <color name="buttonShoppingCartHighlight">#64B5F6</color>
+    <color name="addToCartButton">#B2DFDB</color>
+
 </resources>
