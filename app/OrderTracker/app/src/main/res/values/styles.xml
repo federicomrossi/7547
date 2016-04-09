@@ -39,4 +39,10 @@
         <!--<item name="queryHint">@nullt</item>-->
     </style>
 
+    <style name="ButtonAddToCart" parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">@color/buttonShoppingCartHighlight</item>
+        <item name="colorButtonNormal">@color/buttonShoppingCart</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
 </resources>

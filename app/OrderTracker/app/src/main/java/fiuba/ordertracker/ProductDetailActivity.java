@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -50,6 +51,10 @@ public class ProductDetailActivity extends AppCompatActivity {
         category.setText(i.getStringExtra("category"));
         availability.setText(i.getStringExtra("availability"));
         new ImageLoadTask(i.getStringExtra("url_image_normal"), image).execute();
+    }
+
+    public void addProductToCart(View view) {
+
     }
 
 }
