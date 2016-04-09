@@ -13,11 +13,13 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.content.Intent;
 
 import java.util.List;
 
+import fiuba.ordertracker.helpers.Fonts;
 import fiuba.ordertracker.pojo.Client;
 import fiuba.ordertracker.services.ClientService;
 import retrofit2.Call;
@@ -42,7 +44,12 @@ public class ClientListActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setSubtitle(getString(R.string.activity_client_list));
-
+        final SearchView searchView = (SearchView)findViewById(R.id.searchView);
+        final EditText razonFilterView = (EditText)findViewById(R.id.editText_brand);
+        final EditText clientCodeFilterView = (EditText)findViewById(R.id.editText_client_code);
+        Fonts.changeSearchViewTextColorBlack(searchView);
+        Fonts.changeSearchViewTextColorBlack(clientCodeFilterView);
+        Fonts.changeSearchViewTextColorBlack(razonFilterView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
@@ -100,10 +107,6 @@ public class ClientListActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_menu, menu);
 
-        /*final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));*/
-
         return true;
     }
 
@@ -111,17 +114,6 @@ public class ClientListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-
-        /*switch(id) {
-
-            case R.id.action_filter:
-                toolbar_filter();
-                break;
-
-            case R.id.action_search:
-                break;
-        }*/
-
         return super.onOptionsItemSelected(item);
     }
 
