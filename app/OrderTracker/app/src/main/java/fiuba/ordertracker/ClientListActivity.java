@@ -1,5 +1,6 @@
 package fiuba.ordertracker;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -56,9 +57,15 @@ public class ClientListActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("OrderTrackerPref", 0);
+        int idVendedor = pref.getInt("id", 0);
+
+
         // Create a call instance for looking up Retrofit contributors.
         String orderBy = intent.getStringExtra("orderBy") != null ? intent.getStringExtra("orderBy") : "razon_social";
-        Call<List<Client>> call = cs.clients.Clients(null,null,orderBy,null);
+        //Call<List<Client>> call = cs.clients.Clients(null,null,orderBy,null);
+        Call<List<Client>> call = cs.clients.Clients(Integer.toString(idVendedor),null,orderBy,null);
+        //Call<List<Client>> call = cs.clientsFromTodayByVendIdService.ClientsFromTodayByVendIdService(idVendedor,orderBy,null);
 
         final ClientListActivity self_ = this;
         call.enqueue(new Callback<List<Client>>() {
