@@ -18,6 +18,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import fiuba.ordertracker.helpers.Constants;
+import fiuba.ordertracker.helpers.Fonts;
 import fiuba.ordertracker.pojo.Categorie;
 import fiuba.ordertracker.services.CategorieService;
 import retrofit2.Call;
@@ -45,7 +46,7 @@ public class ProductCategoryListActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setSubtitle(getString(R.string.activity_product_category_list));
-        this.changeSearchViewTextColorBlack(searchView);
+        Fonts.changeSearchViewTextColorBlack(searchView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
@@ -118,22 +119,6 @@ public class ProductCategoryListActivity extends AppCompatActivity {
 
         int id = item.getItemId();
         return super.onOptionsItemSelected(item);
-    }
-
-    private void changeSearchViewTextColorBlack(View view) {
-        if (view != null) {
-            if (view instanceof TextView) {
-                ((TextView) view).setTextColor(Constants.COLOR_TEXT_FILTER);
-                ((TextView) view).setHintTextColor(Constants.COLOR_HINT_FILTER);
-                ((TextView) view).setCursorVisible(true);
-                return;
-            } else if (view instanceof ViewGroup) {
-                ViewGroup viewGroup = (ViewGroup) view;
-                for (int i = 0; i < viewGroup.getChildCount(); i++) {
-                    changeSearchViewTextColorBlack(viewGroup.getChildAt(i));
-                }
-            }
-        }
     }
 
     protected void setIntentsInFilters(SearchView searchView, EditText marcaFilterView)

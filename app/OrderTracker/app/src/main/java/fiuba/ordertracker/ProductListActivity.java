@@ -22,6 +22,7 @@ import android.view.View.OnKeyListener;
 import java.util.List;
 
 import fiuba.ordertracker.helpers.Constants;
+import fiuba.ordertracker.helpers.Fonts;
 import fiuba.ordertracker.pojo.Product;
 import fiuba.ordertracker.services.ProductService;
 import retrofit2.Call;
@@ -44,8 +45,8 @@ public class ProductListActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         final SearchView searchView = (SearchView)findViewById(R.id.searchView);
         final EditText marcaFilterView = (EditText)findViewById(R.id.editText_brand);
-        this.changeSearchViewTextColorBlack(searchView);
-        this.changeSearchViewTextColorBlack(marcaFilterView);
+        Fonts.changeSearchViewTextColorBlack(searchView);
+        Fonts.changeSearchViewTextColorBlack(marcaFilterView);
         setFiltersValues(searchView, marcaFilterView);
         setSupportActionBar(toolbar);
         String toolbarSubtitle = this.getToolbarSubtitle();
@@ -191,21 +192,6 @@ public class ProductListActivity extends AppCompatActivity {
         }
     }
 
-    private void changeSearchViewTextColorBlack(View view) {
-        if (view != null) {
-            if (view instanceof TextView) {
-                ((TextView) view).setTextColor(Constants.COLOR_TEXT_FILTER);
-                ((TextView) view).setHintTextColor(Constants.COLOR_HINT_FILTER);
-                ((TextView) view).setCursorVisible(true);
-                return;
-            } else if (view instanceof ViewGroup) {
-                ViewGroup viewGroup = (ViewGroup) view;
-                for (int i = 0; i < viewGroup.getChildCount(); i++) {
-                    changeSearchViewTextColorBlack(viewGroup.getChildAt(i));
-                }
-            }
-        }
-    }
 
     private String getToolbarSubtitle()
     {
