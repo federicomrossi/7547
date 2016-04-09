@@ -8,4 +8,6 @@
     <color name="colorAccent">#A7FFEB</color> <!-- Teal A100 -->
 
     <color name="colorPrimaryText">#FFFFFF</color>
+
+    <color name="addToCartButton">#B2DFDB</color>
 </resources>
