@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import fiuba.ordertracker.helpers.Constants;
 import fiuba.ordertracker.pojo.Product;
 import fiuba.ordertracker.services.ProductService;
 import retrofit2.Call;
@@ -38,6 +40,10 @@ public class ProductListActivity extends AppCompatActivity {
         final Intent intent = getIntent();
         // Toolbar
         toolbar = (Toolbar) findViewById(R.id.app_bar);
+        SearchView searchView = (SearchView)findViewById(R.id.searchView);
+        EditText filter = (EditText)findViewById(R.id.editText_brand);
+        this.changeSearchViewTextColorBlack(searchView);
+        this.changeSearchViewTextColorBlack(filter);
         setSupportActionBar(toolbar);
 
         final SearchView searchView = (SearchView) findViewById(R.id.searchView);
@@ -117,11 +123,6 @@ public class ProductListActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_menu, menu);
-
-        /*final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));*/
-
         return true;
     }
 
@@ -129,22 +130,7 @@ public class ProductListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-
-        /*switch(id) {
-
-            case R.id.action_filter:
-                toolbar_filter();
-                break;
-
-            case R.id.action_search:
-                break;
-        }*/
-
         return super.onOptionsItemSelected(item);
-    }
-
-    private void toolbar_filter() {
-
     }
 
     public void onClickShowHideFilters(View view) {
@@ -155,12 +141,22 @@ public class ProductListActivity extends AppCompatActivity {
             button_filter.setVisibility(View.VISIBLE);
         else {
             button_filter.setVisibility(View.GONE);
+        }
+    }
 
-            /*EditText editText_brand = (EditText) findViewById(R.id.editText_brand);
-            editText_brand.clearFocus();
-
-            EditText editText_client_code = (EditText) findViewById(R.id.editText_client_code);
-            editText_client_code.clearFocus();*/
+    private void changeSearchViewTextColorBlack(View view) {
+        if (view != null) {
+            if (view instanceof TextView) {
+                ((TextView) view).setTextColor(Constants.COLOR_TEXT_FILTER);
+                ((TextView) view).setHintTextColor(Constants.COLOR_HINT_FILTER);
+                ((TextView) view).setCursorVisible(true);
+                return;
+            } else if (view instanceof ViewGroup) {
+                ViewGroup viewGroup = (ViewGroup) view;
+                for (int i = 0; i < viewGroup.getChildCount(); i++) {
+                    changeSearchViewTextColorBlack(viewGroup.getChildAt(i));
+                }
+            }
         }
     }
 
