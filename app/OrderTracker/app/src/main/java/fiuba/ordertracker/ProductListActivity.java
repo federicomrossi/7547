@@ -1,7 +1,6 @@
 package fiuba.ordertracker;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,27 +34,21 @@ public class ProductListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ProductListAdapter productListAdapter;
     private ProgressBar progressBar;
-
+    private  Intent intent ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
-        final Intent intent = getIntent();
+        intent = getIntent();
         // Toolbar
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         final SearchView searchView = (SearchView)findViewById(R.id.searchView);
         final EditText marcaFilterView = (EditText)findViewById(R.id.editText_brand);
         this.changeSearchViewTextColorBlack(searchView);
         this.changeSearchViewTextColorBlack(marcaFilterView);
-        searchView.setQuery(intent.getStringExtra("nameFilter"), false);
-        marcaFilterView.setText(intent.getStringExtra("marca"));
-        if(intent.getStringExtra("marca") != null )
-        {
-            View filtersContainer = findViewById(R.id.filters_container);
-            filtersContainer.setVisibility(View.VISIBLE);
-        }
+        setFiltersValues(searchView, marcaFilterView);
         setSupportActionBar(toolbar);
-        String toolbarSubtitle = this.getToolbarSubtitle(intent);
+        String toolbarSubtitle = this.getToolbarSubtitle();
         getSupportActionBar().setSubtitle(toolbarSubtitle);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
@@ -93,7 +86,6 @@ public class ProductListActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
-                //Aca tenemos que agregar el msj de error a mostrar... puto el que lee
                 TextView textNoProducts = (TextView) findViewById(R.id.text_no_products);
                 textNoProducts.setText("Hubo un error al cargar los productos por favor reintente mas tarde");
                 textNoProducts.setVisibility(View.VISIBLE);
@@ -110,7 +102,7 @@ public class ProductListActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (query != "") {
-                    setIntentsInFilters(searchView,marcaFilterView,intent);
+                    setIntentsInFilters(searchView,marcaFilterView);
                 }
                 return false;
             }
@@ -121,7 +113,7 @@ public class ProductListActivity extends AppCompatActivity {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                    setIntentsInFilters(searchView,marcaFilterView,intent);
+                    setIntentsInFilters(searchView,marcaFilterView);
                     return true;
                 }
                 return false;
@@ -132,7 +124,7 @@ public class ProductListActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if ((actionId == EditorInfo.IME_ACTION_DONE) || ((event.getKeyCode() == KeyEvent.KEYCODE_ENTER) && (event.getAction() == KeyEvent.ACTION_DOWN ))){
-                   setIntentsInFilters(searchView,marcaFilterView,intent);
+                   setIntentsInFilters(searchView,marcaFilterView);
                     return true;
                 }
                 else{
@@ -144,13 +136,29 @@ public class ProductListActivity extends AppCompatActivity {
 
     }
 
-    protected void setIntentsInFilters(SearchView searchView, EditText marcaFilterView, Intent intent)
+    private void setFiltersValues(SearchView searchView, EditText marcaFilterView) {
+        if(intent.getStringExtra("nameFilter") != null)
+        {
+            searchView.setQuery(intent.getStringExtra("nameFilter"), false);
+            searchView.setQueryHint(intent.getStringExtra("nameFilter"));
+            searchView.setHovered(true);
+            searchView.setSelected(true);
+        }
+        if(intent.getStringExtra("marca") != null )
+        {
+            marcaFilterView.setText(intent.getStringExtra("marca"));
+            View filtersContainer = findViewById(R.id.filters_container);
+            filtersContainer.setVisibility(View.VISIBLE);
+        }
+    }
+
+    protected void setIntentsInFilters(SearchView searchView, EditText marcaFilterView)
     {
         Intent newIntent = new Intent(searchView.getContext(), ProductListActivity.class);
-        if (searchView.getQuery().toString() != "") {
+        if (!searchView.getQuery().toString().equals("")) {
             newIntent.putExtra("nameFilter", searchView.getQuery().toString());
         }
-        if (marcaFilterView.getText().toString() != "") {
+        if (!marcaFilterView.getText().toString().equals("")) {
             newIntent.putExtra("marca", marcaFilterView.getText().toString());
         }
         newIntent.putExtra("category", intent.getStringExtra("category"));
@@ -198,7 +206,7 @@ public class ProductListActivity extends AppCompatActivity {
         }
     }
 
-    private String getToolbarSubtitle(Intent intent)
+    private String getToolbarSubtitle()
     {
         String subtitle =  getString(R.string.activity_product_list) + " filtrado por ";
         if(intent.getStringExtra("nameFilter") != null)
