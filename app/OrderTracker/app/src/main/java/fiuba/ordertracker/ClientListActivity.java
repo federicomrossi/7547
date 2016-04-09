@@ -138,4 +138,9 @@ public class ClientListActivity extends AppCompatActivity {
             editText_client_code.clearFocus();
         }
     }
+
+    // When the user clicks the "Ver carrito" button
+    public void onClickViewShoppingCart(View view){
+        System.out.println("**** View shopping cart ****");
+    }
 }
