@@ -45,4 +45,9 @@
         <item name="android:textColor">#ffffff</item>
     </style>
 
+    <style name="NumberPickerCustom" parent="Theme.AppCompat.Light">
+        <item name="android:textColorPrimary">#000000</item>
+        <item name="android:textColorSecondary">#000000</item>
+    </style>
+
 </resources>
