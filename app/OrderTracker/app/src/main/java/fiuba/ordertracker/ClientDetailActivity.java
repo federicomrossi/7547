@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.MapFragment;
@@ -40,6 +41,13 @@ public class ClientDetailActivity extends AppCompatActivity {
         distance.setText("a " + i.getStringExtra("distance") + " Km.");
 
 
+        RelativeLayout viewOrdersLayout = (RelativeLayout) findViewById(R.id.viewOrdersLayout);
+        viewOrdersLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("**** View client orders ****");
+            }
+        });
     }
 
     //Call when the user clicks the button
