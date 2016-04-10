@@ -165,6 +165,7 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_marginTop="20dp"
+            android:layout_gravity="right"
             map:cameraTilt="30"
             map:cameraZoom="15"
             map:mapType="normal"
@@ -173,7 +174,20 @@
             map:uiScrollGestures="false"
             map:uiTiltGestures="true"
             map:uiZoomControls="true"
-            map:uiZoomGestures="true" />
+            map:uiZoomGestures="true" >
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/go_map"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_map_black_24dp"
+                android:background="@color/colorAccent"
+                app:layout_anchor="@id/app_bar"
+                android:layout_gravity="right|top"
+                android:onClick="onClickGoMap"/>
+
+        </fragment>
 
     </LinearLayout>
 
