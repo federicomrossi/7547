@@ -9,11 +9,15 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 
-public class ClientDetailActivity extends AppCompatActivity {
+public class ClientDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,9 @@ public class ClientDetailActivity extends AppCompatActivity {
                 System.out.println("**** View client orders ****");
             }
         });
+
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.client_map);
+        mapFragment.getMapAsync(this);
     }
 
     //Call when the user clicks the button
@@ -55,5 +62,23 @@ public class ClientDetailActivity extends AppCompatActivity {
         Intent intent = new Intent(view.getContext(), ProductCategoryListActivity.class);
         view.getContext().startActivity(intent);
 
+    }
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+        //DO WHATEVER YOU WANT WITH GOOGLEMAP
+        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+        //map.setTrafficEnabled(true);
+        map.setIndoorEnabled(true);
+        map.setBuildingsEnabled(true);
+        map.getUiSettings().setZoomControlsEnabled(true);
+
+        MarkerOptions marker = new MarkerOptions();
+        LatLng latLng = new LatLng(-34.6014832, -58.4293502);
+        marker.position(latLng);
+        marker.title("Mi Lugar");
+
+        map.addMarker(marker);
     }
 }
