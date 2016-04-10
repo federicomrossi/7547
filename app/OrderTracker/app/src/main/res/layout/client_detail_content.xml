@@ -125,7 +125,7 @@
 
         </RelativeLayout>
 
-        <include layout="@layout/_reuse_item_divider" />
+        <!--<include layout="@layout/_reuse_item_divider" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -156,7 +156,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="#212121" />
 
-        </RelativeLayout>
+        </RelativeLayout>-->
 
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:map="http://schemas.android.com/apk/res-auto"
@@ -165,8 +165,6 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_marginTop="20dp"
-            map:cameraTargetLat="-34.6014832"
-            map:cameraTargetLng="-58.4293502"
             map:cameraTilt="30"
             map:cameraZoom="15"
             map:mapType="normal"

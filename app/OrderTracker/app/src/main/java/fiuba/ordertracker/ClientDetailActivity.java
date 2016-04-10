@@ -1,6 +1,7 @@
 package fiuba.ordertracker;
 
 import android.content.Intent;
+import android.graphics.Camera;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +10,8 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
@@ -44,17 +47,20 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
         telephone.setText(i.getStringExtra("telephone"));
         distance.setText("a " + i.getStringExtra("distance") + " Km.");
 
+        /**
+         * Map to show client address
+         */
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.client_map);
+        mapFragment.getMapAsync(this);
 
-        RelativeLayout viewOrdersLayout = (RelativeLayout) findViewById(R.id.viewOrdersLayout);
+
+        /*RelativeLayout viewOrdersLayout = (RelativeLayout) findViewById(R.id.viewOrdersLayout);
         viewOrdersLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 System.out.println("**** View client orders ****");
             }
-        });
-
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.client_map);
-        mapFragment.getMapAsync(this);
+        });*/
     }
 
     //Call when the user clicks the button
@@ -66,19 +72,29 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
 
     @Override
     public void onMapReady(GoogleMap map) {
-        //DO WHATEVER YOU WANT WITH GOOGLEMAP
-        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
+        // Client address
+        LatLng map_client_address = new LatLng(-34.6014832, -58.4293502);
+        String map_client_name = "Mi Lugar";
+
+        // Map settings
+        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         //map.setTrafficEnabled(true);
         map.setIndoorEnabled(true);
         map.setBuildingsEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(true);
 
+        // Client marker
         MarkerOptions marker = new MarkerOptions();
-        LatLng latLng = new LatLng(-34.6014832, -58.4293502);
-        marker.position(latLng);
-        marker.title("Mi Lugar");
+        marker.position(map_client_address);
+        marker.flat(true);
+        marker.title(map_client_name);
 
+        // Add marker to map
         map.addMarker(marker);
+
+        // Positioned camera to focus the marker
+        CameraUpdate cu = CameraUpdateFactory.newLatLng(map_client_address);
+        map.animateCamera(cu);
     }
 }
