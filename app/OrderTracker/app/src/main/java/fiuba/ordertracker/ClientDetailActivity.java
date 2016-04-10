@@ -22,6 +22,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class ClientDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
+    private String clientName;
+    private Double clientLatitude;
+    private Double clientLongitude;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,12 +44,17 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
         TextView distance = (TextView) findViewById(R.id.client_distance);
 
         // Set data from intent
-        collapsingToolbar.setTitle(i.getStringExtra("name"));
-        //name.setText(i.getStringExtra("name"));
+        this.clientName = i.getStringExtra("name");
+
+        collapsingToolbar.setTitle(this.clientName);
         clientId.setText(i.getStringExtra("clientCode"));
         address.setText(i.getStringExtra("address"));
         telephone.setText(i.getStringExtra("telephone"));
         distance.setText("a " + i.getStringExtra("distance") + " Km.");
+
+        // Set latitude and longitude from intent
+        this.clientLatitude = Double.valueOf(i.getStringExtra("latitude"));
+        this.clientLongitude = Double.valueOf(i.getStringExtra("longitude"));
 
         /**
          * Map to show client address
@@ -74,8 +83,8 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
     public void onMapReady(GoogleMap map) {
 
         // Client address
-        LatLng map_client_address = new LatLng(-34.6014832, -58.4293502);
-        String map_client_name = "Mi Lugar";
+        LatLng map_client_address = new LatLng(this.clientLatitude, this.clientLongitude);
+        String map_client_name = this.clientName;
 
         // Map settings
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
