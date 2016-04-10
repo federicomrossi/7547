@@ -31,10 +31,7 @@
         <activity android:name=".ProductCategoryListActivity" />
         <activity android:name=".ProductListActivity" />
         <activity android:name=".ProductDetailActivity" />
-        <activity
-            android:name=".OrderListActivity"
-            android:label="@string/title_activity_order"
-            android:theme="@style/AppTheme"></activity>
+        <activity android:name=".OrderListActivity" />
         <activity android:name=".ProductsOrderListActivity" />
     </application>
 

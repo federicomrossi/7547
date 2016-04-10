@@ -28,7 +28,7 @@ public class OrderListActivity extends AppCompatActivity {
         // Toolbar
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setSubtitle(getString(R.string.activity_order_list));
+        getSupportActionBar().setSubtitle("Pedidos");
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);

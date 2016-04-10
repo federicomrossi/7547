@@ -2,17 +2,14 @@
     <string name="app_name">Order Tracker</string>
     <string name="activity_client_list">Clientes</string>
     <string name="activity_product_category_list">Categorías de productos</string>
-    <string name="activity_order_list">Pedidos</string>
     <string name="search_client">Buscar cliente</string>
     <string name="company">Razón social</string>
     <string name="client_code">Código de cliente</string>
     <string name="activity_product_list">Productos</string>
-    <string name="activity_products_order_list">Productos incluidos en el pedido</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="confirm">Confirmar</string>
     <string name="cancel">Cancelar</string>
     <string name="add_product">Agregar producto</string>
-    <string name="title_activity_order">Order Tracker</string>
 </resources>

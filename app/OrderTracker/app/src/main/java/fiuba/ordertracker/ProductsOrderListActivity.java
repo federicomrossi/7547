@@ -30,14 +30,14 @@ public class ProductsOrderListActivity extends AppCompatActivity {
         // Toolbar
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setSubtitle(getString(R.string.activity_products_order_list));
+        getSupportActionBar().setSubtitle("Productos incluidos en el pedido");
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
         setProgressBarIndeterminateVisibility(true);
 
-        // Orders list
+        // Products order list
         recyclerView = (RecyclerView) findViewById(R.id.ordersList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(this, LinearLayoutManager.VERTICAL));
