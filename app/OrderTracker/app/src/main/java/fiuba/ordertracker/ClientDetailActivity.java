@@ -9,9 +9,6 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.MapView;
-
 
 public class ClientDetailActivity extends AppCompatActivity {
 
@@ -52,7 +49,7 @@ public class ClientDetailActivity extends AppCompatActivity {
 
     //Call when the user clicks the button
     public void onClickShoppingCart(View view){
-        Intent intent = new Intent(view.getContext(), ProductCategoryListActivity.class);
+        Intent intent = new Intent(view.getContext(), OrderListActivity.class);
         view.getContext().startActivity(intent);
 
     }
