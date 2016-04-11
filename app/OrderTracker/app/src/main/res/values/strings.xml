@@ -6,4 +6,5 @@
     <string name="company">Razón social</string>
     <string name="client_code">Código de cliente</string>
     <string name="activity_product_list">Productos</string>
+    <string name="title_activity_clients_map">Map</string>
 </resources>

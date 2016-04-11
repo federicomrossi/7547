@@ -80,8 +80,8 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
 
     // Call when the user clicks the go map button
     public void onClickGoMap(View view) {
-        //Intent intent = new Intent(view.getContext(), ClientsMapActivity.class);
-        //view.getContext().startActivity(intent);
+        Intent intent = new Intent(view.getContext(), ClientsMapActivity.class);
+        view.getContext().startActivity(intent);
     }
 
     @Override
