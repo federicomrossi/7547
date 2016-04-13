@@ -61,23 +61,6 @@ public class AddProductToCartFragment extends DialogFragment {
         View v = inflater.inflate(R.layout.fragment_add_product_to_cart, null);
 
         /**
-         * Product name
-         */
-        TextView pn = (TextView) v.findViewById(R.id.productName);
-        pn.setText(product_name);
-
-        /**
-         * Warning message for stock
-         */
-        LinearLayout warningNoStock = (LinearLayout) v.findViewById(R.id.warningNoStock);
-
-        if(product_availability.contentEquals("Agotado")) {
-            warningNoStock.setVisibility(View.VISIBLE);
-        } else {
-            warningNoStock.setVisibility(View.GONE);
-        }
-
-        /**
          * Number picker for select stock
          */
         NumberPicker np = (NumberPicker) v.findViewById(R.id.numberPicker);

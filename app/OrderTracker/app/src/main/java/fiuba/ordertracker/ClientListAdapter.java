@@ -61,6 +61,8 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
                 intent.putExtra("address", selectedClient.getDireccion());
                 intent.putExtra("telephone", selectedClient.getTelefono());
                 intent.putExtra("distance", String.valueOf(selectedClient.getDistance()));
+                intent.putExtra("latitude", String.valueOf(selectedClient.getLatitude()));
+                intent.putExtra("longitude", String.valueOf(selectedClient.getLongitude()));
 
                 view.getContext().startActivity(intent);
             }

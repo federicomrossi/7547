@@ -1,13 +1,12 @@
 package fiuba.ordertracker.pojo;
 
 /**
- * Created by pablo on 12/4/2016.
+ * Created by pablo on 13/4/2016.
  */
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Order {
+public class OrderProduct {
 
     @SerializedName("id")
     @Expose
@@ -27,6 +26,15 @@ public class Order {
     @SerializedName("updated_at")
     @Expose
     private String updatedAt;
+    @SerializedName("id_orden")
+    @Expose
+    private String idOrden;
+    @SerializedName("id_producto")
+    @Expose
+    private String idProducto;
+    @SerializedName("cantidad")
+    @Expose
+    private String cantidad;
 
     /**
      *
@@ -136,9 +144,63 @@ public class Order {
         this.updatedAt = updatedAt;
     }
 
+    /**
+     *
+     * @return
+     * The idOrden
+     */
+    public String getIdOrden() {
+        return idOrden;
+    }
+
+    /**
+     *
+     * @param idOrden
+     * The id_orden
+     */
+    public void setIdOrden(String idOrden) {
+        this.idOrden = idOrden;
+    }
+
+    /**
+     *
+     * @return
+     * The idProducto
+     */
+    public String getIdProducto() {
+        return idProducto;
+    }
+
+    /**
+     *
+     * @param idProducto
+     * The id_producto
+     */
+    public void setIdProducto(String idProducto) {
+        this.idProducto = idProducto;
+    }
+
+    /**
+     *
+     * @return
+     * The cantidad
+     */
+    public String getCantidad() {
+        return cantidad;
+    }
+
+    /**
+     *
+     * @param cantidad
+     * The cantidad
+     */
+    public void setCantidad(String cantidad) {
+        this.cantidad = cantidad;
+    }
+
     @Override
     public String toString(){
-        return this.getIdCliente();
+        return this.getIdCliente() + this.getIdProducto() + this.getIdOrden();
     }
 
 }
