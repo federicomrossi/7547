@@ -2,9 +2,11 @@ package fiuba.ordertracker;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -34,13 +36,10 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-    }
 
-    protected void onCreate(Bundle savedInstanceState, String clientID) {
-        this.onCreate(savedInstanceState);
-        this.focusInClient = clientID;
+        Bundle b = getIntent().getExtras();
+        this.focusInClient = b.getString("clientID");
     }
-
 
     /**
      * Manipulates the map once available.
@@ -62,6 +61,10 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
 
         // Load the clients in the map
         this.loadClientsInMap(googleMap);
+
+        mMap.setIndoorEnabled(true);
+        mMap.setBuildingsEnabled(true);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
     }
 
     private void loadClientsInMap(GoogleMap googleMap) {
@@ -87,12 +90,15 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
                     marker.position(client_position);
                     marker.flat(true);
                     marker.title(client_name);
-                    _googleMap.addMarker(marker);
+
+                    _googleMap.addMarker(marker).showInfoWindow();
 
                     // If theres a client specified to be focused, we positioned the camera
                     // over the marker.
                     if(client.getId().contentEquals(_self.focusInClient)) {
-                        _googleMap.moveCamera(CameraUpdateFactory.newLatLng(client_position));
+                        _googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(client_position, 15));
+                        _googleMap.animateCamera(CameraUpdateFactory.zoomIn());
+                        _googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
                     }
                 }
             }
@@ -107,4 +113,5 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
             }
         });
     }
+
 }

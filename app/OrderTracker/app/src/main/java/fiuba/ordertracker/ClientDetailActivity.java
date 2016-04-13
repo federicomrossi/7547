@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class ClientDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
+    private String clientID;
     private String clientName;
     private Double clientLatitude;
     private Double clientLongitude;
@@ -44,6 +45,7 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
         TextView distance = (TextView) findViewById(R.id.client_distance);
 
         // Set data from intent
+        this.clientID = i.getStringExtra("clientID");
         this.clientName = i.getStringExtra("name");
 
         collapsingToolbar.setTitle(this.clientName);
@@ -81,6 +83,11 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
     // Call when the user clicks the go map button
     public void onClickGoMap(View view) {
         Intent intent = new Intent(view.getContext(), ClientsMapActivity.class);
+
+        Bundle b = new Bundle();
+        b.putString("clientID", this.clientID);
+        intent.putExtras(b);
+
         view.getContext().startActivity(intent);
     }
 
