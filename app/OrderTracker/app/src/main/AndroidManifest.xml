@@ -31,8 +31,6 @@
         <activity android:name=".ProductCategoryListActivity" />
         <activity android:name=".ProductListActivity" />
         <activity android:name=".ProductDetailActivity" />
-        <activity android:name=".OrderListActivity" />
-        <activity android:name=".ProductsOrderListActivity" />
     </application>
 
 </manifest>

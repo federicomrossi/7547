@@ -49,7 +49,7 @@ public class ClientDetailActivity extends AppCompatActivity {
 
     //Call when the user clicks the button
     public void onClickShoppingCart(View view){
-        Intent intent = new Intent(view.getContext(), OrderListActivity.class);
+        Intent intent = new Intent(view.getContext(), ProductCategoryListActivity.class);
         view.getContext().startActivity(intent);
 
     }
