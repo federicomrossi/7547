@@ -160,7 +160,7 @@ public class ClientListActivity extends AppCompatActivity {
         else {
             button_filter.setVisibility(View.GONE);
 
-            EditText editText_brand = (EditText) findViewById(R.id.editText_brand);
+            EditText editText_brand = (EditText) findViewById(R.id.editText_client_code);
             editText_brand.clearFocus();
 
             EditText editText_client_code = (EditText) findViewById(R.id.editText_client_code);
