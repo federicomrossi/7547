@@ -106,13 +106,15 @@ public class ProductCategoryListFragment extends Fragment {
 
 
         final FragmentActivity self_ = getActivity();
+        final Fragment _parentFragment = this.getParentFragment();
         final View _view = view;
+
         call.enqueue(new Callback<List<Categorie>>() {
             @Override
             public void onResponse(Call<List<Categorie>> call, Response<List<Categorie>> response) {
                 // Get result Repo from response.body()
                 List<Categorie> listCategories = response.body();
-                productCategoryListAdapter = new ProductCategoryListAdapter(self_, listCategories);
+                productCategoryListAdapter = new ProductCategoryListAdapter(self_, listCategories, _parentFragment);
                 progressBar.setVisibility(View.GONE);
 
                 if(listCategories.size() == 0) {
@@ -125,7 +127,7 @@ public class ProductCategoryListFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Categorie>> call, Throwable t) {
-                //Aca tenemos que agregar el msj de error a mostrar... puto el que lee
+                //Aca tenemos que agregar el msj de error a mostrar...
                 progressBar.setVisibility(View.GONE);
                 TextView textNoCategories = (TextView) _view.findViewById(R.id.text_no_categories);
                 textNoCategories.setText("Hubo un error al cargar las categorias por favor reintente mas tarde");

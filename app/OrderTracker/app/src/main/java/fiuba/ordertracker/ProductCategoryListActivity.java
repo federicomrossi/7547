@@ -38,7 +38,7 @@ public class ProductCategoryListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        /*super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_category_list);
         final SearchView searchView = (SearchView)findViewById(R.id.searchView);
         intent = getIntent();
@@ -68,7 +68,7 @@ public class ProductCategoryListActivity extends AppCompatActivity {
             public void onResponse(Call<List<Categorie>> call, Response<List<Categorie>> response) {
                 // Get result Repo from response.body()
                 List<Categorie> listCategories = response.body();
-                productCategoryListAdapter = new ProductCategoryListAdapter(self_, listCategories);
+                productCategoryListAdapter = new ProductCategoryListAdapter(self_, listCategories, );
                 progressBar.setVisibility(View.GONE);
 
                 if(listCategories.size() == 0) {
@@ -104,7 +104,7 @@ public class ProductCategoryListActivity extends AppCompatActivity {
                 return false;
             }
 
-        });
+        });*/
     }
 
     @Override
