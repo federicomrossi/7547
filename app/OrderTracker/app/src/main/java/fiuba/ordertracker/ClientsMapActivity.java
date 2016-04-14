@@ -1,5 +1,6 @@
 package fiuba.ordertracker;
 
+import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
+import fiuba.ordertracker.listeners.GPSTracker;
 import fiuba.ordertracker.pojo.Client;
 import fiuba.ordertracker.services.ClientService;
 import retrofit2.Call;
@@ -27,6 +29,7 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
     private GoogleMap mMap;
     private ClientService clientService = ClientService.getInstance();
     private String focusInClient = "";
+    private LatLng centeredMarker = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +40,17 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        Bundle b = getIntent().getExtras();
-        this.focusInClient = b.getString("clientID");
+        String clientFocusedId = getIntent().getExtras().getString("clientID");
+        if(clientFocusedId == null)
+        {
+            GPSTracker gpsTracker = new GPSTracker(this);
+            centeredMarker = new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude());
+            // came from client list
+            this.focusInClient = "-1";
+        } else {
+            this.focusInClient = clientFocusedId;
+
+        }
     }
 
     /**
@@ -100,6 +112,17 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
                         _googleMap.animateCamera(CameraUpdateFactory.zoomIn());
                         _googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
                     }
+                }
+                if(centeredMarker != null)
+                {
+                    MarkerOptions marker = new MarkerOptions();
+                    marker.position(centeredMarker);
+                    marker.flat(true);
+                    marker.title("Tu ubicación");
+                    _googleMap.addMarker(marker).showInfoWindow();
+                    _googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centeredMarker, 15));
+                    _googleMap.animateCamera(CameraUpdateFactory.zoomIn());
+                    _googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
                 }
             }
 
