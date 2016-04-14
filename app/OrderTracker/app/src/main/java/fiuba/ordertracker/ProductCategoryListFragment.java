@@ -4,11 +4,24 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import java.util.List;
+
+import fiuba.ordertracker.pojo.Categorie;
+import fiuba.ordertracker.services.CategorieService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -29,6 +42,10 @@ public class ProductCategoryListFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private RecyclerView recyclerView;
+    private ProductCategoryListAdapter productCategoryListAdapter;
+    private ProgressBar progressBar;
 
     private OnFragmentInteractionListener mListener;
 
@@ -60,6 +77,8 @@ public class ProductCategoryListFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
 
     @Override
@@ -69,16 +88,91 @@ public class ProductCategoryListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_product_category_list, container, false);
 
 
-        Button button = (Button) view.findViewById(R.id.button);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+
+        getActivity().setProgressBarIndeterminateVisibility(true); // POSIBLE BUG
+
+        // Categories list
+        recyclerView = (RecyclerView) view.findViewById(R.id.productsCategoriesList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
+
+        CategorieService cs = CategorieService.getInstance();
+
+        // Create a call instance for looking up Retrofit contributors.
+        //Call<List<Categorie>> call = cs.categories.Categories(intent.getStringExtra("nameFilter"),null,null);
+        Call<List<Categorie>> call = cs.categories.Categories("",null,null);
+
+
+        final FragmentActivity self_ = getActivity();
+        final View _view = view;
+        call.enqueue(new Callback<List<Categorie>>() {
+            @Override
+            public void onResponse(Call<List<Categorie>> call, Response<List<Categorie>> response) {
+                // Get result Repo from response.body()
+                List<Categorie> listCategories = response.body();
+                productCategoryListAdapter = new ProductCategoryListAdapter(self_, listCategories);
+                progressBar.setVisibility(View.GONE);
+
+                if(listCategories.size() == 0) {
+                    TextView textNoCategories = (TextView) _view.findViewById(R.id.text_no_categories);
+                    textNoCategories.setVisibility(View.VISIBLE);
+                }
+
+                recyclerView.setAdapter(productCategoryListAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<List<Categorie>> call, Throwable t) {
+                //Aca tenemos que agregar el msj de error a mostrar... puto el que lee
+                progressBar.setVisibility(View.GONE);
+                TextView textNoCategories = (TextView) _view.findViewById(R.id.text_no_categories);
+                textNoCategories.setText("Hubo un error al cargar las categorias por favor reintente mas tarde");
+                textNoCategories.setVisibility(View.VISIBLE);
+            }
+
+        });
+
+        /*searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (query != "") {
+                    setIntentsInFilters(searchView, null);
+                }
+                return false;
+            }
+
+        });*/
+
+
+
+
+
+
+
+
+        //////////////////////////////////////////////////////////
+
+        /*Button button = (Button) view.findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
                 ProductsFragment instanceFragment = (ProductsFragment) getParentFragment();
-                instanceFragment.replaceFragment(new ProductListFragment(), false);
+
+                Bundle args= new Bundle();
+                ProductListFragment productListFragment = new ProductListFragment();
+                productListFragment.setArguments(args);
+                instanceFragment.replaceFragment(productListFragment, false);
             }
-        });
+        });*/
 
         return view;
     }
