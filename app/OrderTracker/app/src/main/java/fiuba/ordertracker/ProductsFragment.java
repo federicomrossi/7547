@@ -110,6 +110,15 @@ public class ProductsFragment extends Fragment {
         void onProductsFragmentInteraction(Uri uri);
     }
 
+    /*public void changeFragment(View view) {
+        Fragment mFragment = new ProductListFragment();
+        android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        //Replacing using the id of the container and not the fragment itself
+        ft.replace(R.id.Maincontainer, mFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }*/
+
     public void replaceFragment(Fragment fragment, boolean addToBackStack) {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         if (addToBackStack) {

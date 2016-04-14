@@ -41,13 +41,6 @@ public class TabActivity extends AppCompatActivity
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-
-
-        /*//Notice that I am adding this 1st fragment in the Activity and not the XML
-        ProductCategoryListFragment mainFragment = new ProductCategoryListFragment();
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.add(R.id.Maincontainer, mainFragment);
-        ft.commit();*/
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -104,15 +97,5 @@ public class TabActivity extends AppCompatActivity
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
-    }
-
-
-    public void changeFragment(View view) {
-        Fragment mFragment = new ProductListFragment();
-        android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        //Replacing using the id of the container and not the fragment itself
-        ft.replace(R.id.Maincontainer, mFragment);
-        ft.addToBackStack(null);
-        ft.commit();
     }
 }
