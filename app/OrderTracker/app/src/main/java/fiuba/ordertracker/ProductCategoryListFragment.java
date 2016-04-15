@@ -240,5 +240,4 @@ public class ProductCategoryListFragment extends Fragment {
         void onProductCategoryListFragmentInteraction(Uri uri);
     }
 
-
 }
