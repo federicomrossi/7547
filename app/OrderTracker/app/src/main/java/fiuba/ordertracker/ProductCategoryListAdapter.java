@@ -24,12 +24,29 @@ import fiuba.ordertracker.pojo.Client;
 public class ProductCategoryListAdapter extends RecyclerView.Adapter<ProductCategoryListAdapter.MyViewHolder> {
 
     private LayoutInflater inflater;
+
+
     List<Categorie> data = Collections.emptyList();
+
+    List<Categorie> originalData = Collections.emptyList();
+
+    public void setOriginalData(List<Categorie> originalData) {
+        this.originalData = originalData;
+    }
+
+    public List<Categorie> getOriginalData() {
+        return originalData;
+    }
+
     private Fragment parentFragment;
+    public void setData(List<Categorie> data) {
+        this.data = data;
+    }
 
     public ProductCategoryListAdapter(Context context, List<Categorie> data, Fragment fragment) {
         inflater = LayoutInflater.from(context);
         this.data = data;
+
         this.parentFragment = fragment;
     }
 

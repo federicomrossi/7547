@@ -4,10 +4,26 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.SearchView;
+import android.widget.TextView;
+
+import java.util.List;
+
+import fiuba.ordertracker.pojo.Product;
+import fiuba.ordertracker.services.ProductService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -27,6 +43,10 @@ public class ProductListFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private RecyclerView recyclerView;
+    private ProductListAdapter productListAdapter;
+    private ProgressBar progressBar;
 
     private OnFragmentInteractionListener mListener;
 
@@ -63,11 +83,101 @@ public class ProductListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                            final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_product_list, container, false);
 
         Button button = (Button) view.findViewById(R.id.button1);
+
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+
+        getActivity().setProgressBarIndeterminateVisibility(true);
+
+        // Products list
+        recyclerView = (RecyclerView) view.findViewById(R.id.productsList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
+
+        ProductService ps = ProductService.getInstance();
+
+        // Create a call instance for looking up Retrofit contributors.
+        Call<List<Product>> call = ps.products.Products(getArguments().getString("category"), null, null, null, null, null, null, null);
+
+        final FragmentActivity self_ = getActivity();
+        final Fragment _parentFragment = this.getParentFragment();
+        final View _view = view;
+
+        call.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                // Get result Repo from response.body()
+                List<Product> listProducts = response.body();
+                productListAdapter = new ProductListAdapter(self_, listProducts, _parentFragment);
+                productListAdapter.setCategory(getArguments().getString("categoryName")); // no longer needed :P
+                progressBar.setVisibility(View.GONE);
+
+                if(listProducts.size() == 0) {
+                    TextView textNoProducts = (TextView) _view.findViewById(R.id.text_no_products);
+                    textNoProducts.setVisibility(View.VISIBLE);
+                }
+
+                recyclerView.setAdapter(productListAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                TextView textNoProducts = (TextView) _view.findViewById(R.id.text_no_products);
+                textNoProducts.setText("Hubo un error al cargar los productos por favor reintente mas tarde");
+                textNoProducts.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+            }
+        });
+
+        /*searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (query != "") {
+                    setIntentsInFilters(searchView,marcaFilterView);
+                }
+                return false;
+            }
+
+        });
+
+        marcaFilterView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                    setIntentsInFilters(searchView,marcaFilterView);
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        marcaFilterView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((actionId == EditorInfo.IME_ACTION_DONE) || ((event.getKeyCode() == KeyEvent.KEYCODE_ENTER) && (event.getAction() == KeyEvent.ACTION_DOWN ))){
+                    setIntentsInFilters(searchView,marcaFilterView);
+                    return true;
+                }
+                else{
+                    return false;
+                }
+
+            }
+        });*/
+
+
+
+        // REMOVE :)
         button.setOnClickListener(new View.OnClickListener()
         {
             @Override
