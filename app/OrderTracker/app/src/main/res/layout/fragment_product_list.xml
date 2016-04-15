@@ -4,22 +4,87 @@
     android:layout_height="match_parent"
     tools:context="fiuba.ordertracker.ProductListFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Product list" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="A las Categorías"
-        android:id="@+id/button1" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <!--<Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A las Categorías"
+            android:id="@+id/button1" />-->
+        <LinearLayout
+            android:id="@+id/search_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:elevation="4dp"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cv"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@android:color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <RelativeLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:descendantFocusability="beforeDescendants"
+                        android:focusableInTouchMode="true"
+                        android:layout_height="wrap_content">
+                        <EditText
+                            android:id="@+id/category_filter_name"
+                            android:layout_width="fill_parent"
+                            android:singleLine="true"
+                            android:drawableLeft="@drawable/ic_menu_search_holo_light"
+                            android:background="@android:color/transparent"
+                            android:textColor="@android:color/black"
+                            android:layout_height="wrap_content" />
+                        <ImageButton
+                            android:id="@+id/button1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:background="#00000000"
+                            android:src="@drawable/ic_settings_gray_24dp"
+                            android:layout_centerVertical="true"
+                            android:layout_margin="5dp"
+                            android:text="Button"/>
+                    </RelativeLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:orientation="vertical"
+                        android:id="@+id/filters_container">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/textView2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Código cliente:"
+                                android:textAppearance="?android:attr/textAppearanceSmall" />
+                            <EditText
+                                android:id="@+id/editText_client_code"
+                                android:layout_width="match_parent"
+                                android:imeOptions="actionDone"
+                                android:singleLine="true"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/text_no_products"

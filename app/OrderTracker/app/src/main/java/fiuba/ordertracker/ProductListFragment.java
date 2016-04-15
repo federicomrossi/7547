@@ -87,7 +87,7 @@ public class ProductListFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_product_list, container, false);
 
-        Button button = (Button) view.findViewById(R.id.button1);
+        /*Button button = (Button) view.findViewById(R.id.button1);*/
 
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
@@ -178,7 +178,7 @@ public class ProductListFragment extends Fragment {
 
 
         // REMOVE :)
-        button.setOnClickListener(new View.OnClickListener()
+        /*button.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -187,7 +187,7 @@ public class ProductListFragment extends Fragment {
                 instanceFragment.replaceFragment(new ProductCategoryListFragment(), false);
             }
         });
-
+*/
         return view;
     }
 
