@@ -2,6 +2,7 @@ package fiuba.ordertracker;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     private LayoutInflater inflater;
     List<Product> data = Collections.emptyList();
     private String category = "";
+    private Fragment parentFragment;
 
     public String getCategory() {
         return category;
@@ -34,9 +36,10 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         this.category = category;
     }
 
-    public ProductListAdapter(Context context, List<Product> data) {
+    public ProductListAdapter(Context context, List<Product> data, Fragment parentFragment) {
         inflater = LayoutInflater.from(context);
         this.data = data;
+        this.parentFragment = parentFragment;
     }
 
     @Override

@@ -38,7 +38,7 @@ public class ProductListActivity extends AppCompatActivity {
     private  Intent intent ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        /*super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
         intent = getIntent();
         // Toolbar
@@ -133,7 +133,7 @@ public class ProductListActivity extends AppCompatActivity {
                 }
 
             }
-        });
+        });*/
 
     }
 
