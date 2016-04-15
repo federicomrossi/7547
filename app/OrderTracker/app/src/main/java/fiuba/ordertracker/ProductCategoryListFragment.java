@@ -8,15 +8,19 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.List;
 
+import fiuba.ordertracker.helpers.FiltersHelper;
 import fiuba.ordertracker.pojo.Categorie;
 import fiuba.ordertracker.services.CategorieService;
 import retrofit2.Call;
@@ -46,9 +50,7 @@ public class ProductCategoryListFragment extends Fragment {
     private RecyclerView recyclerView;
     private ProductCategoryListAdapter productCategoryListAdapter;
     private ProgressBar progressBar;
-
     private OnFragmentInteractionListener mListener;
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -115,6 +117,7 @@ public class ProductCategoryListFragment extends Fragment {
                 // Get result Repo from response.body()
                 List<Categorie> listCategories = response.body();
                 productCategoryListAdapter = new ProductCategoryListAdapter(self_, listCategories, _parentFragment);
+                productCategoryListAdapter.setOriginalData(listCategories);
                 progressBar.setVisibility(View.GONE);
 
                 if(listCategories.size() == 0) {
@@ -134,6 +137,22 @@ public class ProductCategoryListFragment extends Fragment {
                 textNoCategories.setVisibility(View.VISIBLE);
             }
 
+        });
+
+        final EditText nameFilter = (EditText) view.findViewById(R.id.category_filter_name);
+        nameFilter.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((actionId == EditorInfo.IME_ACTION_DONE) || ((event.getKeyCode() == android.view.KeyEvent.KEYCODE_ENTER) && (event.getAction() == android.view.KeyEvent.ACTION_DOWN))) {
+                    String filter = nameFilter.getText().toString();
+                    List<Categorie> listFiltered = FiltersHelper.filterCategoriesByName(productCategoryListAdapter.getOriginalData(), filter);
+                    productCategoryListAdapter.setData(listFiltered);
+                    recyclerView.setAdapter(productCategoryListAdapter);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
         });
 
         /*searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -202,6 +221,9 @@ public class ProductCategoryListFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
+    // Filters //
+
 
     /**
      * This interface must be implemented by activities that contain this
