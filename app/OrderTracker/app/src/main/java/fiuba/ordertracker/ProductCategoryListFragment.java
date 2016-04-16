@@ -16,11 +16,13 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import java.util.List;
 
 import fiuba.ordertracker.helpers.FiltersHelper;
+import fiuba.ordertracker.helpers.Fonts;
 import fiuba.ordertracker.pojo.Categorie;
 import fiuba.ordertracker.services.CategorieService;
 import retrofit2.Call;
@@ -139,66 +141,27 @@ public class ProductCategoryListFragment extends Fragment {
 
         });
 
-        final EditText nameFilter = (EditText) view.findViewById(R.id.category_filter_name);
-        nameFilter.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (event != null && event.getAction() != KeyEvent.ACTION_DOWN) {
-                    return false;
-                } else if (actionId == EditorInfo.IME_ACTION_SEARCH
-                        || event == null
-                        || event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-                    String filter = nameFilter.getText().toString();
-                    List<Categorie> listFiltered = FiltersHelper.filterCategoriesByName(productCategoryListAdapter.getOriginalData(), filter);
-                    productCategoryListAdapter.setData(listFiltered);
-                    recyclerView.setAdapter(productCategoryListAdapter);
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        });
-
-        /*searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        final SearchView nameFilter = (SearchView) view.findViewById(R.id.searchView);
+        Fonts.changeSearchViewTextColorBlack(nameFilter);
+        nameFilter.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
+                if(newText.equals("")){
+                    this.onQueryTextSubmit("");
+                }
+                return true;
             }
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (query != "") {
-                    setIntentsInFilters(searchView, null);
-                }
-                return false;
+                String filter = nameFilter.getQuery().toString();
+                List<Categorie> listFiltered = FiltersHelper.filterCategoriesByName(productCategoryListAdapter.getOriginalData(), filter);
+                productCategoryListAdapter.setData(listFiltered);
+                recyclerView.setAdapter(productCategoryListAdapter);
+                return true;
             }
 
-        });*/
-
-
-
-
-
-
-
-
-        //////////////////////////////////////////////////////////
-
-        /*Button button = (Button) view.findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                ProductsFragment instanceFragment = (ProductsFragment) getParentFragment();
-
-                Bundle args= new Bundle();
-                ProductListFragment productListFragment = new ProductListFragment();
-                productListFragment.setArguments(args);
-                instanceFragment.replaceFragment(productListFragment, false);
-            }
-        });*/
-
+        });
         return view;
     }
 
