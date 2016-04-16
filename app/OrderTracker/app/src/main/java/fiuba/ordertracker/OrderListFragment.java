@@ -1,17 +1,23 @@
 package fiuba.ordertracker;
 
+import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -111,7 +117,7 @@ public class OrderListFragment extends Fragment {
 
                 progressBar.setVisibility(View.GONE);
 
-                if(listProducts.size() == 0) {
+                if (listProducts.size() == 0) {
                     TextView textNoProducts = (TextView) _view.findViewById(R.id.text_no_products);
                     textNoProducts.setVisibility(View.VISIBLE);
                 }
@@ -125,6 +131,44 @@ public class OrderListFragment extends Fragment {
                 textNoProducts.setText("Hubo un error al cargar los productos por favor reintente mas tarde");
                 textNoProducts.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
+            }
+        });
+
+        // Confirmation button
+        Button buttonConfirm = (Button) view.findViewById(R.id.buttonConfirmOrder);
+        buttonConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(self_)
+                        .setTitle("Confirmar pedido")
+                        .setMessage("¿Está seguro de confirmar el pedido?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                Toast.makeText(self_, "Se ha confirmado el pedido satisfactoriamente", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton("Cancelar", null).show();
+            }
+        });
+
+        // Discard button
+        Button buttonDiscard = (Button) view.findViewById(R.id.buttonDiscardOrder);
+        buttonDiscard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(self_)
+                        .setTitle("Descartar pedido")
+                        .setMessage("¿Está seguro de descartar el pedido?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                Toast.makeText(self_, "Se ha descartado el pedido satisfactoriamente", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton("Cancelar", null).show();
             }
         });
 
