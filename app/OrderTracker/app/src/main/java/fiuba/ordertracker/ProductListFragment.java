@@ -2,6 +2,7 @@ package fiuba.ordertracker;
 
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -23,7 +27,6 @@ import java.util.List;
 
 import fiuba.ordertracker.helpers.FiltersHelper;
 import fiuba.ordertracker.helpers.Fonts;
-import fiuba.ordertracker.pojo.Categorie;
 import fiuba.ordertracker.pojo.Product;
 import fiuba.ordertracker.services.ProductService;
 import retrofit2.Call;
@@ -121,7 +124,7 @@ public class ProductListFragment extends Fragment {
                 productListAdapter.setOriginalData(listProducts);
                 progressBar.setVisibility(View.GONE);
 
-                if(listProducts.size() == 0) {
+                if (listProducts.size() == 0) {
                     TextView textNoProducts = (TextView) _view.findViewById(R.id.text_no_products);
                     textNoProducts.setVisibility(View.VISIBLE);
                 }
@@ -138,28 +141,8 @@ public class ProductListFragment extends Fragment {
             }
         });
 
+        setFilters(view);
 
-        final SearchView nameFilter = (SearchView) view.findViewById(R.id.searchView);
-        Fonts.changeSearchViewTextColorBlack(nameFilter);
-        nameFilter.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if(newText.equals("")){
-                    this.onQueryTextSubmit("");
-                }
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                String filter = nameFilter.getQuery().toString();
-                List<Product> listFiltered = FiltersHelper.filterProductsByName(productListAdapter.getOriginalData(), filter);
-                productListAdapter.setData(listFiltered);
-                recyclerView.setAdapter(productListAdapter);
-                return true;
-            }
-
-        });
 
         return view;
     }
@@ -201,5 +184,81 @@ public class ProductListFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onProductListFragmentInteraction(Uri uri);
+    }
+
+    public void onClickShowHideFilters(View view) {
+
+        LinearLayout button_filter = (LinearLayout) view.findViewById(R.id.filters_container);
+
+        if(button_filter.getVisibility() == View.GONE)
+            button_filter.setVisibility(View.VISIBLE);
+        else {
+            button_filter.setVisibility(View.GONE);
+            EditText editText_brand = (EditText) view.findViewById(R.id.marca_filter);
+            editText_brand.clearFocus();
+
+        }
+    }
+
+    public void setFilters(View view)
+    {
+        final SearchView nameFilter = (SearchView)view.findViewById(R.id.searchView);
+        Fonts.changeSearchViewTextColorBlack(nameFilter);
+        nameFilter.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.equals("")) {
+                    this.onQueryTextSubmit("");
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                setRecycler();
+                return true;
+            }
+
+        });
+
+
+
+        final EditText marcaFilter = (EditText) view.findViewById(R.id.marca_filter);
+        Fonts.changeSearchViewTextColorBlack(marcaFilter);
+        marcaFilter.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (event != null && event.getAction() != KeyEvent.ACTION_DOWN) {
+                    return false;
+                } else if (actionId == EditorInfo.IME_ACTION_SEARCH
+                        || event == null
+                        || event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                    setRecycler();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
+        ImageButton button = (ImageButton) view.findViewById(R.id.imageButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickShowHideFilters(getView());
+            }
+        });
+
+    }
+
+    public void setRecycler()
+    {
+        View view = getView();
+        String marcaFilter = ((EditText) view.findViewById(R.id.marca_filter)).getText().toString();
+        String nameFilter = ((SearchView) view.findViewById(R.id.searchView)).getQuery().toString();
+        List<Product> listFiltered = FiltersHelper.filterProductsByName(productListAdapter.getOriginalData(), nameFilter);
+        listFiltered = FiltersHelper.filterProductsByMarca(listFiltered, marcaFilter);
+        productListAdapter.setData(listFiltered);
+        recyclerView.setAdapter(productListAdapter);
     }
 }

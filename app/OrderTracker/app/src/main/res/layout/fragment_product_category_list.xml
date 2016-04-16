@@ -46,17 +46,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="48dp"
                             android:layout_weight="10" />
-
-                        <!--<ImageButton
-                            android:id="@+id/imageButton"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginRight="16dp"
-                            android:layout_weight="1"
-                            android:background="#00000000"
-                            android:src="@drawable/ic_settings_gray_24dp"
-                            android:onClick="onClickShowHideFilters" />
 -->
                     </LinearLayout>
 
