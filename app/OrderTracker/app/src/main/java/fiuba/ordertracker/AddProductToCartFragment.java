@@ -19,20 +19,34 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import fiuba.ordertracker.pojo.Product;
+
 
 public class AddProductToCartFragment extends DialogFragment {
 
-    public static AddProductToCartFragment newInstance(int product_id, String product_name,
-                                                       String product_brand,
-                                                       String product_availability) {
+    private static Product product;
+
+    public static AddProductToCartFragment newInstance(Product p) {
+
+        AddProductToCartFragment frag = new AddProductToCartFragment();
+        Bundle args = new Bundle();
+        product = p;
+        args.putString("product_id", p.getId());
+        args.putString("product_name", p.getNombre());
+        args.putString("product_brand", p.getMarca());
+
+        frag.setArguments(args);
+        return frag;
+    }
+
+    public static AddProductToCartFragment newInstance(String product_id, String product_name, String product_brand) {
 
         AddProductToCartFragment frag = new AddProductToCartFragment();
         Bundle args = new Bundle();
 
-        args.putInt("product_id", product_id);
+        args.putString("product_id", product_id);
         args.putString("product_name", product_name);
         args.putString("product_brand", product_brand);
-        args.putString("product_availability", product_availability);
 
         frag.setArguments(args);
         return frag;
@@ -52,7 +66,7 @@ public class AddProductToCartFragment extends DialogFragment {
         /**
          * Product info
          */
-        int product_id = getArguments().getInt("product_id");
+        String product_id = getArguments().getString("product_id");
         String product_name = getArguments().getString("product_name");
         String product_brand = getArguments().getString("product_brand");
         String product_availability = getArguments().getString("product_availability");
@@ -65,7 +79,7 @@ public class AddProductToCartFragment extends DialogFragment {
          */
         NumberPicker np = (NumberPicker) v.findViewById(R.id.numberPicker);
         np.setMinValue(0);
-        np.setMaxValue(100000);
+        np.setMaxValue(1000);
         np.setWrapSelectorWheel(true);
 
         return new AlertDialog.Builder(getActivity())
