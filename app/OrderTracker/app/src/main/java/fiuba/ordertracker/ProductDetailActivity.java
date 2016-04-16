@@ -22,7 +22,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private FragmentManager fm = getSupportFragmentManager();
     private Toolbar toolbar;
 
-    private int product_id;
+    private String product_id;
     private String product_name;
     private String product_brand;
     private String product_availability;
@@ -46,7 +46,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         // Set data from intent
         //collapsingToolbar.setTitle(i.getStringExtra("name"));
 
-        this.product_id = 1;
+        this.product_id = "1";
         this.product_availability = i.getStringExtra("availability");
         this.product_name = i.getStringExtra("name");
         this.product_brand = i.getStringExtra("brand");
@@ -71,7 +71,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         AddProductToCartFragment newFragment = AddProductToCartFragment.newInstance(this.product_id,
-                this.product_name, this.product_brand, this.product_availability);
+                this.product_name, this.product_brand);
         newFragment.show(ft, "dialog");
     }
 }

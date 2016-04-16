@@ -1,5 +1,6 @@
 package fiuba.ordertracker;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,8 +89,6 @@ public class ProductListFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_product_list, container, false);
 
-        Button button = (Button) view.findViewById(R.id.button1);
-
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
@@ -100,7 +100,7 @@ public class ProductListFragment extends Fragment {
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
 
         ProductService ps = ProductService.getInstance();
-
+        Log.i("CATEGORIAAAAAA", getArguments().getString("category"));
         // Create a call instance for looking up Retrofit contributors.
         Call<List<Product>> call = ps.products.Products(getArguments().getString("category"), null, null, null, null, null, null, null);
 
@@ -178,7 +178,7 @@ public class ProductListFragment extends Fragment {
 
 
         // REMOVE :)
-        button.setOnClickListener(new View.OnClickListener()
+        /*button.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -186,7 +186,8 @@ public class ProductListFragment extends Fragment {
                 ProductsFragment instanceFragment = (ProductsFragment) getParentFragment();
                 instanceFragment.replaceFragment(new ProductCategoryListFragment(), false);
             }
-        });
+        });*/
+
 
         return view;
     }

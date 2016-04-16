@@ -13,12 +13,12 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ProductsFragment.OnFragmentInteractionListener} interface
+ * {@link OrderContainerFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ProductsFragment#newInstance} factory method to
+ * Use the {@link OrderContainerFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProductsFragment extends Fragment {
+public class OrderContainerFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -30,7 +30,7 @@ public class ProductsFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public ProductsFragment() {
+    public OrderContainerFragment() {
         // Required empty public constructor
     }
 
@@ -40,11 +40,11 @@ public class ProductsFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ProductsFragment.
+     * @return A new instance of fragment OrderContainerFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ProductsFragment newInstance(String param1, String param2) {
-        ProductsFragment fragment = new ProductsFragment();
+    public static OrderContainerFragment newInstance(String param1, String param2) {
+        OrderContainerFragment fragment = new OrderContainerFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -60,20 +60,23 @@ public class ProductsFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        this.replaceFragment(new ProductCategoryListFragment(), false);
+        // TODO: Replace the line below with a validation of an exiting active order.
+        // In this case, must be displayed the order products list. Otherwise, an add
+        // order screen must be showed.
+        this.replaceFragment(new OrderListFragment(), false);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_products, container, false);
+        return inflater.inflate(R.layout.fragment_order_container, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onProductsFragmentInteraction(uri);
+            mListener.onOrderContainerFragmentInteraction(uri);
         }
     }
 
@@ -106,24 +109,15 @@ public class ProductsFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onProductsFragmentInteraction(Uri uri);
+        void onOrderContainerFragmentInteraction(Uri uri);
     }
-
-    /*public void changeFragment(View view) {
-        Fragment mFragment = new ProductListFragment();
-        android.support.v4.app.FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        //Replacing using the id of the container and not the fragment itself
-        ft.replace(R.id.Maincontainer, mFragment);
-        ft.addToBackStack(null);
-        ft.commit();
-    }*/
 
     public void replaceFragment(Fragment fragment, boolean addToBackStack) {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         if (addToBackStack) {
             transaction.addToBackStack(null);
         }
-        transaction.replace(R.id.Maincontainer, fragment);
+        transaction.replace(R.id.OrderContainerTab, fragment);
         transaction.commit();
         getChildFragmentManager().executePendingTransactions();
     }

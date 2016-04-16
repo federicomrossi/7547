@@ -17,9 +17,10 @@ import java.util.List;
 
 public class TabActivity extends AppCompatActivity
         implements ProductsFragment.OnFragmentInteractionListener,
-                   OrderListFragment.OnFragmentInteractionListener,
                    ProductCategoryListFragment.OnFragmentInteractionListener,
-                   ProductListFragment.OnFragmentInteractionListener
+                   ProductListFragment.OnFragmentInteractionListener,
+                   OrderContainerFragment.OnFragmentInteractionListener,
+                   OrderListFragment.OnFragmentInteractionListener
 {
 
     private Toolbar toolbar;
@@ -46,7 +47,7 @@ public class TabActivity extends AppCompatActivity
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new ProductsFragment(), "PRODUCTOS");
-        adapter.addFragment(new OrderListFragment(), "PEDIDO");
+        adapter.addFragment(new OrderContainerFragment(), "PEDIDO");
         viewPager.setAdapter(adapter);
     }
 
@@ -69,6 +70,30 @@ public class TabActivity extends AppCompatActivity
     public void onProductListFragmentInteraction(Uri uri) {
 
     }
+
+    @Override
+    public void onOrderContainerFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        System.out.println("*********** onBackPressed() **************");
+        // if there is a fragment and the back stack of this fragment is not empty,
+        // then we have to emulate the 'onBackPressed' behaviour (BUG) :(
+        FragmentManager fm = getSupportFragmentManager();
+        for (Fragment frag : fm.getFragments()) {
+            if (frag.isVisible()) {
+                FragmentManager childFm = frag.getChildFragmentManager();
+                if (childFm.getBackStackEntryCount() > 0) {
+                    childFm.popBackStack();
+                    return;
+                }
+            }
+        }
+        super.onBackPressed();
+    }
+
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
