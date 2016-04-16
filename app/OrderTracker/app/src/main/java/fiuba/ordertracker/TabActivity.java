@@ -17,9 +17,10 @@ import java.util.List;
 
 public class TabActivity extends AppCompatActivity
         implements ProductsFragment.OnFragmentInteractionListener,
-                   OrderListFragment.OnFragmentInteractionListener,
                    ProductCategoryListFragment.OnFragmentInteractionListener,
-                   ProductListFragment.OnFragmentInteractionListener
+                   ProductListFragment.OnFragmentInteractionListener,
+                   OrderContainerFragment.OnFragmentInteractionListener,
+                   OrderListFragment.OnFragmentInteractionListener
 {
 
     private Toolbar toolbar;
@@ -46,7 +47,7 @@ public class TabActivity extends AppCompatActivity
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new ProductsFragment(), "PRODUCTOS");
-        adapter.addFragment(new OrderListFragment(), "PEDIDO");
+        adapter.addFragment(new OrderContainerFragment(), "PEDIDO");
         viewPager.setAdapter(adapter);
     }
 
@@ -67,6 +68,11 @@ public class TabActivity extends AppCompatActivity
 
     @Override
     public void onProductListFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onOrderContainerFragmentInteraction(Uri uri) {
 
     }
 

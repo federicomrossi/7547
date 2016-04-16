@@ -6,26 +6,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Collections;
 import java.util.List;
 
 import fiuba.ordertracker.helpers.ImageLoadTask;
-import fiuba.ordertracker.pojo.Client;
 import fiuba.ordertracker.pojo.Product;
 
 /**
  *
  */
-public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.MyViewHolder> {
+public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductListAdapter.MyViewHolder> {
 
     private LayoutInflater inflater;
     List<Product> data = Collections.emptyList();
@@ -40,7 +37,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         this.category = category;
     }
 
-    public ProductListAdapter(Context context, List<Product> data, Fragment parentFragment) {
+    public OrderProductListAdapter(Context context, List<Product> data, Fragment parentFragment) {
         inflater = LayoutInflater.from(context);
         this.data = data;
         this.parentFragment = parentFragment;
@@ -48,7 +45,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.product_list_row, null);
+        View view = inflater.inflate(R.layout.order_product_list_row, null);
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }

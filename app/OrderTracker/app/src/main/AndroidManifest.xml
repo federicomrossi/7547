@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="fiuba.ordertracker">
-
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<?xml version="1.0" encoding="utf-8"?><manifest xmlns:android="http://schemas.android.com/apk/res/android"
+package="fiuba.ordertracker">
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -19,7 +18,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyB00hARFJMEtjp6bOcaCaGa7uahHrqLwMU" />
+            android:value="@string/google_maps_key" />
 
         <activity
             android:name=".LauncherActivity"
@@ -27,15 +26,15 @@
             android:theme="@style/LauncherTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ClientListActivity" />
-        <activity android:name=".ClientDetailActivity" />
-        <activity android:name=".ProductCategoryListActivity" />
-        <activity android:name=".ProductListActivity" />
-        <activity android:name=".ProductDetailActivity" />
+        <activity android:name=".ClientListActivity"></activity>
+        <activity android:name=".ClientDetailActivity"></activity>
+        <activity android:name=".ProductCategoryListActivity"></activity>
+        <activity android:name=".ProductListActivity"></activity>
+        <activity android:name=".ProductDetailActivity"></activity>
+        <activity android:name=".ClientsMapActivity" android:label="@string/title_activity_clients_map"></activity>
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login" />

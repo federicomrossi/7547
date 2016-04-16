@@ -7,6 +7,8 @@
     <string name="client_code">Código de cliente</string>
     <string name="activity_product_list">Productos</string>
 
+    <string name="title_activity_clients_map">Map</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="confirm">Confirmar</string>
     <string name="cancel">Cancelar</string>
