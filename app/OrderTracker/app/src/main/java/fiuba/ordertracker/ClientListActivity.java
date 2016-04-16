@@ -21,8 +21,10 @@ import android.content.Intent;
 
 import java.util.List;
 
+import fiuba.ordertracker.helpers.FiltersHelper;
 import fiuba.ordertracker.helpers.Fonts;
 import fiuba.ordertracker.pojo.Client;
+import fiuba.ordertracker.pojo.Product;
 import fiuba.ordertracker.services.ClientService;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -81,6 +83,7 @@ public class ClientListActivity extends AppCompatActivity {
                 // Get result Repo from response.body()
                 List<Client> listClients = response.body();
                 clientListAdapter = new ClientListAdapter(self_, listClients);
+                clientListAdapter.setOriginalData(listClients);
                 progressBar.setVisibility(View.GONE);
 
                 if (listClients.size() == 0) {
@@ -104,14 +107,14 @@ public class ClientListActivity extends AppCompatActivity {
         razonFilterView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextChange(String newText) {
+                if(newText.equals(""))
+                    onQueryTextSubmit("");
                 return false;
             }
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (query != "") {
-                    setIntentsInFilters(razonFilterView, clientCodeFilterView);
-                }
+                setRecycler();
                 return false;
             }
 
@@ -121,7 +124,7 @@ public class ClientListActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if ((actionId == EditorInfo.IME_ACTION_DONE) || ((event.getKeyCode() == KeyEvent.KEYCODE_ENTER) && (event.getAction() == KeyEvent.ACTION_DOWN))) {
-                    setIntentsInFilters(razonFilterView, clientCodeFilterView);
+                    setRecycler();
                     return true;
                 } else {
                     return false;
@@ -173,18 +176,13 @@ public class ClientListActivity extends AppCompatActivity {
         System.out.println("**** View shopping cart ****");
     }
 
-    protected void setIntentsInFilters(SearchView socialReasonView, EditText codView)
+    public void setRecycler()
     {
-        Intent newIntent = new Intent(socialReasonView.getContext(), ClientListActivity.class);
-
-        if (!socialReasonView.getQuery().toString().equals("")) {
-            newIntent.putExtra("socialReasonFilter", socialReasonView.getQuery().toString());
-        }
-        if (!codView.getText().toString().equals("")) {
-            newIntent.putExtra("codClientFilter", codView.getText().toString());
-        }
-
-        socialReasonView.getContext().startActivity(newIntent);
-        finish();
+        String codeFilter = ((EditText) findViewById(R.id.editText_client_code)).getText().toString();
+        String nameFilter = ((SearchView) findViewById(R.id.searchView)).getQuery().toString();
+        List<Client> listFiltered = FiltersHelper.filterClientsBySocialReason(clientListAdapter.getOriginalData(), nameFilter);
+        listFiltered = FiltersHelper.filterClientsByCode(listFiltered, codeFilter);
+        clientListAdapter.setData(listFiltered);
+        recyclerView.setAdapter(clientListAdapter);
     }
 }

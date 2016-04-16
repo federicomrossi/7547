@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fiuba.ordertracker.pojo.Categorie;
+import fiuba.ordertracker.pojo.Client;
 import fiuba.ordertracker.pojo.Product;
 
 /**
@@ -46,6 +47,32 @@ public class FiltersHelper {
             String marca = product.getMarca().toString();
             if (marca.toLowerCase().contains((filter.toLowerCase()))) {
                 result.add(product);
+            }
+        }
+        return result;
+    }
+
+    public static List<Client> filterClientsBySocialReason(List<Client> listToFilter, String filter)
+    {
+        if(filter.equals("")) return listToFilter;
+        List<Client> result = new ArrayList<Client>();
+        for (Client client: listToFilter) {
+            String marca = client.getSocialReason().toString();
+            if (marca.toLowerCase().contains((filter.toLowerCase()))) {
+                result.add(client);
+            }
+        }
+        return result;
+    }
+
+    public static List<Client> filterClientsByCode(List<Client> listToFilter, String filter)
+    {
+        if(filter.equals("")) return listToFilter;
+        List<Client> result = new ArrayList<Client>();
+        for (Client client: listToFilter) {
+            String marca = client.getCode().toString();
+            if (marca.toLowerCase().contains((filter.toLowerCase()))) {
+                result.add(client);
             }
         }
         return result;

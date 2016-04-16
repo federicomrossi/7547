@@ -21,7 +21,23 @@ import fiuba.ordertracker.pojo.Client;
 public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.MyViewHolder> {
 
     private LayoutInflater inflater;
+
+    public void setData(List<Client> data) {
+        this.data = data;
+    }
+
     List<Client> data = Collections.emptyList();
+
+    public List<Client> getOriginalData() {
+        return originalData;
+    }
+
+    public void setOriginalData(List<Client> originalData) {
+        this.originalData = originalData;
+    }
+
+    List<Client> originalData = Collections.emptyList();
+
 
     public ClientListAdapter(Context context, List<Client> data) {
         inflater = LayoutInflater.from(context);
