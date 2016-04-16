@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -63,15 +64,17 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         holder.price.setText(current.getPrecio());
         holder.stock.setText(current.stockState());
         new ImageLoadTask(current.getUrlImageMini(), holder.thumbnail).execute();
-        //holder.thumbnail.setImageResource(current.getSomething()); // TODO implement method in Product class
+
+        final Fragment _parentFragment = this.parentFragment;
 
         // Set listener to manage clicks on items from the RecyclerView
         holder.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 System.out.println("*********** Click on item ***********");
+                Product currentClicked = data.get(position);
 
-                Intent intent = new Intent(view.getContext(), ProductDetailActivity.class);
+                /*Intent intent = new Intent(view.getContext(), ProductDetailActivity.class);
                 intent.putExtra("url_image_normal", data.get(position).getUrlImageNormal()); // TODO show picture
                 intent.putExtra("name", data.get(position).getNombre());
                 intent.putExtra("brand", data.get(position).getMarca());
@@ -79,7 +82,23 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 intent.putExtra("price", data.get(position).getPrecio());
                 intent.putExtra("category", category);
                 intent.putExtra("availability", data.get(position).stockState()); // TODO it has to be availability, not stock
-                view.getContext().startActivity(intent);
+                view.getContext().startActivity(intent);*/
+
+
+                ProductsFragment instanceFragment = (ProductsFragment) _parentFragment;
+
+                Bundle args= new Bundle();
+                args.putString("url_image_normal", currentClicked.getUrlImageNormal());
+                args.putString("name", currentClicked.getNombre());
+                args.putString("brand", currentClicked.getMarca());
+                args.putString("description", currentClicked.getDescripcion());
+                args.putString("price", currentClicked.getPrecio());
+                args.putString("category", category);
+                args.putString("availability", currentClicked.stockState());
+                ProductDetailFragment productDetailFragment = new ProductDetailFragment();
+                productDetailFragment.setArguments(args);
+                instanceFragment.replaceFragment(productDetailFragment, true); // it was false, I changed it
+
             }
         });
     }
