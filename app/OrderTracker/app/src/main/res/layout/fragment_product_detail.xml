@@ -100,11 +100,10 @@
                                     android:orientation="horizontal">
 
                                     <Button
-                                        android:id="@+id/product_add_to_cart"
+                                        android:id="@+id/product_detail_add_to_cart"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:drawableLeft="@drawable/ic_add_shopping_cart_white_24dp"
-                                        android:onClick="addProductToCart"
                                         android:text="Agregar"
                                         android:theme="@style/ButtonAddToCart" />
                                 </LinearLayout>
