@@ -1,19 +1,24 @@
 package fiuba.ordertracker;
 
-import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import fiuba.ordertracker.pojo.Order;
+import fiuba.ordertracker.services.OrderService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class TabActivity extends AppCompatActivity
         implements ProductsFragment.OnFragmentInteractionListener,
@@ -27,12 +32,15 @@ public class TabActivity extends AppCompatActivity
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    public String clientId;
+    private Order activeOrder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
 
+        Intent i = this.getIntent();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -43,6 +51,61 @@ public class TabActivity extends AppCompatActivity
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+
+        this.clientId = i.getStringExtra("clientID");
+
+        final OrderService os = OrderService.getInstance();
+        Integer clientIntID = new Integer(this.clientId);
+
+        Call<Order> call = os.order.getActiveProductOrderByClient(clientIntID.intValue());
+
+        final TabActivity self_ = this;
+        call.enqueue(new Callback<Order>() {
+            @Override
+            public void onResponse(Call<Order> call, Response<Order> response) {
+                Order activeOrder;
+                if(response.code() == 404){
+                    //no tiene pedido activo... entonces creo uno
+                    self_.createOrderCall(os);
+
+                }else {
+                    self_.setActiveOrder(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Order> call, Throwable t) {
+                //Aca tenemos que agregar el msj de error a mostrar... puto el que lee
+            }
+        });
+
+    }
+
+    public Order getActiveOrder() {
+        return activeOrder;
+    }
+
+    public void setActiveOrder(Order activeOrder) {
+        this.activeOrder = activeOrder;
+    }
+
+    public void createOrderCall(final OrderService os){
+        final TabActivity self_ = this;
+        Call<Order> call = os.order.createOrder(self_.clientId,"0","se crea pedido");
+
+        call.enqueue(new Callback<Order>() {
+            @Override
+            public void onResponse(Call<Order> call, Response<Order> response) {
+                Order order = response.body();
+                self_.setActiveOrder(order);
+            }
+
+            @Override
+            public void onFailure(Call<Order> call, Throwable t) {
+                //Aca tenemos que agregar el msj de error a mostrar... puto el que lee
+            }
+        });
     }
 
     private void setupViewPager(ViewPager viewPager) {
