@@ -89,7 +89,7 @@ public class ProductCategoryListAdapter extends RecyclerView.Adapter<ProductCate
                 args.putString("categoryName", currentClicked.getNombre());
                 ProductListFragment productListFragment = new ProductListFragment();
                 productListFragment.setArguments(args);
-                instanceFragment.replaceFragment(productListFragment, false);
+                instanceFragment.replaceFragment(productListFragment, true); // it was false, I changed it
             }
         });
     }

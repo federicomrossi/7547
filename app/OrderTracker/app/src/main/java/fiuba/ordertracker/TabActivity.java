@@ -70,6 +70,25 @@ public class TabActivity extends AppCompatActivity
 
     }
 
+    @Override
+    public void onBackPressed() {
+        System.out.println("*********** onBackPressed() **************");
+        // if there is a fragment and the back stack of this fragment is not empty,
+        // then we have to emulate the 'onBackPressed' behaviour (BUG) :(
+        FragmentManager fm = getSupportFragmentManager();
+        for (Fragment frag : fm.getFragments()) {
+            if (frag.isVisible()) {
+                FragmentManager childFm = frag.getChildFragmentManager();
+                if (childFm.getBackStackEntryCount() > 0) {
+                    childFm.popBackStack();
+                    return;
+                }
+            }
+        }
+        super.onBackPressed();
+    }
+
+
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();

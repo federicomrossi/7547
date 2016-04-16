@@ -60,7 +60,6 @@ public class ProductsFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-
         this.replaceFragment(new ProductCategoryListFragment(), false);
     }
 
