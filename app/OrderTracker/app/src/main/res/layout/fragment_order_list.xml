@@ -50,7 +50,7 @@
                 android:paddingLeft="56dp">
 
                 <Button
-                    android:id="@+id/button"
+                    android:id="@+id/buttonConfirmOrder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:elevation="1dp"
@@ -58,7 +58,7 @@
                     android:theme="@style/ButtonConfirm" />
 
                 <Button
-                    android:id="@+id/button2"
+                    android:id="@+id/buttonDiscardOrder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"

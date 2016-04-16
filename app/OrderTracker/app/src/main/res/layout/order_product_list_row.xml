@@ -54,19 +54,6 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textSize="13dp" />
 
-            <TextView
-                android:id="@+id/product_list_row_stock"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:background="#aaaaaa"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
-                android:text="Stock"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="#ffffff"
-                android:textSize="13dp" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -77,7 +64,8 @@
             android:layout_toRightOf="@+id/product_list_row_thumbnail"
             android:layout_weight="1"
             android:gravity="center_vertical|right"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginRight="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -104,23 +92,46 @@
                     android:textSize="20dp" />
 
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="right">
+
+                <TextView
+                    android:id="@+id/textProductAmount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textSize="15dp"
+                    android:textColor="#b9b9b9" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="16dp"
-                    android:text="00"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:visibility="gone" />
-
+                    android:text="u."
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textSize="12dp"
+                    android:textColor="#b9b9b9"
+                    android:layout_marginLeft="3dp" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/product_list_add_to_cart"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/place_autocomplete_powered_by_google_height"
-                android:text="Agregar"
-                android:theme="@style/ButtonAddToCart" />
+        </LinearLayout>
 
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/orderProductContextMenu"
+                android:src="@drawable/ic_more_vert_grey_24dp" />
         </LinearLayout>
 
     </LinearLayout>

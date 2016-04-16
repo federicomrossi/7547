@@ -5,8 +5,12 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -53,12 +57,22 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        Product current = this.data.get(position);
+        final Product current = this.data.get(position);
+
+        // Item context menu
         holder.setProduct(current);
         holder.nameAndBrand.setText(current.getNombre() + ", " + current.getMarca());
         holder.category.setText(this.category);
         holder.price.setText(current.getPrecio());
-        holder.stock.setText(current.stockState());
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+
+            @Override
+            public boolean onLongClick(View v) {
+
+                return false;
+            }
+        });
+
         new ImageLoadTask(current.getUrlImageMini(), holder.thumbnail).execute();
         //holder.thumbnail.setImageResource(current.getSomething()); // TODO implement method in Product class
 
@@ -86,15 +100,21 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
         return this.data.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener, android.widget.PopupMenu.OnMenuItemClickListener {
         TextView nameAndBrand, description, category, price, stock;
         ImageView thumbnail;
+        ImageView mOverflowIcon;
 
         private OnItemClickListener clickListener;
         private Product product;
 
         public MyViewHolder(View itemView) {
             super(itemView);
+
+            itemView.setOnCreateContextMenuListener(this);
+            /*itemView.setOnClickListener(this);
+            this.mOverflowIcon = (ImageView) itemView.findViewById(R.id.orderProductContextMenu);
+            mOverflowIcon.setOnClickListener(this);*/
 
             nameAndBrand = (TextView) itemView.findViewById(R.id.product_list_row_name_brand);
             category = (TextView) itemView.findViewById(R.id.product_list_row_category);
@@ -108,17 +128,6 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
 
         public void setProduct(Product p) {
             this.product = p;
-            final Product _product = this.product;
-
-            Button button = (Button) itemView.findViewById(R.id.product_list_add_to_cart);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FragmentTransaction ft = ((Activity) itemView.getContext()).getFragmentManager().beginTransaction();
-                    AddProductToCartFragment newFragment = AddProductToCartFragment.newInstance(_product);
-                    newFragment.show(ft, "dialog");
-                }
-            });
         }
 
         public void setOnItemClickListener(OnItemClickListener clickListener) {
@@ -127,7 +136,28 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
 
         @Override
         public void onClick(View view) {
+
+            /*if (view == mOverflowIcon) {
+                PopupMenu popup = new PopupMenu(view.getContext(), view);
+                popup.inflate(R.menu.menu_order_list_poduct_item);
+                popup.setOnMenuItemClickListener(this);
+                popup.show();
+                return;
+            }*/
+
             clickListener.onItemClick(view, getAdapterPosition()); // or getLayoutPosition() ??
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            menu.setHeaderTitle("Opciones del producto");
+            menu.add(0, v.getId(), 0, "Modificar");//groupId, itemId, order, title
+            menu.add(0, v.getId(), 0, "Eliminar");
+        }
+
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            return false;
         }
     }
 
@@ -137,7 +167,8 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
     private interface OnItemClickListener {
         /**
          * Called when the view is clicked
-         * @param view that is clicked
+         *
+         * @param view     that is clicked
          * @param position of the clicked item
          */
         public void onItemClick(View view, int position);
