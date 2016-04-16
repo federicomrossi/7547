@@ -64,8 +64,7 @@
             android:layout_toRightOf="@+id/product_list_row_thumbnail"
             android:layout_weight="1"
             android:gravity="center_vertical|right"
-            android:orientation="vertical"
-            android:layout_marginRight="10dp">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -125,7 +124,9 @@
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:visibility="gone"
+            android:layout_marginLeft="10dp">
 
             <ImageView
                 android:layout_width="wrap_content"
