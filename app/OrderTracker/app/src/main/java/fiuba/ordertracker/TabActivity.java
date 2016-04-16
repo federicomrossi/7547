@@ -19,6 +19,7 @@ public class TabActivity extends AppCompatActivity
         implements ProductsFragment.OnFragmentInteractionListener,
                    ProductCategoryListFragment.OnFragmentInteractionListener,
                    ProductListFragment.OnFragmentInteractionListener,
+                   ProductDetailFragment.OnFragmentInteractionListener,
                    OrderContainerFragment.OnFragmentInteractionListener,
                    OrderListFragment.OnFragmentInteractionListener
 {
@@ -68,6 +69,11 @@ public class TabActivity extends AppCompatActivity
 
     @Override
     public void onProductListFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onProductDetailFragmentInteraction(Uri uri) {
 
     }
 

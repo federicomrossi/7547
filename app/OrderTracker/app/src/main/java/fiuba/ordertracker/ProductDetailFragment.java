@@ -1,12 +1,20 @@
 package fiuba.ordertracker;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import fiuba.ordertracker.helpers.ImageLoadTask;
 
 
 /**
@@ -22,6 +30,13 @@ public class ProductDetailFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private Toolbar toolbar;
+
+    private String product_id;
+    private String product_name;
+    private String product_brand;
+    private String product_availability;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -64,13 +79,51 @@ public class ProductDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_product_detail, container, false);
+        //return inflater.inflate(R.layout.fragment_product_detail, container, false);
+        View view = inflater.inflate(R.layout.fragment_product_detail, container, false);
+
+        //Toolbar toolbar = (Toolbar) view.findViewById(R.id.client_detail_toolbar); // TODO change for the toolbar in the product layout
+        //setSupportActionBar(toolbar);
+        //CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+
+        // Toolbar
+        //toolbar = (Toolbar) view.findViewById(R.id.app_bar);
+        //((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        //((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle("Detalle de producto");
+
+        /*Intent i = getIntent();
+
+        // Set data from intent
+        //collapsingToolbar.setTitle(i.getStringExtra("name"));*/
+
+        /*this.product_id = "1";
+        this.product_availability = i.getStringExtra("availability");
+        this.product_name = i.getStringExtra("name");
+        this.product_brand = i.getStringExtra("brand");*/
+
+        TextView name = (TextView) view.findViewById(R.id.product_name);
+        TextView brand = (TextView) view.findViewById(R.id.product_brand);
+        TextView description = (TextView) view.findViewById(R.id.product_description);
+        TextView price = (TextView) view.findViewById(R.id.product_price);
+        TextView category = (TextView) view.findViewById(R.id.product_category);
+        TextView availability = (TextView) view.findViewById(R.id.product_availability);
+        ImageView image = (ImageView) view.findViewById(R.id.detail_view);
+
+        name.setText(getArguments().getString("name"));
+        brand.setText(getArguments().getString("brand"));
+        description.setText(getArguments().getString("description"));
+        price.setText("$ " + getArguments().getString("price"));
+        category.setText(getArguments().getString("category"));
+        availability.setText(getArguments().getString("availability"));
+        new ImageLoadTask(getArguments().getString("url_image_normal"), image).execute();
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onProductDetailFragmentInteraction(uri);
         }
     }
 
@@ -103,6 +156,6 @@ public class ProductDetailFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onProductDetailFragmentInteraction(Uri uri);
     }
 }
