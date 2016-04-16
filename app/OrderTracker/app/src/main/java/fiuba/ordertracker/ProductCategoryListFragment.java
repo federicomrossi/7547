@@ -143,7 +143,11 @@ public class ProductCategoryListFragment extends Fragment {
         nameFilter.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((actionId == EditorInfo.IME_ACTION_DONE) || ((event.getKeyCode() == android.view.KeyEvent.KEYCODE_ENTER) && (event.getAction() == android.view.KeyEvent.ACTION_DOWN))) {
+                if (event != null && event.getAction() != KeyEvent.ACTION_DOWN) {
+                    return false;
+                } else if (actionId == EditorInfo.IME_ACTION_SEARCH
+                        || event == null
+                        || event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
                     String filter = nameFilter.getText().toString();
                     List<Categorie> listFiltered = FiltersHelper.filterCategoriesByName(productCategoryListAdapter.getOriginalData(), filter);
                     productCategoryListAdapter.setData(listFiltered);

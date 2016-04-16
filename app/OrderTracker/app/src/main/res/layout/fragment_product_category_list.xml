@@ -39,13 +39,14 @@
                     android:orientation="vertical">
                     <LinearLayout
                         android:layout_width="match_parent"
+                        android:descendantFocusability="beforeDescendants"
+                        android:focusableInTouchMode="true"
                         android:layout_height="wrap_content">
                         <EditText
                             android:id="@+id/category_filter_name"
                             android:layout_width="match_parent"
-                            android:imeOptions="actionDone"
                             android:singleLine="true"
-                            android:drawableLeft="@android:drawable/ic_menu_search"
+                            android:drawableLeft="@drawable/ic_menu_search_holo_light"
                             android:background="@android:color/transparent"
                             android:textColor="@android:color/black"
                             android:layout_height="wrap_content" />
