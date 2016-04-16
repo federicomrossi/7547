@@ -4,9 +4,22 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import java.util.List;
+
+import fiuba.ordertracker.pojo.Product;
+import fiuba.ordertracker.services.ProductService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -26,6 +39,10 @@ public class OrderListFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private RecyclerView recyclerView;
+    private OrderProductListAdapter orderProductListAdapter;
+    private ProgressBar progressBar;
 
     private OnFragmentInteractionListener mListener;
 
@@ -64,7 +81,54 @@ public class OrderListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_order_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_order_list, container, false);
+
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+
+        getActivity().setProgressBarIndeterminateVisibility(true);
+
+        // Products list
+        recyclerView = (RecyclerView) view.findViewById(R.id.productsList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
+
+        ProductService ps = ProductService.getInstance();
+
+        // Create a call instance for looking up Retrofit contributors.
+        Call<List<Product>> call = ps.products.Products(null, null, null, null, null, null, null, null);
+
+        final FragmentActivity self_ = getActivity();
+        final Fragment _parentFragment = this.getParentFragment();
+        final View _view = view;
+
+        call.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                // Get result Repo from response.body()
+                List<Product> listProducts = response.body();
+                orderProductListAdapter = new OrderProductListAdapter(self_, listProducts, _parentFragment);
+
+                progressBar.setVisibility(View.GONE);
+
+                if(listProducts.size() == 0) {
+                    TextView textNoProducts = (TextView) _view.findViewById(R.id.text_no_products);
+                    textNoProducts.setVisibility(View.VISIBLE);
+                }
+
+                recyclerView.setAdapter(orderProductListAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                TextView textNoProducts = (TextView) _view.findViewById(R.id.text_no_products);
+                textNoProducts.setText("Hubo un error al cargar los productos por favor reintente mas tarde");
+                textNoProducts.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+            }
+        });
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

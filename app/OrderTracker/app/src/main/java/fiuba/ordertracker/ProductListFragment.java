@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -99,7 +100,7 @@ public class ProductListFragment extends Fragment {
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
 
         ProductService ps = ProductService.getInstance();
-
+        Log.i("CATEGORIAAAAAA", getArguments().getString("category"));
         // Create a call instance for looking up Retrofit contributors.
         Call<List<Product>> call = ps.products.Products(getArguments().getString("category"), null, null, null, null, null, null, null);
 
