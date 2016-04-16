@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 
 import fiuba.ordertracker.helpers.ImageLoadTask;
+import fiuba.ordertracker.pojo.Categorie;
 import fiuba.ordertracker.pojo.Client;
 import fiuba.ordertracker.pojo.Product;
 
@@ -28,9 +29,26 @@ import fiuba.ordertracker.pojo.Product;
 public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.MyViewHolder> {
 
     private LayoutInflater inflater;
+
+    public void setData(List<Product> data) {
+        this.data = data;
+    }
+
     List<Product> data = Collections.emptyList();
     private String category = "";
     private Fragment parentFragment;
+
+    public List<Product> getOriginalData() {
+        return originalData;
+    }
+
+    public void setOriginalData(List<Product> originalData) {
+        this.originalData = originalData;
+    }
+
+
+    List<Product> originalData = Collections.emptyList();
+
 
     public String getCategory() {
         return category;

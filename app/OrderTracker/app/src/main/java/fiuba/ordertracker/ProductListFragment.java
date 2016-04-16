@@ -21,6 +21,9 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import fiuba.ordertracker.helpers.FiltersHelper;
+import fiuba.ordertracker.helpers.Fonts;
+import fiuba.ordertracker.pojo.Categorie;
 import fiuba.ordertracker.pojo.Product;
 import fiuba.ordertracker.services.ProductService;
 import retrofit2.Call;
@@ -115,6 +118,7 @@ public class ProductListFragment extends Fragment {
                 List<Product> listProducts = response.body();
                 productListAdapter = new ProductListAdapter(self_, listProducts, _parentFragment);
                 productListAdapter.setCategory(getArguments().getString("categoryName")); // no longer needed :P
+                productListAdapter.setOriginalData(listProducts);
                 progressBar.setVisibility(View.GONE);
 
                 if(listProducts.size() == 0) {
@@ -134,60 +138,28 @@ public class ProductListFragment extends Fragment {
             }
         });
 
-        /*searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+        final SearchView nameFilter = (SearchView) view.findViewById(R.id.searchView);
+        Fonts.changeSearchViewTextColorBlack(nameFilter);
+        nameFilter.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
+                if(newText.equals("")){
+                    this.onQueryTextSubmit("");
+                }
+                return true;
             }
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (query != "") {
-                    setIntentsInFilters(searchView,marcaFilterView);
-                }
-                return false;
+                String filter = nameFilter.getQuery().toString();
+                List<Product> listFiltered = FiltersHelper.filterProductsByName(productListAdapter.getOriginalData(), filter);
+                productListAdapter.setData(listFiltered);
+                recyclerView.setAdapter(productListAdapter);
+                return true;
             }
 
         });
-
-        marcaFilterView.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                    setIntentsInFilters(searchView,marcaFilterView);
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        marcaFilterView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((actionId == EditorInfo.IME_ACTION_DONE) || ((event.getKeyCode() == KeyEvent.KEYCODE_ENTER) && (event.getAction() == KeyEvent.ACTION_DOWN ))){
-                    setIntentsInFilters(searchView,marcaFilterView);
-                    return true;
-                }
-                else{
-                    return false;
-                }
-
-            }
-        });*/
-
-
-
-        // REMOVE :)
-        /*button.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                ProductsFragment instanceFragment = (ProductsFragment) getParentFragment();
-                instanceFragment.replaceFragment(new ProductCategoryListFragment(), false);
-            }
-        });*/
-
 
         return view;
     }
