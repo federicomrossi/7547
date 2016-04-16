@@ -1,11 +1,16 @@
 package fiuba.ordertracker;
 
+import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +30,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     private LayoutInflater inflater;
     List<Product> data = Collections.emptyList();
     private String category = "";
+    private Fragment parentFragment;
 
     public String getCategory() {
         return category;
@@ -34,9 +40,10 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         this.category = category;
     }
 
-    public ProductListAdapter(Context context, List<Product> data) {
+    public ProductListAdapter(Context context, List<Product> data, Fragment parentFragment) {
         inflater = LayoutInflater.from(context);
         this.data = data;
+        this.parentFragment = parentFragment;
     }
 
     @Override
@@ -50,6 +57,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         Product current = this.data.get(position);
+        holder.setProduct(current);
         holder.nameAndBrand.setText(current.getNombre() + ", " + current.getMarca());
         holder.category.setText(this.category);
         holder.price.setText(current.getPrecio());
@@ -86,6 +94,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         ImageView thumbnail;
 
         private OnItemClickListener clickListener;
+        private Product product;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -98,6 +107,21 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
             // Set listener to the item view
             itemView.setOnClickListener(this);
+        }
+
+        public void setProduct(Product p) {
+            this.product = p;
+            final Product _product = this.product;
+
+            Button button = (Button) itemView.findViewById(R.id.product_list_add_to_cart);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FragmentTransaction ft = ((Activity) itemView.getContext()).getFragmentManager().beginTransaction();
+                    AddProductToCartFragment newFragment = AddProductToCartFragment.newInstance(_product);
+                    newFragment.show(ft, "dialog");
+                }
+            });
         }
 
         public void setOnItemClickListener(OnItemClickListener clickListener) {

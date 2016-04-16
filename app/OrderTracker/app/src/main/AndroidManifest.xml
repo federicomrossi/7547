@@ -26,18 +26,19 @@ package="fiuba.ordertracker">
             android:theme="@style/LauncherTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
-    <activity android:name=".ClientListActivity"></activity>
-    <activity android:name=".ClientDetailActivity"></activity>
-    <activity android:name=".ProductCategoryListActivity"></activity>
-    <activity android:name=".ProductListActivity"></activity>
-    <activity android:name=".ProductDetailActivity"></activity>
-    <activity android:name=".ClientsMapActivity" android:label="@string/title_activity_clients_map"></activity>
-    <activity android:name=".LoginActivity"/>
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ClientListActivity"></activity>
+        <activity android:name=".ClientDetailActivity"></activity>
+        <activity android:name=".ProductCategoryListActivity"></activity>
+        <activity android:name=".ProductListActivity"></activity>
+        <activity android:name=".ProductDetailActivity"></activity>
+        <activity android:name=".ClientsMapActivity" android:label="@string/title_activity_clients_map"></activity>
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login" />
+        <activity android:name=".TabActivity"></activity>
     </application>
 
 </manifest>

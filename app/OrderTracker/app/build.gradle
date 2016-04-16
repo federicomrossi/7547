@@ -19,7 +19,6 @@ android {
     }
 }
 
-
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
@@ -31,4 +30,5 @@ dependencies {
     compile 'org.lucasr.dspec:dspec:0.1.1'
     compile 'com.squareup.retrofit2:retrofit:2.0.0'
     compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta4'
+    compile 'com.android.support:support-v4:23.2.1'
 }
