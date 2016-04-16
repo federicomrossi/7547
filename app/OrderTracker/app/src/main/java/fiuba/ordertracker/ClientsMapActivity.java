@@ -13,6 +13,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
@@ -95,7 +96,7 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
 
                 for (Client client : listClients) {
                     LatLng client_position = new LatLng(client.getLatitude(), client.getLongitude());
-                    String client_name = client.getApenom();
+                    String client_name = client.getSocialReason();
 
                     // Client marker
                     MarkerOptions marker = new MarkerOptions();
@@ -103,11 +104,12 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
                     marker.flat(true);
                     marker.title(client_name);
 
-                    _googleMap.addMarker(marker).showInfoWindow();
+                    Marker googleMarker = _googleMap.addMarker(marker);
 
                     // If theres a client specified to be focused, we positioned the camera
                     // over the marker.
-                    if(client.getId().contentEquals(_self.focusInClient)) {
+                    if(client.getId().equals(_self.focusInClient)) {
+                        googleMarker.showInfoWindow();
                         _googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(client_position, 15));
                         _googleMap.animateCamera(CameraUpdateFactory.zoomIn());
                         _googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
