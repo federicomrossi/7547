@@ -1,16 +1,15 @@
 package fiuba.ordertracker;
 
+import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,17 +30,11 @@ public class ProductDetailFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private Toolbar toolbar;
-
-    private String product_id;
-    private String product_name;
-    private String product_brand;
-    private String product_availability;
-
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
+    private View view;
     private OnFragmentInteractionListener mListener;
 
     public ProductDetailFragment() {
@@ -80,7 +73,7 @@ public class ProductDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         //return inflater.inflate(R.layout.fragment_product_detail, container, false);
-        View view = inflater.inflate(R.layout.fragment_product_detail, container, false);
+        this.view = inflater.inflate(R.layout.fragment_product_detail, container, false);
 
         //Toolbar toolbar = (Toolbar) view.findViewById(R.id.client_detail_toolbar); // TODO change for the toolbar in the product layout
         //setSupportActionBar(toolbar);
@@ -116,6 +109,22 @@ public class ProductDetailFragment extends Fragment {
         category.setText(getArguments().getString("category"));
         availability.setText(getArguments().getString("availability"));
         new ImageLoadTask(getArguments().getString("url_image_normal"), image).execute();
+
+        final String productId = getArguments().getString("id");
+        final String productName = getArguments().getString("name");
+        final String productBrand = getArguments().getString("brand");
+
+        Button button = (Button) view.findViewById(R.id.product_detail_add_to_cart);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("******** AGREGAR button ********");
+                FragmentTransaction ft = ((Activity) view.getContext()).getFragmentManager().beginTransaction();
+                AddProductToCartFragment newFragment = AddProductToCartFragment.newInstance(productId,
+                        productName, productBrand);
+                newFragment.show(ft, "dialog");
+            }
+        });
 
         return view;
     }
@@ -158,4 +167,5 @@ public class ProductDetailFragment extends Fragment {
         // TODO: Update argument type and name
         void onProductDetailFragmentInteraction(Uri uri);
     }
+
 }
