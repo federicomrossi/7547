@@ -66,12 +66,14 @@ public final class OrderService {
         Call<List<OrderProduct>> getProductsFromActiveOrder(@Path("id") String id);
 
         @FormUrlEncoded
+        @POST("orders/removeProductFromOrder")
+        Call<List<OrderProduct>> removeProductFromOrder (@Field("id_producto") String id_producto, @Field("id_orden") String id_orden);
+
+        @FormUrlEncoded
         @PUT("orders")
         Call<Order> editOrder(@Field("id_orden") String id_orden, @Field("id_estado") String id_estado);
 
-        @FormUrlEncoded
-        @POST("orders/removeProductFromOrder")
-        Call<List<OrderProduct>> removeProductFromOrder (@Field("id_producto") String id_producto, @Field("id_orden") String id_orden);
+
     }
 
 
