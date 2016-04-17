@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,7 +38,12 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
     private LayoutInflater inflater;
     List<OrderProduct> data = Collections.emptyList();
     private String category = "";
+    private final OrderProductListAdapter _self = this;
     private Fragment parentFragment;
+
+    public void setData(List<OrderProduct> data) {
+        this.data = data;
+    }
 
     public String getCategory() {
         return category;
@@ -163,6 +169,7 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
 
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            final View view = v;
             OrderProduct order = data.get(getAdapterPosition());
             int productId = Integer.valueOf(order.getId());
             int orderId = Integer.valueOf(order.getIdOrden());
@@ -175,14 +182,18 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
                 String idOrder = String.valueOf(item.getOrder());
                     try
                     {
-                       Call<String> call = OrderService.getInstance().order.removeProductFromOrder(idProduct, idOrder);
-                        call.enqueue(new Callback<String>() {
+                       Call<List<OrderProduct>> call = OrderService.getInstance().order.removeProductFromOrder(idProduct, idOrder);
+                        call.enqueue(new Callback<List<OrderProduct>>() {
                             @Override
-                            public void onResponse(Call<String> call, Response<String> response) {
-
+                            public void onResponse(Call<List<OrderProduct>> call, Response<List<OrderProduct>> response) {
+                                List<OrderProduct> list = response.body();
+                                setData(list);
+                                RecyclerView rv = (RecyclerView) view.findViewById(R.id.productsList);
+                                rv.setAdapter(_self);
                             }
+
                             @Override
-                            public void onFailure(Call<String> call, Throwable t) {
+                            public void onFailure(Call<List<OrderProduct>> call, Throwable t) {
 
                             }
                         });

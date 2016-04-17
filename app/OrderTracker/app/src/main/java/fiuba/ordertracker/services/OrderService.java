@@ -66,7 +66,7 @@ public final class OrderService {
 
         @FormUrlEncoded
         @POST("orders/removeProductFromOrder")
-        Call<String> removeProductFromOrder (@Field("id_producto") String id_producto, @Field("id_orden") String id_orden);
+        Call<List<OrderProduct>> removeProductFromOrder (@Field("id_producto") String id_producto, @Field("id_orden") String id_orden);
 
 
     }
@@ -77,7 +77,7 @@ public final class OrderService {
         OrderService loginService = OrderService.getInstance();
         try
         {
-            Call<String> call8 = loginService.order.removeProductFromOrder("9", "44");
+            Call<List<OrderProduct>> call8 = loginService.order.removeProductFromOrder("9", "44");
             call8.execute();
         } catch(Exception e){}
 
