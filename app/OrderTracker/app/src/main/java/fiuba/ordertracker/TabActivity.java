@@ -17,6 +17,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import fiuba.ordertracker.helpers.Constants;
 import fiuba.ordertracker.pojo.Order;
 import fiuba.ordertracker.services.OrderService;
 import retrofit2.Call;
@@ -108,7 +109,7 @@ public class TabActivity extends AppCompatActivity
 
     public void createOrderCall(final OrderService os){
         final TabActivity self_ = this;
-        Call<Order> call = os.order.createOrder(self_.clientId,"0","se crea pedido");
+        Call<Order> call = os.order.createOrder(self_.clientId, Constants.PENDING_STATE,"se crea pedido");
 
         call.enqueue(new Callback<Order>() {
             @Override
