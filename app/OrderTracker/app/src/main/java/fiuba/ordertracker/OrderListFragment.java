@@ -123,8 +123,7 @@ public class OrderListFragment extends Fragment  implements Observer {
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                System.out.println("*********** confirmOrderCall() ***********");
-                                confirmOrderCall(); /////////////////////////////////////////////////////////////
+                                confirmOrderCall();
                             }
                         })
                         .setNegativeButton("Cancelar", null).show();
@@ -186,7 +185,7 @@ public class OrderListFragment extends Fragment  implements Observer {
     }
 
 
-    public void confirmOrderCall(){ ////////////////////////////////////////////////////////////////////////////////////
+    public void confirmOrderCall(){
         final TabActivity tabsAct = (TabActivity) getActivity();
         OrderService os = OrderService.getInstance();
         Call<Order> call = os.order.editOrder(tabsAct.getActiveOrder().getId(), Constants.COMPLETED_STATE);
