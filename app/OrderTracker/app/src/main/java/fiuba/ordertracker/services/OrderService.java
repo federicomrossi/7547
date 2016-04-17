@@ -13,6 +13,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -67,6 +68,10 @@ public final class OrderService {
         @FormUrlEncoded
         @POST("orders/removeProductFromOrder")
         Call<List<OrderProduct>> removeProductFromOrder (@Field("id_producto") String id_producto, @Field("id_orden") String id_orden);
+
+        @FormUrlEncoded
+        @PUT("orders")
+        Call<Order> editOrder(@Field("id_orden") String id_orden, @Field("id_estado") String id_estado);
 
 
     }
