@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+
 import fiuba.ordertracker.pojo.OrderProduct;
 import fiuba.ordertracker.services.OrderService;
 import retrofit2.Call;
@@ -36,7 +37,7 @@ import retrofit2.Response;
  * Use the {@link OrderListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class OrderListFragment extends Fragment  implements Observer{
+public class OrderListFragment extends Fragment  implements Observer {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";

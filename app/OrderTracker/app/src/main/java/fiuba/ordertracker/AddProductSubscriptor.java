@@ -7,4 +7,7 @@ import java.util.Observable;
  */
 public class AddProductSubscriptor extends Observable{
 
+    public void forceChange() {
+        this.setChanged();
+    }
 }
