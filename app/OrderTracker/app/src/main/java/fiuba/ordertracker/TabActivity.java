@@ -48,6 +48,7 @@ public class TabActivity extends AppCompatActivity
         Intent i = this.getIntent();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setSubtitle(i.getStringExtra("clientName"));
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

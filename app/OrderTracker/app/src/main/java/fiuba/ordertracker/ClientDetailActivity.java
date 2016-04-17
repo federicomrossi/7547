@@ -73,6 +73,7 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
     //Call when the user clicks the button
     public void onClickShoppingCart(View view){
         Intent intent = new Intent(view.getContext(), TabActivity.class);
+        intent.putExtra("clientName", this.clientName);
         intent.putExtra("clientID",this.clientID);
         view.getContext().startActivity(intent);
     }
