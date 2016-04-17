@@ -15,12 +15,16 @@ import java.util.Collections;
 import java.util.List;
 
 import fiuba.ordertracker.helpers.Constants;
+import fiuba.ordertracker.listeners.GPSTracker;
 import fiuba.ordertracker.pojo.Client;
 
 /**
  *
  */
 public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.MyViewHolder> {
+
+    private Double currentLatitude ;
+    private Double currentLongitude;
 
     private LayoutInflater inflater;
 
@@ -42,6 +46,9 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
 
 
     public ClientListAdapter(Context context, List<Client> data) {
+        GPSTracker gps = new GPSTracker(context);
+        currentLatitude = gps.getLatitude();
+        currentLongitude = gps.getLongitude();
         inflater = LayoutInflater.from(context);
         this.data = data;
 
@@ -66,7 +73,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         holder.name.setText(current.getSocialReason());
         holder.address.setText(current.getDireccion());
         holder.clientCode.setText(current.getCode());
-        holder.distance.setText(String.valueOf(current.getDistance())+ " " + Constants.COMPLETE_UNIT);
+        holder.distance.setText(String.valueOf(current.getDistance(currentLatitude,currentLongitude))+ " " + Constants.COMPLETE_UNIT);
 
         // Set listener to manage clicks on items from the RecyclerView
         holder.setOnItemClickListener(new OnItemClickListener() {
@@ -80,7 +87,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
                 intent.putExtra("clientCode", selectedClient.getCode());
                 intent.putExtra("address", selectedClient.getDireccion());
                 intent.putExtra("telephone", selectedClient.getTelefono());
-                intent.putExtra("distance", String.valueOf(selectedClient.getDistance()));
+                intent.putExtra("distance", String.valueOf(selectedClient.getDistance(currentLatitude,currentLongitude)));
                 intent.putExtra("latitude", String.valueOf(selectedClient.getLatitude()));
                 intent.putExtra("longitude", String.valueOf(selectedClient.getLongitude()));
 
