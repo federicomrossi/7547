@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -40,6 +41,7 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
     private String category = "";
     private final OrderProductListAdapter _self = this;
     private Fragment parentFragment;
+    private Context context ;
 
     public void setData(List<OrderProduct> data) {
         this.data = data;
@@ -186,10 +188,11 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
                         call.enqueue(new Callback<List<OrderProduct>>() {
                             @Override
                             public void onResponse(Call<List<OrderProduct>> call, Response<List<OrderProduct>> response) {
-                                List<OrderProduct> list = response.body();
+                                ((TabActivity) view.getContext()).productAdded();
+                                /*List<OrderProduct> list = response.body();
                                 setData(list);
                                 RecyclerView rv = (RecyclerView) view.findViewById(R.id.productsList);
-                                rv.setAdapter(_self);
+                                rv.setAdapter(_self);*/
                             }
 
                             @Override
