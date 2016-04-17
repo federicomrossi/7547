@@ -123,7 +123,8 @@ public class OrderListFragment extends Fragment  implements Observer {
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                confirmOrderCall();
+                                System.out.println("*********** confirmOrderCall() ***********");
+                                confirmOrderCall(); /////////////////////////////////////////////////////////////
                             }
                         })
                         .setNegativeButton("Cancelar", null).show();
@@ -185,7 +186,7 @@ public class OrderListFragment extends Fragment  implements Observer {
     }
 
 
-    public void confirmOrderCall(){
+    public void confirmOrderCall(){ ////////////////////////////////////////////////////////////////////////////////////
         final TabActivity tabsAct = (TabActivity) getActivity();
         OrderService os = OrderService.getInstance();
         Call<Order> call = os.order.editOrder(tabsAct.getActiveOrder().getId(), Constants.COMPLETED_STATE);
@@ -193,7 +194,8 @@ public class OrderListFragment extends Fragment  implements Observer {
         call.enqueue(new Callback<Order>() {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
-                Order order = response.body();
+                final Order order = response.body();
+
                 if(order != null){
                     if(order.getIdEstado().equals(Constants.COMPLETED_STATE)){
                         //aca es completo entonces hay que mostralo como confirmado y se cambia el active order a este pero esta fuera de la entrega asi que no hace nada por ahora
@@ -201,8 +203,25 @@ public class OrderListFragment extends Fragment  implements Observer {
                         Toast.makeText(tabsAct, "Se ha confirmado el pedido satisfactoriamente", Toast.LENGTH_SHORT).show();
                     }else{
                         //no pudo actualizarlo por falta de stock hay q mostrar el popup
-    
+                        new AlertDialog.Builder(tabsAct)
+                                .setTitle("El pedido contiene productos sin stock")
+                                .setMessage("¿Desea realizar el pedido de todas formas?")
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .setPositiveButton("Proseguir", new DialogInterface.OnClickListener() {
+
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        // Force the order status to Completed (Confirmed)
+                                        order.setIdEstado(Constants.COMPLETED_STATE);
+                                        Toast.makeText(tabsAct, "Se ha confirmado el pedido satisfactoriamente",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .setNegativeButton("Modificar", null).show();
                     }
+
+
+
+
                 }
             }
 
