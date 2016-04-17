@@ -116,17 +116,28 @@ public class OrderListFragment extends Fragment  implements Observer {
         buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(self_)
-                        .setTitle("Confirmar pedido")
-                        .setMessage("¿Está seguro de confirmar el pedido?")
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                if(orderProductListAdapter.getItemCount() > 0){
+                    new AlertDialog.Builder(self_)
+                            .setTitle("Confirmar pedido")
+                            .setMessage("¿Está seguro de confirmar el pedido?")
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                confirmOrderCall();
-                            }
-                        })
-                        .setNegativeButton("Cancelar", null).show();
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    confirmOrderCall();
+                                }
+                            })
+                            .setNegativeButton("Cancelar", null).show();
+
+                }else{
+                    new AlertDialog.Builder(self_)
+                            .setTitle("Confirmar pedido")
+                            .setMessage("El pedido está vacío y no puede ser enviado")
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setPositiveButton("Ok", null)
+                            .setNegativeButton("Cancelar", null).show();
+
+                }
             }
         });
 
@@ -217,10 +228,6 @@ public class OrderListFragment extends Fragment  implements Observer {
                                 })
                                 .setNegativeButton("Modificar", null).show();
                     }
-
-
-
-
                 }
             }
 
