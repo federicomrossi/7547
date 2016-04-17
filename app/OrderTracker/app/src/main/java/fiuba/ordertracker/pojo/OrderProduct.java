@@ -311,6 +311,12 @@ public class OrderProduct{
 
     public float getSubtotal()
     {
-        return Float.parseFloat(this.precio) * Float.parseFloat(this.cantidad);
+        try
+        {
+            return Float.parseFloat(this.precio) * Float.parseFloat(this.cantidad);
+        }catch (Exception e)
+        {
+            return 0;
+        }
     }
 }
