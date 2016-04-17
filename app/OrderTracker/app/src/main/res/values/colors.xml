@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorBackground">#FFFFFF</color>
-    <color name="colorLauncherBackground">#E0F2F1</color> <!-- Teal 50 -->
+    <color name="colorLauncherBackground">#1A2731</color> <!-- Teal 50 -->
 
     <color name="colorPrimary">#009688</color> <!-- Teal 500 -->
     <color name="colorPrimaryDark">#00796B</color> <!-- Teal 700 -->

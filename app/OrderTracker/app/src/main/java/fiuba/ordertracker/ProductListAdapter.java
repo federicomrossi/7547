@@ -107,6 +107,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
                 Bundle args= new Bundle();
                 args.putString("url_image_normal", currentClicked.getUrlImageNormal());
+                args.putString("id", currentClicked.getId());
                 args.putString("name", currentClicked.getNombre());
                 args.putString("brand", currentClicked.getMarca());
                 args.putString("description", currentClicked.getDescripcion());
@@ -154,6 +155,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    System.out.println("******** AGREGAR ********");
                     FragmentTransaction ft = ((Activity) itemView.getContext()).getFragmentManager().beginTransaction();
                     AddProductToCartFragment newFragment = AddProductToCartFragment.newInstance(_product);
                     newFragment.show(ft, "dialog");
