@@ -122,9 +122,18 @@ public class OrderListFragment extends Fragment {
                 List<OrderProduct> listProducts = response.body();
                 orderProductListAdapter = new OrderProductListAdapter(self_,listProducts,_parentFragment);
                 progressBar.setVisibility(View.GONE);
+                TextView subtotalText = (TextView) _view.findViewById(R.id.textView4);
                 if (listProducts == null) {
                     TextView textNoProducts = (TextView) _view.findViewById(R.id.text_no_products);
                     textNoProducts.setVisibility(View.VISIBLE);
+
+                    subtotalText.setText("Todavía tu pedido no tiene productos");
+                } else {
+                    float subtotal = 0 ;
+                    for (OrderProduct orderProduct: listProducts) {
+                        subtotal += orderProduct.getSubtotal();
+                    }
+                    subtotalText.setText("$"+String.valueOf(subtotal));
                 }
                 recyclerView.setAdapter(orderProductListAdapter);
             }
