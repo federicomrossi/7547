@@ -57,6 +57,9 @@ public final class OrderService {
 
         @GET("orders/getProducts")
         Call<List<OrderProduct>> orderProductsById(@Query("id") String id );
+
+        @GET("orders/getActiveProductOrder/{id}")
+        Call<Order> getActiveProductOrderByClient(@Path("id") int idCliente );
     }
 
 
@@ -70,6 +73,7 @@ public final class OrderService {
         // Fetch and print a list of the contributors to the library.
         Order user = call.execute().body();
 
+        System.out.println("|||||||||||||||||||||||||||||||||||||");
         System.out.println(user);
 
         call = loginService.order.addProductToOrder("1", "1", "3");
@@ -77,6 +81,7 @@ public final class OrderService {
         // Fetch and print a list of the contributors to the library.
         user = call.execute().body();
 
+        System.out.println("|||||||||||||||||||||||||||||||||||||");
         System.out.println(user);
 
         call = loginService.order.orderById(1);
@@ -84,6 +89,7 @@ public final class OrderService {
         // Fetch and print a list of the contributors to the library.
         user = call.execute().body();
 
+        System.out.println("|||||||||||||||||||||||||||||||||||||");
         System.out.println(user);
 
         Call<List<OrderProduct>> call2 = loginService.order.orderProductsById("1");
@@ -91,11 +97,19 @@ public final class OrderService {
         // Fetch and print a list of the contributors to the library.
         List<OrderProduct> clientList = call2.execute().body();
 
+        System.out.println("|||||||||||||||||||||||||||||||||||||");
         System.out.println(user);
 
         for (OrderProduct orderProduct : clientList) {
             System.out.println(orderProduct);
         }
+
+        call = loginService.order.getActiveProductOrderByClient(1);
+
+        // Fetch and print a list of the contributors to the library.
+        user = call.execute().body();
+        System.out.println("|||||||||||||||||||||||||||||||||||||");
+        System.out.println(user);
 
 
     }

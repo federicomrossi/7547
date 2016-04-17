@@ -15,4 +15,9 @@ public final class Constants {
     public static final Double OBELISCO_LONGITUDE = -58.381570400;
     public static final Integer COLOR_TEXT_FILTER = Color.BLACK;
     public static final Integer COLOR_HINT_FILTER = Color.BLACK;
+
+    public static final String PENDING_STATE = "0";
+    public static final String ACTIVE_STATE = "1";
+    public static final String CANCELED_STATE = "2";
+    public static final String COMPLETED_STATE ="3";
 }
