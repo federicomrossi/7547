@@ -70,7 +70,8 @@
                     android:textColorLink="#ffffff"
                     android:textColor="#ffffff"
                     android:textColorHighlight="#ffffff"
-                    android:textColorHint="#ffffff" />
+                    android:textColorHint="#ffffff"
+                    android:text="ezequielmreyes@gmail.com" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -93,7 +94,8 @@
                     android:textColor="#ffffff"
                     android:textColorHighlight="#ffffff"
                     android:textColorHint="#ffffff"
-                    android:textColorLink="#ffffff" />
+                    android:textColorLink="#ffffff"
+                    android:text="12345" />
 
             </android.support.design.widget.TextInputLayout>
 
