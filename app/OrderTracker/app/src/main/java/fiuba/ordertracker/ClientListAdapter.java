@@ -21,7 +21,23 @@ import fiuba.ordertracker.pojo.Client;
 public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.MyViewHolder> {
 
     private LayoutInflater inflater;
+
+    public void setData(List<Client> data) {
+        this.data = data;
+    }
+
     List<Client> data = Collections.emptyList();
+
+    public List<Client> getOriginalData() {
+        return originalData;
+    }
+
+    public void setOriginalData(List<Client> originalData) {
+        this.originalData = originalData;
+    }
+
+    List<Client> originalData = Collections.emptyList();
+
 
     public ClientListAdapter(Context context, List<Client> data) {
         inflater = LayoutInflater.from(context);
@@ -56,11 +72,14 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
                 System.out.println("*********** Click on item ***********");
                 Client selectedClient = data.get(position);
                 Intent intent = new Intent(view.getContext(), ClientDetailActivity.class);
-                intent.putExtra("name", selectedClient.getApenom());
+                intent.putExtra("clientID", selectedClient.getId());
+                intent.putExtra("name", selectedClient.getSocialReason());
                 intent.putExtra("clientCode", selectedClient.getCode());
                 intent.putExtra("address", selectedClient.getDireccion());
                 intent.putExtra("telephone", selectedClient.getTelefono());
                 intent.putExtra("distance", String.valueOf(selectedClient.getDistance()));
+                intent.putExtra("latitude", String.valueOf(selectedClient.getLatitude()));
+                intent.putExtra("longitude", String.valueOf(selectedClient.getLongitude()));
 
                 view.getContext().startActivity(intent);
             }

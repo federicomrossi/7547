@@ -1,5 +1,6 @@
 package fiuba.ordertracker;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,11 +9,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import java.util.List;
 
+import fiuba.ordertracker.helpers.Constants;
+import fiuba.ordertracker.helpers.Fonts;
 import fiuba.ordertracker.pojo.Categorie;
 import fiuba.ordertracker.services.CategorieService;
 import retrofit2.Call;
@@ -28,22 +34,24 @@ public class ProductCategoryListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ProductCategoryListAdapter productCategoryListAdapter;
     private ProgressBar progressBar;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        /*super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_category_list);
-
+        final SearchView searchView = (SearchView)findViewById(R.id.searchView);
+        intent = getIntent();
         // Toolbar
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setSubtitle(getString(R.string.activity_product_category_list));
-
+        Fonts.changeSearchViewTextColorBlack(searchView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
         setProgressBarIndeterminateVisibility(true);
-
+        setFiltersValues(searchView, null);
         // Categories list
         recyclerView = (RecyclerView) findViewById(R.id.productsCategoriesList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -52,7 +60,7 @@ public class ProductCategoryListActivity extends AppCompatActivity {
         CategorieService cs = CategorieService.getInstance();
 
         // Create a call instance for looking up Retrofit contributors.
-        Call<List<Categorie>> call = cs.categories.Categories(null,null,null);
+        Call<List<Categorie>> call = cs.categories.Categories(intent.getStringExtra("nameFilter"),null,null);
 
         final ProductCategoryListActivity self_ = this;
         call.enqueue(new Callback<List<Categorie>>() {
@@ -60,7 +68,7 @@ public class ProductCategoryListActivity extends AppCompatActivity {
             public void onResponse(Call<List<Categorie>> call, Response<List<Categorie>> response) {
                 // Get result Repo from response.body()
                 List<Categorie> listCategories = response.body();
-                productCategoryListAdapter = new ProductCategoryListAdapter(self_, listCategories);
+                productCategoryListAdapter = new ProductCategoryListAdapter(self_, listCategories, );
                 progressBar.setVisibility(View.GONE);
 
                 if(listCategories.size() == 0) {
@@ -79,18 +87,30 @@ public class ProductCategoryListActivity extends AppCompatActivity {
                 textNoCategories.setText("Hubo un error al cargar las categorias por favor reintente mas tarde");
                 textNoCategories.setVisibility(View.VISIBLE);
             }
+
         });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (query != "") {
+                    setIntentsInFilters(searchView, null);
+                }
+                return false;
+            }
+
+        });*/
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_menu, menu);
-
-        /*final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));*/
-
         return true;
     }
 
@@ -98,23 +118,27 @@ public class ProductCategoryListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-
-        /*switch(id) {
-
-            case R.id.action_filter:
-                toolbar_filter();
-                break;
-
-            case R.id.action_search:
-                break;
-        }*/
-
         return super.onOptionsItemSelected(item);
     }
 
-    private void toolbar_filter() {
-
+    protected void setIntentsInFilters(SearchView searchView, EditText marcaFilterView)
+    {
+        Intent newIntent = new Intent(searchView.getContext(), ProductCategoryListActivity.class);
+        if (!searchView.getQuery().toString().equals("")) {
+            newIntent.putExtra("nameFilter", searchView.getQuery().toString());
+        }
+        searchView.getContext().startActivity(newIntent);
+        finish();
     }
 
+    private void setFiltersValues(SearchView searchView, EditText marcaFilterView) {
+        if(intent.getStringExtra("nameFilter") != null)
+        {
+            searchView.setQuery(intent.getStringExtra("nameFilter"), false);
+            searchView.setQueryHint(intent.getStringExtra("nameFilter"));
+            searchView.setHovered(true);
+            searchView.setSelected(true);
+        }
+    }
 
 }
