@@ -10,6 +10,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +35,7 @@ public class TabActivity extends AppCompatActivity
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private ProgressBar progressBar;
     public String clientId;
     private Order activeOrder;
 
@@ -45,6 +49,11 @@ public class TabActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+
+        setProgressBarIndeterminateVisibility(true);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -64,7 +73,9 @@ public class TabActivity extends AppCompatActivity
         call.enqueue(new Callback<Order>() {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
+                System.out.println("****************** onResponse TabActivity *********************");
                 Order activeOrder;
+                progressBar.setVisibility(View.GONE);
                 if(response.code() == 404){
                     //no tiene pedido activo... entonces creo uno
                     self_.createOrderCall(os);
@@ -76,7 +87,12 @@ public class TabActivity extends AppCompatActivity
 
             @Override
             public void onFailure(Call<Order> call, Throwable t) {
-                //Aca tenemos que agregar el msj de error a mostrar... puto el que lee
+                //Aca tenemos que agregar el msj de error a mostrar...
+                System.out.println("****************** onFailure TabActivity 1 *********************");
+                TextView textNoClients = (TextView) findViewById(R.id.text_no_products);
+                textNoClients.setText("Hubo un error al cargar el pedido, por favor reintente más tarde");
+                textNoClients.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
             }
         });
 
@@ -103,7 +119,12 @@ public class TabActivity extends AppCompatActivity
 
             @Override
             public void onFailure(Call<Order> call, Throwable t) {
-                //Aca tenemos que agregar el msj de error a mostrar... puto el que lee
+                //Aca tenemos que agregar el msj de error a mostrar...
+                System.out.println("****************** onFailure TabActivity 2 *********************");
+                TextView textNoClients = (TextView) findViewById(R.id.text_no_products);
+                textNoClients.setText("Hubo un error al cargar el pedido, por favor reintente más tarde");
+                textNoClients.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
             }
         });
     }
