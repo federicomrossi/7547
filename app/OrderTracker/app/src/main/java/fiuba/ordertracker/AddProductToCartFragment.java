@@ -3,23 +3,18 @@ package fiuba.ordertracker;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.NumberPicker;
-import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
+import fiuba.ordertracker.pojo.Order;
 import fiuba.ordertracker.pojo.Product;
+import fiuba.ordertracker.services.OrderService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class AddProductToCartFragment extends DialogFragment {
@@ -66,7 +61,7 @@ public class AddProductToCartFragment extends DialogFragment {
         /**
          * Product info
          */
-        String product_id = getArguments().getString("product_id");
+        final String product_id = getArguments().getString("product_id");
         String product_name = getArguments().getString("product_name");
         String product_brand = getArguments().getString("product_brand");
         String product_availability = getArguments().getString("product_availability");
@@ -77,7 +72,7 @@ public class AddProductToCartFragment extends DialogFragment {
         /**
          * Number picker for select stock
          */
-        NumberPicker np = (NumberPicker) v.findViewById(R.id.numberPicker);
+        final NumberPicker np = (NumberPicker) v.findViewById(R.id.numberPicker);
         np.setMinValue(1);
         np.setMaxValue(1000);
         np.setWrapSelectorWheel(true);
@@ -91,6 +86,7 @@ public class AddProductToCartFragment extends DialogFragment {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 //((ProductDetailActivity)getActivity()).doPositiveClick();
+                                createOrderCall( product_id,"1", new Integer(np.getValue()).toString());
                             }
                         }
                 )
@@ -106,4 +102,23 @@ public class AddProductToCartFragment extends DialogFragment {
                 )
                 .create();
     }
+
+
+    public void createOrderCall(String idProd, String idOrd, String cantidad ){
+        OrderService os = OrderService.getInstance();
+        Call<Order> call = os.order.addProductToOrder(idProd, idOrd, cantidad);
+
+        call.enqueue(new Callback<Order>() {
+            @Override
+            public void onResponse(Call<Order> call, Response<Order> response) {
+                Order order = response.body();
+            }
+
+            @Override
+            public void onFailure(Call<Order> call, Throwable t) {
+                //Aca tenemos que agregar el msj de error a mostrar...
+            }
+        });
+    }
+
 }
