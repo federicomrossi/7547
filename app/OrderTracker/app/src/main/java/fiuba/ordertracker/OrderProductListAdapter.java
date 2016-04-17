@@ -89,7 +89,7 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
             public void onItemClick(View view, int position) {
                 System.out.println("*********** Click on item ***********");
 
-                Intent intent = new Intent(view.getContext(), ProductDetailActivity.class);
+                /*Intent intent = new Intent(view.getContext(), ProductDetailActivity.class);
                 intent.putExtra("url_image_normal", data.get(position).getUrlImageNormal()); // TODO show picture
                 intent.putExtra("name", data.get(position).getNombre());
                 intent.putExtra("brand", data.get(position).getMarca());
@@ -97,7 +97,7 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
                 intent.putExtra("price", data.get(position).getPrecio());
                 intent.putExtra("category", category);
                 intent.putExtra("availability", data.get(position).stockState()); // TODO it has to be availability, not stock
-                view.getContext().startActivity(intent);
+                view.getContext().startActivity(intent);*/
             }
         });
     }
