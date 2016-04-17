@@ -39,11 +39,16 @@ public class TabActivity extends AppCompatActivity
     private ProgressBar progressBar;
     public String clientId;
     private Order activeOrder;
+    private AddProductSubscriptor subscriptor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
+
+        subscriptor = new AddProductSubscriptor();
+
 
         Intent i = this.getIntent();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -133,6 +138,7 @@ public class TabActivity extends AppCompatActivity
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        ProductsFragment pf = new ProductsFragment();
         adapter.addFragment(new ProductsFragment(), "PRODUCTOS");
         adapter.addFragment(new OrderContainerFragment(), "PEDIDO");
         viewPager.setAdapter(adapter);
@@ -187,7 +193,7 @@ public class TabActivity extends AppCompatActivity
     }
 
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
+    class ViewPagerAdapter extends FragmentPagerAdapter  {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
@@ -213,6 +219,20 @@ public class TabActivity extends AppCompatActivity
         @Override
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
+        }
+
+
+
+    }
+
+    public AddProductSubscriptor getSubscriptor() {
+        return subscriptor;
+    }
+
+
+    public void productAdded(){
+        synchronized(this.subscriptor){
+            this.subscriptor.notifyAll();
         }
     }
 }
