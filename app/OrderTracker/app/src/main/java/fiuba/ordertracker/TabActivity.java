@@ -78,7 +78,7 @@ public class TabActivity extends AppCompatActivity
                 System.out.println("****************** onResponse TabActivity *********************");
                 Order activeOrder;
                 progressBar.setVisibility(View.GONE);
-                if(response.code() == 404){
+                if(response.code() == 500){
                     //no tiene pedido activo... entonces creo uno
                     self_.createOrderCall(os);
 
@@ -110,7 +110,7 @@ public class TabActivity extends AppCompatActivity
 
     public void createOrderCall(final OrderService os){
         final TabActivity self_ = this;
-        Call<Order> call = os.order.createOrder(self_.clientId, Constants.PENDING_STATE,"se crea pedido");
+        Call<Order> call = os.order.createOrder(self_.clientId, Constants.PENDING_STATE, "se crea pedido");
 
         call.enqueue(new Callback<Order>() {
             @Override
