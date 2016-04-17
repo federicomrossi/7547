@@ -1,7 +1,5 @@
 package fiuba.ordertracker;
 
-import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
@@ -20,12 +18,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
-import fiuba.ordertracker.pojo.Order;
+
 import fiuba.ordertracker.pojo.OrderProduct;
-import fiuba.ordertracker.pojo.Product;
 import fiuba.ordertracker.services.OrderService;
-import fiuba.ordertracker.services.ProductService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,7 +37,7 @@ import retrofit2.Response;
  * Use the {@link OrderListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class OrderListFragment extends Fragment {
+public class OrderListFragment extends Fragment  implements Observer {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -48,6 +46,7 @@ public class OrderListFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private View view;
 
     private RecyclerView recyclerView;
     private OrderProductListAdapter orderProductListAdapter;
@@ -80,6 +79,8 @@ public class OrderListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TabActivity self_ = (TabActivity)getActivity();
+        self_.getSubscriptor().addObserver(this);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -90,7 +91,7 @@ public class OrderListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_order_list, container, false);
+        view = inflater.inflate(R.layout.fragment_order_list, container, false);
 
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
@@ -102,54 +103,13 @@ public class OrderListFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
 
+        // Load OrderProduct list
 
-
-
-
-        // Create a call instance for looking up Retrofit contributors.
-
-        final FragmentActivity self_ = getActivity();
-        final Fragment _parentFragment = this.getParentFragment();
-        final View _view = view;
-
-        final OrderService os = OrderService.getInstance();
-        Call<List<OrderProduct>> call = os.order.getProductsFromActiveOrder(((TabActivity) self_).clientId);
-
-        call.enqueue(new Callback<List<OrderProduct>>() {
-
-            @Override
-            public void onResponse(Call<List<OrderProduct>> call, Response<List<OrderProduct>> response) {
-                List<OrderProduct> listProducts = response.body();
-                orderProductListAdapter = new OrderProductListAdapter(self_,listProducts,_parentFragment);
-                progressBar.setVisibility(View.GONE);
-                TextView subtotalText = (TextView) _view.findViewById(R.id.textView4);
-                if (listProducts == null) {
-                    TextView textNoProducts = (TextView) _view.findViewById(R.id.text_no_products);
-                    textNoProducts.setVisibility(View.VISIBLE);
-
-                    subtotalText.setText("Todavía tu pedido no tiene productos");
-                } else {
-                    float subtotal = 0 ;
-                    for (OrderProduct orderProduct: listProducts) {
-                        subtotal += orderProduct.getSubtotal();
-                    }
-                    subtotalText.setText("$"+String.valueOf(subtotal));
-                }
-                recyclerView.setAdapter(orderProductListAdapter);
-            }
-
-            @Override
-            public void onFailure(Call<List<OrderProduct>> call, Throwable t) {
-                TextView textNoProducts = (TextView) _view.findViewById(R.id.text_no_products);
-                textNoProducts.setVisibility(View.VISIBLE);
-            }
-        });
-
-
-
-
+        this.getProductsFromActiveOrderCall();
 
         // Confirmation button
+        final FragmentActivity self_ = getActivity();
+        final Fragment _parentFragment = this.getParentFragment();
         Button buttonConfirm = (Button) view.findViewById(R.id.buttonConfirmOrder);
         buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -213,6 +173,63 @@ public class OrderListFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
+
+    @Override
+    public void onStart() {
+        getProductsFromActiveOrderCall();
+        super.onStart();
+
+    }
+
+
+
+    public void getProductsFromActiveOrderCall(){
+        // Create a call instance for looking up Retrofit contributors.
+        final FragmentActivity self_ = getActivity();
+        final Fragment _parentFragment = this.getParentFragment();
+        final View _view = view;
+        final OrderService os = OrderService.getInstance();
+        Call<List<OrderProduct>> call = os.order.getProductsFromActiveOrder(((TabActivity) self_).clientId);
+
+        call.enqueue(new Callback<List<OrderProduct>>() {
+
+            @Override
+            public void onResponse(Call<List<OrderProduct>> call, Response<List<OrderProduct>> response) {
+                List<OrderProduct> listProducts = response.body();
+                orderProductListAdapter = new OrderProductListAdapter(self_, listProducts, _parentFragment);
+                progressBar.setVisibility(View.GONE);
+                TextView subtotalText = (TextView) _view.findViewById(R.id.textView4);
+                if (listProducts == null) {
+                    TextView textNoProducts = (TextView) _view.findViewById(R.id.text_no_products);
+                    textNoProducts.setVisibility(View.VISIBLE);
+
+                    subtotalText.setText("Todavía tu pedido no tiene productos");
+                } else {
+                    float subtotal = 0;
+                    for (OrderProduct orderProduct : listProducts) {
+                        subtotal += orderProduct.getSubtotal();
+                    }
+                    subtotalText.setText("$" + String.valueOf(subtotal));
+                }
+                recyclerView.setAdapter(orderProductListAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<List<OrderProduct>> call, Throwable t) {
+                TextView textNoProducts = (TextView) _view.findViewById(R.id.text_no_products);
+                textNoProducts.setVisibility(View.VISIBLE);
+            }
+        });
+
+    }
+
+    @Override
+    public void update(Observable observable, Object data) {
+        System.out.println("notificadoooooo");
+        this.getProductsFromActiveOrderCall();
+    }
+
 
     /**
      * This interface must be implemented by activities that contain this

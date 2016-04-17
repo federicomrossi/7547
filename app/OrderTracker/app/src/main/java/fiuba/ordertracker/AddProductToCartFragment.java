@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
@@ -114,6 +113,7 @@ public class AddProductToCartFragment extends DialogFragment {
 
 
     public void createOrderCall(String idProd, String idOrd, String cantidad ){
+        final TabActivity tabsAct = (TabActivity) getActivity();
         OrderService os = OrderService.getInstance();
         Call<Order> call = os.order.addProductToOrder(idProd, idOrd, cantidad);
 
@@ -121,6 +121,7 @@ public class AddProductToCartFragment extends DialogFragment {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
                 Order order = response.body();
+                tabsAct.productAdded();
             }
 
             @Override
