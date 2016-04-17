@@ -17,12 +17,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
 import fiuba.ordertracker.helpers.ImageLoadTask;
 import fiuba.ordertracker.pojo.OrderProduct;
 import fiuba.ordertracker.pojo.Product;
+import fiuba.ordertracker.services.OrderService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  *
@@ -158,9 +163,36 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
 
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            OrderProduct order = data.get(getAdapterPosition());
+            int productId = Integer.valueOf(order.getId());
+            int orderId = Integer.valueOf(order.getIdOrden());
             menu.setHeaderTitle("Opciones del producto");
             menu.add(0, v.getId(), 0, "Modificar");//groupId, itemId, order, title
-            menu.add(0, v.getId(), 0, "Eliminar");
+            menu.add(productId, v.getId(), orderId, "Eliminar").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                String idProduct = String.valueOf(item.getGroupId());
+                String idOrder = String.valueOf(item.getOrder());
+                    try
+                    {
+                       Call<String> call = OrderService.getInstance().order.removeProductFromOrder(idProduct, idOrder);
+                        call.enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+
+                            }
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
+
+                            }
+                        });
+                    } catch(Exception e){
+                        String as = "";
+                    }
+                return false;
+                }
+            });
+
         }
 
         @Override

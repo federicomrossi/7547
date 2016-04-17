@@ -63,14 +63,23 @@ public final class OrderService {
 
         @GET("orders/getProductsFromActiveOrder/{id}")
         Call<List<OrderProduct>> getProductsFromActiveOrder(@Path("id") String id);
+
+        @FormUrlEncoded
+        @POST("orders/removeProductFromOrder")
+        Call<String> removeProductFromOrder (@Field("id_producto") String id_producto, @Field("id_orden") String id_orden);
+
+
     }
 
 
 
     public static void main(String... args) throws IOException {
         OrderService loginService = OrderService.getInstance();
-        Call<List<OrderProduct>> call8 = loginService.order.getProductsFromActiveOrder("2");
-        List<OrderProduct> lproducts = call8.execute().body();
+        try
+        {
+            Call<String> call8 = loginService.order.removeProductFromOrder("9", "44");
+            call8.execute();
+        } catch(Exception e){}
 
 
         // Create a call instance for looking up Retrofit contributors.
