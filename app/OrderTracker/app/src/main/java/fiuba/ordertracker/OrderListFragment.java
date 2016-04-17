@@ -206,12 +206,12 @@ public class OrderListFragment extends Fragment  implements Observer {
             public void onResponse(Call<Order> call, Response<Order> response) {
                 final Order order = response.body();
 
-                if(order != null){
-                    if(order.getIdEstado().equals(Constants.COMPLETED_STATE)){
+                if (order != null) {
+                    if (order.getIdEstado().equals(Constants.COMPLETED_STATE)) {
                         //aca es completo entonces hay que mostralo como confirmado y se cambia el active order a este pero esta fuera de la entrega asi que no hace nada por ahora
                         //tabsAct.setActiveOrder(order);
                         Toast.makeText(tabsAct, "Se ha confirmado el pedido satisfactoriamente", Toast.LENGTH_SHORT).show();
-                    }else{
+                    } else {
                         //no pudo actualizarlo por falta de stock hay q mostrar el popup
                         new AlertDialog.Builder(tabsAct)
                                 .setTitle("El pedido contiene productos sin stock")
@@ -256,11 +256,11 @@ public class OrderListFragment extends Fragment  implements Observer {
                 orderProductListAdapter = new OrderProductListAdapter(self_, listProducts, _parentFragment);
                 progressBar.setVisibility(View.GONE);
                 TextView subtotalText = (TextView) _view.findViewById(R.id.textView4);
-                if (listProducts == null) {
+                if (listProducts.size() == 0) {
                     TextView textNoProducts = (TextView) _view.findViewById(R.id.text_no_products);
                     textNoProducts.setVisibility(View.VISIBLE);
 
-                    subtotalText.setText("Todavía tu pedido no tiene productos");
+                    subtotalText.setText("No hay productos en el pedido");
                 } else {
                     float subtotal = 0;
                     for (OrderProduct orderProduct : listProducts) {
