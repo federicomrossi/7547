@@ -185,4 +185,15 @@ public class ClientListActivity extends AppCompatActivity {
         clientListAdapter.setData(listFiltered);
         recyclerView.setAdapter(clientListAdapter);
     }
+
+    // Call when the user clicks the go map button
+    public void onClickGoMap(View view) {
+        Intent intent = new Intent(view.getContext(), ClientsMapActivity.class);
+
+        Bundle b = new Bundle();
+        b.putString("clientID", null);
+        intent.putExtras(b);
+
+        view.getContext().startActivity(intent);
+    }
 }

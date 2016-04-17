@@ -2,10 +2,12 @@ package fiuba.ordertracker;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,6 +62,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         Client current = this.data.get(position);
+        holder.setClient(current);
         holder.name.setText(current.getSocialReason());
         holder.address.setText(current.getDireccion());
         holder.clientCode.setText(current.getCode());
@@ -98,6 +101,8 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         TextView distance;
         private OnItemClickListener clickListener;
 
+        private Client client;
+
         public MyViewHolder(View itemView) {
             super(itemView);
 
@@ -108,6 +113,25 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
 
             // Set listener to the item view
             itemView.setOnClickListener(this);
+        }
+
+        public void setClient(Client c) {
+            this.client = c;
+            final Client _client = this.client;
+
+            Button button = (Button) itemView.findViewById(R.id.client_list_goto_order);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(itemView.getContext(), TabActivity.class);
+
+                    Bundle b = new Bundle();
+                    b.putString("clientID", _client.getId());
+                    intent.putExtras(b);
+
+                    itemView.getContext().startActivity(intent);
+                }
+            });
         }
 
         public void setOnItemClickListener(OnItemClickListener clickListener) {
