@@ -37,7 +37,7 @@ public class TabActivity extends AppCompatActivity
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private ProgressBar progressBar;
+    //private ProgressBar progressBar;
     public String clientId;
     private Order activeOrder;
     private AddProductSubscriptor subscriptor;
@@ -56,12 +56,12 @@ public class TabActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setSubtitle(i.getStringExtra("clientName"));
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.VISIBLE);
+        //progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        //progressBar.setVisibility(View.VISIBLE);
 
-        setProgressBarIndeterminateVisibility(true);
+        //setProgressBarIndeterminateVisibility(true);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -83,7 +83,7 @@ public class TabActivity extends AppCompatActivity
             public void onResponse(Call<Order> call, Response<Order> response) {
                 System.out.println("****************** onResponse TabActivity *********************");
                 Order activeOrder;
-                progressBar.setVisibility(View.GONE);
+                //progressBar.setVisibility(View.GONE);
                 if(response.code() == 500){
                     //no tiene pedido activo... entonces creo uno
                     self_.createOrderCall(os);
@@ -100,7 +100,7 @@ public class TabActivity extends AppCompatActivity
                 TextView textNoClients = (TextView) findViewById(R.id.text_no_products);
                 textNoClients.setText("Hubo un error al cargar el pedido, por favor reintente más tarde");
                 textNoClients.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.GONE);
+                //progressBar.setVisibility(View.GONE);
             }
         });
 
@@ -132,7 +132,7 @@ public class TabActivity extends AppCompatActivity
                 TextView textNoClients = (TextView) findViewById(R.id.text_no_products);
                 textNoClients.setText("Hubo un error al cargar el pedido, por favor reintente más tarde");
                 textNoClients.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.GONE);
+                //progressBar.setVisibility(View.GONE);
             }
         });
     }
