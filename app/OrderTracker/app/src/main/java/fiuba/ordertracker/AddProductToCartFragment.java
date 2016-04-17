@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
@@ -20,6 +21,7 @@ import retrofit2.Response;
 public class AddProductToCartFragment extends DialogFragment {
 
     private static Product product;
+    private static Order order;
 
     public static AddProductToCartFragment newInstance(Product p) {
 
@@ -66,8 +68,15 @@ public class AddProductToCartFragment extends DialogFragment {
         String product_brand = getArguments().getString("product_brand");
         String product_availability = getArguments().getString("product_availability");
 
+        order = ((TabActivity) getActivity()).getActiveOrder();
+
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View v = inflater.inflate(R.layout.fragment_add_product_to_cart, null);
+
+        /**
+         * Order info
+         */
+        final Order _order = order;
 
         /**
          * Number picker for select stock
@@ -86,7 +95,7 @@ public class AddProductToCartFragment extends DialogFragment {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 //((ProductDetailActivity)getActivity()).doPositiveClick();
-                                createOrderCall( product_id,"1", new Integer(np.getValue()).toString());
+                                createOrderCall( product_id, _order.getId(), new Integer(np.getValue()).toString());
                             }
                         }
                 )
