@@ -113,7 +113,7 @@ public class OrderListFragment extends Fragment {
         final View _view = view;
 
         final OrderService os = OrderService.getInstance();
-        Call<List<OrderProduct>> call = os.order.getProductsFromActiveOrder("2");
+        Call<List<OrderProduct>> call = os.order.getProductsFromActiveOrder(((TabActivity) self_).clientId);
 
         call.enqueue(new Callback<List<OrderProduct>>() {
 
@@ -122,7 +122,7 @@ public class OrderListFragment extends Fragment {
                 List<OrderProduct> listProducts = response.body();
                 orderProductListAdapter = new OrderProductListAdapter(self_,listProducts,_parentFragment);
                 progressBar.setVisibility(View.GONE);
-                if (listProducts.size() == 0) {
+                if (listProducts == null) {
                     TextView textNoProducts = (TextView) _view.findViewById(R.id.text_no_products);
                     textNoProducts.setVisibility(View.VISIBLE);
                 }
@@ -131,7 +131,8 @@ public class OrderListFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<OrderProduct>> call, Throwable t) {
-
+                TextView textNoProducts = (TextView) _view.findViewById(R.id.text_no_products);
+                textNoProducts.setVisibility(View.VISIBLE);
             }
         });
 
