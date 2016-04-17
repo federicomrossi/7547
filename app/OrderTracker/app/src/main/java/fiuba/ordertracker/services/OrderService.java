@@ -60,12 +60,18 @@ public final class OrderService {
 
         @GET("orders/getActiveProductOrder/{id}")
         Call<Order> getActiveProductOrderByClient(@Path("id") int idCliente );
+
+        @GET("orders/getProductsFromActiveOrder/{id}")
+        Call<List<OrderProduct>> getProductsFromActiveOrder(@Path("id") String id);
     }
 
 
 
     public static void main(String... args) throws IOException {
         OrderService loginService = OrderService.getInstance();
+        Call<List<OrderProduct>> call8 = loginService.order.getProductsFromActiveOrder("2");
+        List<OrderProduct> lproducts = call8.execute().body();
+
 
         // Create a call instance for looking up Retrofit contributors.
         Call<Order> call = loginService.order.createOrder("1","1","tuvieja");

@@ -21,7 +21,10 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import fiuba.ordertracker.pojo.Order;
+import fiuba.ordertracker.pojo.OrderProduct;
 import fiuba.ordertracker.pojo.Product;
+import fiuba.ordertracker.services.OrderService;
 import fiuba.ordertracker.services.ProductService;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -99,40 +102,42 @@ public class OrderListFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
 
-        ProductService ps = ProductService.getInstance();
+
+
+
 
         // Create a call instance for looking up Retrofit contributors.
-        Call<List<Product>> call = ps.products.Products(null, null, null, null, null, null, null, null);
 
         final FragmentActivity self_ = getActivity();
         final Fragment _parentFragment = this.getParentFragment();
         final View _view = view;
 
-        call.enqueue(new Callback<List<Product>>() {
+        final OrderService os = OrderService.getInstance();
+        Call<List<OrderProduct>> call = os.order.getProductsFromActiveOrder("2");
+
+        call.enqueue(new Callback<List<OrderProduct>>() {
+
             @Override
-            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                // Get result Repo from response.body()
-                List<Product> listProducts = response.body();
-                orderProductListAdapter = new OrderProductListAdapter(self_, listProducts, _parentFragment);
-
+            public void onResponse(Call<List<OrderProduct>> call, Response<List<OrderProduct>> response) {
+                List<OrderProduct> listProducts = response.body();
+                orderProductListAdapter = new OrderProductListAdapter(self_,listProducts,_parentFragment);
                 progressBar.setVisibility(View.GONE);
-
                 if (listProducts.size() == 0) {
                     TextView textNoProducts = (TextView) _view.findViewById(R.id.text_no_products);
                     textNoProducts.setVisibility(View.VISIBLE);
                 }
-
                 recyclerView.setAdapter(orderProductListAdapter);
             }
 
             @Override
-            public void onFailure(Call<List<Product>> call, Throwable t) {
-                TextView textNoProducts = (TextView) _view.findViewById(R.id.text_no_products);
-                textNoProducts.setText("Hubo un error al cargar los productos por favor reintente mas tarde");
-                textNoProducts.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.GONE);
+            public void onFailure(Call<List<OrderProduct>> call, Throwable t) {
+
             }
         });
+
+
+
+
 
         // Confirmation button
         Button buttonConfirm = (Button) view.findViewById(R.id.buttonConfirmOrder);

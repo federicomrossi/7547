@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 
 import fiuba.ordertracker.helpers.ImageLoadTask;
+import fiuba.ordertracker.pojo.OrderProduct;
 import fiuba.ordertracker.pojo.Product;
 
 /**
@@ -29,7 +30,7 @@ import fiuba.ordertracker.pojo.Product;
 public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductListAdapter.MyViewHolder> {
 
     private LayoutInflater inflater;
-    List<Product> data = Collections.emptyList();
+    List<OrderProduct> data = Collections.emptyList();
     private String category = "";
     private Fragment parentFragment;
 
@@ -41,7 +42,13 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
         this.category = category;
     }
 
-    public OrderProductListAdapter(Context context, List<Product> data, Fragment parentFragment) {
+    /*public OrderProductListAdapter(Context context, List<Product> data, Fragment parentFragment) {
+        inflater = LayoutInflater.from(context);
+        this.data = data;
+        this.parentFragment = parentFragment;
+    }*/
+
+    public OrderProductListAdapter(Context context, List<OrderProduct> data, Fragment parentFragment) {
         inflater = LayoutInflater.from(context);
         this.data = data;
         this.parentFragment = parentFragment;
@@ -57,15 +64,15 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        final Product current = this.data.get(position);
+        final OrderProduct current = this.data.get(position);
 
         // Item context menu
         holder.setProduct(current);
         holder.nameAndBrand.setText(current.getNombre() + ", " + current.getMarca());
-        holder.category.setText(this.category);
+        //holder.category.setText(this.category);
         holder.price.setText(current.getPrecio());
+        holder.productAmount.setText(current.getCantidad());
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-
             @Override
             public boolean onLongClick(View v) {
 
@@ -103,10 +110,11 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener, android.widget.PopupMenu.OnMenuItemClickListener {
         TextView nameAndBrand, description, category, price, stock;
         ImageView thumbnail;
+        TextView productAmount;
         ImageView mOverflowIcon;
 
         private OnItemClickListener clickListener;
-        private Product product;
+        private OrderProduct product;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -121,12 +129,12 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
             price = (TextView) itemView.findViewById(R.id.product_list_row_price_value);
             stock = (TextView) itemView.findViewById(R.id.product_list_row_stock);
             thumbnail = (ImageView) itemView.findViewById(R.id.product_list_row_thumbnail);
-
+            productAmount = (TextView) itemView.findViewById(R.id.textProductAmount);
             // Set listener to the item view
             itemView.setOnClickListener(this);
         }
 
-        public void setProduct(Product p) {
+        public void setProduct(OrderProduct p) {
             this.product = p;
         }
 

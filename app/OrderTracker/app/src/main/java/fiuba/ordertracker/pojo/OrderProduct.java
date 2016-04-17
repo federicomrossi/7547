@@ -6,7 +6,7 @@ package fiuba.ordertracker.pojo;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class OrderProduct {
+public class OrderProduct{
 
     @SerializedName("id")
     @Expose
@@ -35,6 +35,46 @@ public class OrderProduct {
     @SerializedName("cantidad")
     @Expose
     private String cantidad;
+    @SerializedName("nombre")
+    @Expose
+    private String nombre;
+    @SerializedName("marca")
+    @Expose
+    private String marca;
+    @SerializedName("descripcion")
+    @Expose
+    private String descripcion;
+    @SerializedName("categoria")
+    @Expose
+    private String categoria;
+    @SerializedName("precio")
+    @Expose
+    private String precio;
+    @SerializedName("stock")
+    @Expose
+    private String stock;
+    @SerializedName("url_image_normal")
+    @Expose
+    private String urlImageNormal;
+    @SerializedName("url_image_mini")
+    @Expose
+    private String urlImageMini;
+
+    public String getUrlImageNormal() {
+        return urlImageNormal;
+    }
+
+    public void setUrlImageNormal(String urlImageNormal) {
+        this.urlImageNormal = urlImageNormal;
+    }
+
+    public String getUrlImageMini() {
+        return urlImageMini;
+    }
+
+    public void setUrlImageMini(String urlImageMini) {
+        this.urlImageMini = urlImageMini;
+    }
 
     /**
      *
@@ -203,4 +243,74 @@ public class OrderProduct {
         return this.getIdCliente() + this.getIdProducto() + this.getIdOrden();
     }
 
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public String getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(String precio) {
+        this.precio = precio;
+    }
+
+    public String getStock() {
+        return stock;
+    }
+
+    public void setStock(String stock) {
+        this.stock = stock;
+    }
+
+    public String stockState(){
+        String res;
+        try{
+            Integer stock = new Integer(this.stock);
+            if(stock.intValue() == 0){
+                res = "Agotado";
+            }else if(stock.intValue() > 5){
+                res = "Disponible";
+            }else{
+                res = "Por Agotarse";
+            }
+        }catch(Exception e){
+            res = "Agotado";
+        }
+        return res;
+    }
+
+    public float getSubtotal()
+    {
+        return Float.parseFloat(this.precio) * Float.parseFloat(this.cantidad);
+    }
 }
