@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,16 +14,22 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
 import fiuba.ordertracker.helpers.ImageLoadTask;
 import fiuba.ordertracker.pojo.OrderProduct;
 import fiuba.ordertracker.pojo.Product;
+import fiuba.ordertracker.services.OrderService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  *
@@ -32,7 +39,13 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
     private LayoutInflater inflater;
     List<OrderProduct> data = Collections.emptyList();
     private String category = "";
+    private final OrderProductListAdapter _self = this;
     private Fragment parentFragment;
+    private Context context ;
+
+    public void setData(List<OrderProduct> data) {
+        this.data = data;
+    }
 
     public String getCategory() {
         return category;
@@ -158,9 +171,42 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
 
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            final View view = v;
+            OrderProduct order = data.get(getAdapterPosition());
+            int productId = Integer.valueOf(order.getId());
+            int orderId = Integer.valueOf(order.getIdOrden());
             menu.setHeaderTitle("Opciones del producto");
             menu.add(0, v.getId(), 0, "Modificar");//groupId, itemId, order, title
-            menu.add(0, v.getId(), 0, "Eliminar");
+            menu.add(productId, v.getId(), orderId, "Eliminar").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                String idProduct = String.valueOf(item.getGroupId());
+                String idOrder = String.valueOf(item.getOrder());
+                    try
+                    {
+                       Call<List<OrderProduct>> call = OrderService.getInstance().order.removeProductFromOrder(idProduct, idOrder);
+                        call.enqueue(new Callback<List<OrderProduct>>() {
+                            @Override
+                            public void onResponse(Call<List<OrderProduct>> call, Response<List<OrderProduct>> response) {
+                                ((TabActivity) view.getContext()).productAdded();
+                                /*List<OrderProduct> list = response.body();
+                                setData(list);
+                                RecyclerView rv = (RecyclerView) view.findViewById(R.id.productsList);
+                                rv.setAdapter(_self);*/
+                            }
+
+                            @Override
+                            public void onFailure(Call<List<OrderProduct>> call, Throwable t) {
+
+                            }
+                        });
+                    } catch(Exception e){
+                        String as = "";
+                    }
+                return false;
+                }
+            });
+
         }
 
         @Override

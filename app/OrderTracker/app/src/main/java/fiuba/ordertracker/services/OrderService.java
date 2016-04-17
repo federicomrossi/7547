@@ -69,14 +69,20 @@ public final class OrderService {
         @PUT("orders")
         Call<Order> editOrder(@Field("id_orden") String id_orden, @Field("id_estado") String id_estado);
 
+        @FormUrlEncoded
+        @POST("orders/removeProductFromOrder")
+        Call<List<OrderProduct>> removeProductFromOrder (@Field("id_producto") String id_producto, @Field("id_orden") String id_orden);
     }
 
 
 
     public static void main(String... args) throws IOException {
         OrderService loginService = OrderService.getInstance();
-        Call<List<OrderProduct>> call8 = loginService.order.getProductsFromActiveOrder("2");
-        List<OrderProduct> lproducts = call8.execute().body();
+        try
+        {
+            Call<List<OrderProduct>> call8 = loginService.order.removeProductFromOrder("9", "44");
+            call8.execute();
+        } catch(Exception e){}
 
 
         // Create a call instance for looking up Retrofit contributors.
