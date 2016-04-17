@@ -22,6 +22,8 @@ import java.util.Observable;
 import java.util.Observer;
 
 
+import fiuba.ordertracker.helpers.Constants;
+import fiuba.ordertracker.pojo.Order;
 import fiuba.ordertracker.pojo.OrderProduct;
 import fiuba.ordertracker.services.OrderService;
 import retrofit2.Call;
@@ -121,7 +123,7 @@ public class OrderListFragment extends Fragment  implements Observer {
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                Toast.makeText(self_, "Se ha confirmado el pedido satisfactoriamente", Toast.LENGTH_SHORT).show();
+                                confirmOrderCall();
                             }
                         })
                         .setNegativeButton("Cancelar", null).show();
@@ -182,6 +184,35 @@ public class OrderListFragment extends Fragment  implements Observer {
 
     }
 
+
+    public void confirmOrderCall(){
+        final TabActivity tabsAct = (TabActivity) getActivity();
+        OrderService os = OrderService.getInstance();
+        Call<Order> call = os.order.editOrder(tabsAct.getActiveOrder().getId(), Constants.COMPLETED_STATE);
+
+        call.enqueue(new Callback<Order>() {
+            @Override
+            public void onResponse(Call<Order> call, Response<Order> response) {
+                Order order = response.body();
+                if(order != null){
+                    if(order.getIdEstado().equals(Constants.COMPLETED_STATE)){
+                        //aca es completo entonces hay que mostralo como confirmado y se cambia el active order a este pero esta fuera de la entrega asi que no hace nada por ahora
+                        //tabsAct.setActiveOrder(order);
+                        Toast.makeText(tabsAct, "Se ha confirmado el pedido satisfactoriamente", Toast.LENGTH_SHORT).show();
+                    }else{
+                        //no pudo actualizarlo por falta de stock hay q mostrar el popup
+    
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Order> call, Throwable t) {
+                //Aca tenemos que agregar el msj de error a mostrar...
+                Toast.makeText(tabsAct, "Error de conexion, intente mas tarde nuevamente", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
 
     public void getProductsFromActiveOrderCall(){
