@@ -199,35 +199,40 @@ public class OrderListFragment extends Fragment  implements Observer {
     public void confirmOrderCall(){
         final TabActivity tabsAct = (TabActivity) getActivity();
         OrderService os = OrderService.getInstance();
-        Call<Order> call = os.order.editOrder(tabsAct.getActiveOrder().getId(), Constants.COMPLETED_STATE);
+        Call<Order> call = os.order.editOrder(tabsAct.getActiveOrder().getId());
 
         call.enqueue(new Callback<Order>() {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
-                final Order order = response.body();
+                if(response.code() == 500) {
+                    //no pudo actualizarlo por falta de stock hay q mostrar el popup
+                    new AlertDialog.Builder(tabsAct)
+                            .setTitle("El pedido contiene productos sin stock")
+                            .setMessage("¿Desea realizar el pedido de todas formas?")
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setPositiveButton("Proseguir", new DialogInterface.OnClickListener() {
 
-                if(order != null){
-                    if(order.getIdEstado().equals(Constants.COMPLETED_STATE)){
-                        //aca es completo entonces hay que mostralo como confirmado y se cambia el active order a este pero esta fuera de la entrega asi que no hace nada por ahora
-                        //tabsAct.setActiveOrder(order);
-                        Toast.makeText(tabsAct, "Se ha confirmado el pedido satisfactoriamente", Toast.LENGTH_SHORT).show();
-                    }else{
-                        //no pudo actualizarlo por falta de stock hay q mostrar el popup
-                        new AlertDialog.Builder(tabsAct)
-                                .setTitle("El pedido contiene productos sin stock")
-                                .setMessage("¿Desea realizar el pedido de todas formas?")
-                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                .setPositiveButton("Proseguir", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    // Force the order status to Completed (Confirmed)
+                                    //order.setIdEstado(Constants.COMPLETED_STATE);
+                                    Toast.makeText(tabsAct, "Se ha confirmado el pedido satisfactoriamente",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .setNegativeButton("Modificar", null).show();
+                }else{
+                    final Order order = response.body();
 
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                        // Force the order status to Completed (Confirmed)
-                                        order.setIdEstado(Constants.COMPLETED_STATE);
-                                        Toast.makeText(tabsAct, "Se ha confirmado el pedido satisfactoriamente",
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                })
-                                .setNegativeButton("Modificar", null).show();
+                    if (order != null) {
+                        if (order.getIdEstado().equals(Constants.COMPLETED_STATE)) {
+                            //aca es completo entonces hay que mostralo como confirmado y se cambia el active order a este pero esta fuera de la entrega asi que no hace nada por ahora
+                            //tabsAct.setActiveOrder(order);
+                            Toast.makeText(tabsAct, "Se ha confirmado el pedido satisfactoriamente", Toast.LENGTH_SHORT).show();
+                        } else {
+
+                        }
                     }
+
                 }
             }
 
@@ -256,11 +261,11 @@ public class OrderListFragment extends Fragment  implements Observer {
                 orderProductListAdapter = new OrderProductListAdapter(self_, listProducts, _parentFragment);
                 progressBar.setVisibility(View.GONE);
                 TextView subtotalText = (TextView) _view.findViewById(R.id.textView4);
-                if (listProducts == null) {
+                if (listProducts.size() == 0) {
                     TextView textNoProducts = (TextView) _view.findViewById(R.id.text_no_products);
                     textNoProducts.setVisibility(View.VISIBLE);
 
-                    subtotalText.setText("Todavía tu pedido no tiene productos");
+                    subtotalText.setText("No hay productos en el pedido");
                 } else {
                     float subtotal = 0;
                     for (OrderProduct orderProduct : listProducts) {
