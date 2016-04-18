@@ -1,0 +1,37 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="fiuba.ordertracker.AddProductToCartFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Ingrese la cantidad de unidades"
+            android:id="@+id/textView3"
+            android:layout_margin="10dp"
+            android:textAlignment="center"
+            android:textColor="@color/primary_dark_material_dark" />
+
+        <NumberPicker
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/numberPicker"
+            android:layout_gravity="center_horizontal"
+            style="@style/NumberPickerCustom"
+            android:scrollIndicators="end"
+            android:showDividers="end"
+            android:touchscreenBlocksFocus="false"
+            android:theme="@style/NumberPickerCustom" />
+
+    </LinearLayout>
+
+</FrameLayout>

@@ -44,15 +44,16 @@ public final class ClientService {
     //clientes del dia por id de Vendedor
     public interface ClientsFromTodayByVendIdService {
         @GET("client/getFromToday/{id}")
-        Call<List<Client>> ClientsFromTodayByVendIdService(@Path("id") int vendId);
+        Call<List<Client>> ClientsFromTodayByVendIdService(@Path("id") int vendId, @Query("orderby") String orderby,
+                                                           @Query("orientation") String orientation );
     }
 
     //clientes
     public interface Clients {
         @GET("client")
         //id_vendedor
-        Call<List<Client>> Clients(@Query("id_vendedor") String id_vendedor, @Query("razon_social") String razon_social, @Query("orderby") String orderby,
-                                   @Query("orientation") String orientation );
+        Call<List<Client>> Clients(@Query("id_vendedor") String id_vendedor, @Query("razon_social%") String razon_social, @Query("orderby") String orderby,
+                                   @Query("orientation") String orientation, @Query("cod_cliente%") String codCliente);
     }
 
 
@@ -61,7 +62,7 @@ public final class ClientService {
         ClientService cs = ClientService.getInstance();
 
         // Create a call instance for looking up Retrofit contributors.
-        Call<List<Client>> call = cs.clientsFromTodayByVendIdService.ClientsFromTodayByVendIdService(1);
+        Call<List<Client>> call = cs.clientsFromTodayByVendIdService.ClientsFromTodayByVendIdService(1,null,null);
 
         // Fetch and print a list of the contributors to the library.
         List<Client> clientList = call.execute().body();
@@ -71,7 +72,7 @@ public final class ClientService {
 
         System.out.println("||||||||||||||||||||||||||||||||||||||||");
 
-        call = cs.clients.Clients(null,null,null,null);
+        call = cs.clients.Clients(null,null,null,null,null);
 
         clientList = call.execute().body();
         for (Client client : clientList) {

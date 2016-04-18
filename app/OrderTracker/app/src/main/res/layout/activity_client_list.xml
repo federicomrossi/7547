@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -100,7 +101,7 @@
                         android:visibility="gone"
                         android:id="@+id/filters_container">
 
-                        <LinearLayout
+                        <!--<LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="horizontal">
@@ -116,7 +117,7 @@
                                 android:id="@+id/editText_brand"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content" />
-                        </LinearLayout>
+                        </LinearLayout>-->
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -133,6 +134,8 @@
                             <EditText
                                 android:id="@+id/editText_client_code"
                                 android:layout_width="match_parent"
+                                android:imeOptions="actionDone"
+                                android:singleLine="true"
                                 android:layout_height="wrap_content" />
                         </LinearLayout>
                     </LinearLayout>
@@ -151,7 +154,32 @@
             android:text="No hay clientes en el sistema."
             android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:layout_gravity="center" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_margin="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Hoy"
+                android:id="@+id/textView7"
+                android:textColor="#444444"
+                android:textStyle="bold"
+                android:textSize="16dp"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical" />
+
+        </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/clientsList"
@@ -162,15 +190,26 @@
 
         </android.support.v7.widget.RecyclerView>
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center" />
+
 
     </LinearLayout>
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleLarge"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:onClick="onClickGoMap"
+        android:clickable="true"
+        android:src="@drawable/ic_map_black_24dp" />
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

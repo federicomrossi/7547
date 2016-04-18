@@ -6,6 +6,6 @@
 <item>
     <bitmap
         android:gravity="center"
-        android:src="@mipmap/ic_order_tracker_big"/>
+        android:src="@mipmap/ic_order_tracker_big_name"/>
 </item>
 </layer-list>

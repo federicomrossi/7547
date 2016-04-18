@@ -194,10 +194,11 @@ public class Client {
         this.longitude = longitude;
     }
 
-    public Double getDistance()
+    public Double getDistance(double currentLatitude, double currentLongitude)
     {
-        double currentLatitude = Constants.FIUBA_LATITUDE;
-        double currentLongitude = Constants.FIUBA_LONGITUDE;
+       /* double currentLatitude = Constants.FIUBA_LATITUDE;
+        double currentLongitude = Constants.FIUBA_LONGITUDE;*/
+
         double distance = DistanceCalculator.distance(currentLatitude,currentLongitude,this.getLatitude(),this.getLongitude(),Constants.UNIT);
         return Math.round(distance * 100.0) / 100.0;
     }

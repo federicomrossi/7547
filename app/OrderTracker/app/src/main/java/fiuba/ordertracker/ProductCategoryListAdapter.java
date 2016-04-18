@@ -2,6 +2,8 @@ package fiuba.ordertracker;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,11 +24,30 @@ import fiuba.ordertracker.pojo.Client;
 public class ProductCategoryListAdapter extends RecyclerView.Adapter<ProductCategoryListAdapter.MyViewHolder> {
 
     private LayoutInflater inflater;
+
+
     List<Categorie> data = Collections.emptyList();
 
-    public ProductCategoryListAdapter(Context context, List<Categorie> data) {
+    List<Categorie> originalData = Collections.emptyList();
+
+    public void setOriginalData(List<Categorie> originalData) {
+        this.originalData = originalData;
+    }
+
+    public List<Categorie> getOriginalData() {
+        return originalData;
+    }
+
+    private Fragment parentFragment;
+    public void setData(List<Categorie> data) {
+        this.data = data;
+    }
+
+    public ProductCategoryListAdapter(Context context, List<Categorie> data, Fragment fragment) {
         inflater = LayoutInflater.from(context);
         this.data = data;
+
+        this.parentFragment = fragment;
     }
 
     @Override
@@ -42,20 +63,33 @@ public class ProductCategoryListAdapter extends RecyclerView.Adapter<ProductCate
         Categorie current = this.data.get(position);
         holder.category.setText(current.getNombre());
 
+        final Fragment _parentFragment = this.parentFragment;
+
         // Set listener to manage clicks on items from the RecyclerView
         holder.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 System.out.println("*********** Click on item ***********");
                 Categorie currentClicked = data.get(position);
-                Intent intent = new Intent(view.getContext(), ProductListActivity.class);
+
+                /*Intent intent = new Intent(view.getContext(), ProductListActivity.class);
                 intent.putExtra("category", currentClicked.getId());
                 intent.putExtra("categoryName", currentClicked.getNombre());
-                /*intent.putExtra("name", data.get(position).getApenom());
+                intent.putExtra("name", data.get(position).getApenom());
                 intent.putExtra("address", data.get(position).getDireccion());
-                intent.putExtra("distance", data.get(position).getTelefono());*/
+                intent.putExtra("distance", data.get(position).getTelefono());
 
-                view.getContext().startActivity(intent);
+                view.getContext().startActivity(intent);*/
+
+
+                ProductsFragment instanceFragment = (ProductsFragment) _parentFragment;
+
+                Bundle args= new Bundle();
+                args.putString("category", currentClicked.getId());
+                args.putString("categoryName", currentClicked.getNombre());
+                ProductListFragment productListFragment = new ProductListFragment();
+                productListFragment.setArguments(args);
+                instanceFragment.replaceFragment(productListFragment, true); // it was false, I changed it
             }
         });
     }

@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorBackground">#FFFFFF</color>
-    <color name="colorLauncherBackground">#E0F2F1</color> <!-- Teal 50 -->
+    <color name="colorLauncherBackground">#1A2731</color> <!-- Teal 50 -->
 
     <color name="colorPrimary">#009688</color> <!-- Teal 500 -->
     <color name="colorPrimaryDark">#00796B</color> <!-- Teal 700 -->
     <color name="colorAccent">#A7FFEB</color> <!-- Teal A100 -->
 
     <color name="colorPrimaryText">#FFFFFF</color>
+
+    <color name="buttonShoppingCart">#4DD0E1</color>
+    <color name="buttonShoppingCartHighlight">#64B5F6</color>
+    <color name="addToCartButton">#B2DFDB</color>
+
 </resources>
