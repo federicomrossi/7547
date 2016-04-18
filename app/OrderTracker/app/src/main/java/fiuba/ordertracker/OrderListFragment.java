@@ -203,7 +203,7 @@ public class OrderListFragment extends Fragment  implements Observer {
         call.enqueue(new Callback<Order>() {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
-                if(response.code() == 500) {
+                if (response.code() == 500) {
                     //no pudo actualizarlo por falta de stock hay q mostrar el popup
                     new AlertDialog.Builder(tabsAct)
                             .setTitle("El pedido contiene productos sin stock")
@@ -219,7 +219,7 @@ public class OrderListFragment extends Fragment  implements Observer {
                                 }
                             })
                             .setNegativeButton("Modificar", null).show();
-                }else{
+                } else {
                     final Order order = response.body();
 
                     if (order != null) {
@@ -259,18 +259,21 @@ public class OrderListFragment extends Fragment  implements Observer {
                 List<OrderProduct> listProducts = response.body();
                 orderProductListAdapter = new OrderProductListAdapter(self_, listProducts, _parentFragment);
                 progressBar.setVisibility(View.GONE);
-                TextView subtotalText = (TextView) _view.findViewById(R.id.textView4);
-                if (listProducts.size() == 0) {
-                    TextView textNoProducts = (TextView) _view.findViewById(R.id.text_no_products);
-                    textNoProducts.setVisibility(View.VISIBLE);
 
-                    subtotalText.setText("No hay productos en el pedido");
+                TextView textNoProducts = (TextView) _view.findViewById(R.id.text_no_products);
+                TextView subtotalText = (TextView) _view.findViewById(R.id.textView4);
+
+                if (listProducts.size() == 0) {
+                    textNoProducts.setVisibility(View.VISIBLE);
+                    subtotalText.setText("$" + String.valueOf(0));
+                    textNoProducts.setVisibility(View.VISIBLE);
                 } else {
                     float subtotal = 0;
                     for (OrderProduct orderProduct : listProducts) {
                         subtotal += orderProduct.getSubtotal();
                     }
                     subtotalText.setText("$" + String.valueOf(subtotal));
+                    textNoProducts.setVisibility(View.GONE);
                 }
                 recyclerView.setAdapter(orderProductListAdapter);
             }

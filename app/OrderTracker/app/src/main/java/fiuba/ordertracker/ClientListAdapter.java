@@ -133,7 +133,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
                     Intent intent = new Intent(itemView.getContext(), TabActivity.class);
 
                     Bundle b = new Bundle();
-                    b.putString("clientName", _client.getApenom());
+                    b.putString("clientName", _client.getSocialReason());
                     b.putString("clientID", _client.getId());
                     intent.putExtras(b);
 
