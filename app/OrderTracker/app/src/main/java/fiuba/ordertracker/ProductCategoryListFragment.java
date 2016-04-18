@@ -106,7 +106,6 @@ public class ProductCategoryListFragment extends Fragment {
         //Call<List<Categorie>> call = cs.categories.Categories(intent.getStringExtra("nameFilter"),null,null);
         Call<List<Categorie>> call = cs.categories.Categories("",null,null);
 
-
         final FragmentActivity self_ = getActivity();
         final Fragment _parentFragment = this.getParentFragment();
         final View _view = view;

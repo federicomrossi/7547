@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import fiuba.ordertracker.helpers.ImageLoadTask;
+import fiuba.ordertracker.pojo.Categorie;
 import fiuba.ordertracker.pojo.OrderProduct;
 import fiuba.ordertracker.pojo.Product;
 import fiuba.ordertracker.services.OrderService;
@@ -38,6 +39,7 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
 
     private LayoutInflater inflater;
     List<OrderProduct> data = Collections.emptyList();
+    List<Categorie> dataCategories = Collections.emptyList();
     private String category = "";
     private final OrderProductListAdapter _self = this;
     private Fragment parentFragment;
@@ -61,9 +63,10 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
         this.parentFragment = parentFragment;
     }*/
 
-    public OrderProductListAdapter(Context context, List<OrderProduct> data, Fragment parentFragment) {
+    public OrderProductListAdapter(Context context, List<OrderProduct> data, List<Categorie> listCategories, Fragment parentFragment) {
         inflater = LayoutInflater.from(context);
         this.data = data;
+        this.dataCategories = listCategories;
         this.parentFragment = parentFragment;
     }
 
@@ -82,7 +85,7 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
         // Item context menu
         holder.setProduct(current);
         holder.nameAndBrand.setText(current.getNombre() + ", " + current.getMarca());
-        //holder.category.setText(this.category);
+        holder.category.setText(getProductCategory(current.getCategoria()).getNombre());
         holder.price.setText(current.getPrecio());
         holder.productAmount.setText(current.getCantidad());
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -180,11 +183,10 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
             menu.add(productId, v.getId(), orderId, "Eliminar").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                String idProduct = String.valueOf(item.getGroupId());
-                String idOrder = String.valueOf(item.getOrder());
-                    try
-                    {
-                       Call<List<OrderProduct>> call = OrderService.getInstance().order.removeProductFromOrder(idProduct, idOrder);
+                    String idProduct = String.valueOf(item.getGroupId());
+                    String idOrder = String.valueOf(item.getOrder());
+                    try {
+                        Call<List<OrderProduct>> call = OrderService.getInstance().order.removeProductFromOrder(idProduct, idOrder);
                         call.enqueue(new Callback<List<OrderProduct>>() {
                             @Override
                             public void onResponse(Call<List<OrderProduct>> call, Response<List<OrderProduct>> response) {
@@ -200,10 +202,10 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
 
                             }
                         });
-                    } catch(Exception e){
+                    } catch (Exception e) {
                         String as = "";
                     }
-                return false;
+                    return false;
                 }
             });
 
@@ -229,4 +231,13 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
 
     }
 
+
+    private Categorie getProductCategory(String id) {
+        for(Categorie o : this.dataCategories) {
+            if(o != null && o.getId().equals(id)) {
+                return o;
+            }
+        }
+        return null;
+    }
 }

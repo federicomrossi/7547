@@ -23,8 +23,10 @@ import java.util.Observer;
 
 
 import fiuba.ordertracker.helpers.Constants;
+import fiuba.ordertracker.pojo.Categorie;
 import fiuba.ordertracker.pojo.Order;
 import fiuba.ordertracker.pojo.OrderProduct;
+import fiuba.ordertracker.services.CategorieService;
 import fiuba.ordertracker.services.OrderService;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -258,7 +260,53 @@ public class OrderListFragment extends Fragment  implements Observer {
             @Override
             public void onResponse(Call<List<OrderProduct>> call, Response<List<OrderProduct>> response) {
                 List<OrderProduct> listProducts = response.body();
-                orderProductListAdapter = new OrderProductListAdapter(self_, listProducts, _parentFragment);
+                final List<OrderProduct> _listProducts = listProducts;
+
+                ///////////////////////////////////
+                CategorieService cs = CategorieService.getInstance();
+
+                // Create a call instance for looking up Retrofit contributors.
+                //Call<List<Categorie>> call = cs.categories.Categories(intent.getStringExtra("nameFilter"),null,null);
+                Call<List<Categorie>> call1 = cs.categories.Categories("",null,null);
+
+                call1.enqueue(new Callback<List<Categorie>>() {
+                    @Override
+                    public void onResponse(Call<List<Categorie>> call1, Response<List<Categorie>> response1) {
+                        // Get result Repo from response.body()
+                        List<Categorie> listCategories = response1.body();
+
+                        orderProductListAdapter = new OrderProductListAdapter(self_, _listProducts, listCategories, _parentFragment);
+                        progressBar.setVisibility(View.GONE);
+
+                        TextView textNoProducts = (TextView) _view.findViewById(R.id.text_no_products);
+                        TextView subtotalText = (TextView) _view.findViewById(R.id.textView4);
+
+                        if (_listProducts.size() == 0) {
+                            textNoProducts.setVisibility(View.VISIBLE);
+                            subtotalText.setText("$" + String.valueOf(0));
+                            textNoProducts.setVisibility(View.VISIBLE);
+                        } else {
+                            float subtotal = 0;
+                            for (OrderProduct orderProduct : _listProducts) {
+                                subtotal += orderProduct.getSubtotal();
+                            }
+                            subtotalText.setText("$" + String.valueOf(subtotal));
+                            textNoProducts.setVisibility(View.GONE);
+                        }
+                        recyclerView.setAdapter(orderProductListAdapter);
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Categorie>> call1, Throwable t){}
+                });
+
+
+                ////////////////////////////////////////
+
+
+
+
+                /*orderProductListAdapter = new OrderProductListAdapter(self_, listProducts, _parentFragment);
                 progressBar.setVisibility(View.GONE);
 
                 TextView textNoProducts = (TextView) _view.findViewById(R.id.text_no_products);
@@ -276,7 +324,7 @@ public class OrderListFragment extends Fragment  implements Observer {
                     subtotalText.setText("$" + String.valueOf(subtotal));
                     textNoProducts.setVisibility(View.GONE);
                 }
-                recyclerView.setAdapter(orderProductListAdapter);
+                recyclerView.setAdapter(orderProductListAdapter);*/
             }
 
             @Override
@@ -287,6 +335,8 @@ public class OrderListFragment extends Fragment  implements Observer {
         });
 
     }
+
+
 
     @Override
     public void update(Observable observable, Object data) {
