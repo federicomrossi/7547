@@ -116,6 +116,7 @@ public class OrderListFragment extends Fragment  implements Observer {
         buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println("************* getItemCount()=" + orderProductListAdapter.getItemCount());
                 if(orderProductListAdapter.getItemCount() > 0){
                     new AlertDialog.Builder(self_)
                             .setTitle("Confirmar pedido")
@@ -130,12 +131,12 @@ public class OrderListFragment extends Fragment  implements Observer {
                             .setNegativeButton("Cancelar", null).show();
 
                 }else{
+                    System.out.println("************* ELSE no es posible confirmar");
                     new AlertDialog.Builder(self_)
                             .setTitle("No es posible confirmar")
                             .setMessage("El pedido está vacío y no puede ser enviado")
                             .setIcon(android.R.drawable.ic_dialog_alert)
-                            .setPositiveButton("Ok", null);
-                            //.setNegativeButton("Cancelar", null).show();
+                            .setPositiveButton("Ok", null).show();
                 }
             }
         });
