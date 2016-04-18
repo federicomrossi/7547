@@ -1,5 +1,6 @@
 package fiuba.ordertracker;
 
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -82,7 +83,10 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
 
     private void loadClientsInMap(GoogleMap googleMap) {
 
-        Call<List<Client>> call = clientService.clients.Clients(null,null,null,null,null);
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("OrderTrackerPref", 0);
+        int idVendedor = pref.getInt("id", 0);
+
+        Call<List<Client>> call = clientService.clients.Clients(Integer.toString(idVendedor),null,null,null,null);
         final ClientsMapActivity _self = this;
         final GoogleMap _googleMap = googleMap;
 
