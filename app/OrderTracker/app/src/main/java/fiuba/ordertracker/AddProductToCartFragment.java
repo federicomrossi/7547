@@ -81,6 +81,7 @@ public class AddProductToCartFragment extends DialogFragment {
          * Number picker for select stock
          */
         final NumberPicker np = (NumberPicker) v.findViewById(R.id.numberPicker);
+        np.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         np.setMinValue(1);
         np.setMaxValue(1000);
         np.setWrapSelectorWheel(true);
