@@ -131,12 +131,11 @@ public class OrderListFragment extends Fragment  implements Observer {
 
                 }else{
                     new AlertDialog.Builder(self_)
-                            .setTitle("Confirmar pedido")
+                            .setTitle("No es posible confirmar")
                             .setMessage("El pedido está vacío y no puede ser enviado")
                             .setIcon(android.R.drawable.ic_dialog_alert)
-                            .setPositiveButton("Ok", null)
-                            .setNegativeButton("Cancelar", null).show();
-
+                            .setPositiveButton("Ok", null);
+                            //.setNegativeButton("Cancelar", null).show();
                 }
             }
         });
