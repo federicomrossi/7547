@@ -101,12 +101,14 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
                 for (Client client : listClients) {
                     LatLng client_position = new LatLng(client.getLatitude(), client.getLongitude());
                     String client_name = client.getSocialReason();
+                    String client_address = client.getDireccion();
 
                     // Client marker
                     MarkerOptions marker = new MarkerOptions();
                     marker.position(client_position);
                     marker.flat(true);
                     marker.title(client_name);
+                    marker.snippet(client_address);
 
                     Marker googleMarker = _googleMap.addMarker(marker);
 
