@@ -1,3 +1,4 @@
+
 package fiuba.ordertracker;
 
 import android.content.SharedPreferences;
@@ -17,6 +18,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.Hashtable;
 import java.util.List;
 
 import fiuba.ordertracker.listeners.GPSTracker;
@@ -29,6 +31,8 @@ import retrofit2.Response;
 public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private Marker marker;
+    private Hashtable<String, Client> markers;
     private ClientService clientService = ClientService.getInstance();
     private String focusInClient = "";
     private LatLng centeredMarker = null;
@@ -41,6 +45,8 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        markers = new Hashtable<String, Client>();
 
         String clientFocusedId = getIntent().getExtras().getString("clientID");
         if(clientFocusedId == null)
@@ -68,6 +74,9 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        // Change the default info window with a custom info window
+        mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter());
+
         // Add a marker in Sydney and move the camera
         /*LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
@@ -81,7 +90,7 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
         mMap.getUiSettings().setZoomControlsEnabled(true);
     }
 
-    private void loadClientsInMap(GoogleMap googleMap) {
+    private void loadClientsInMap(final GoogleMap googleMap) {
 
         SharedPreferences pref = getApplicationContext().getSharedPreferences("OrderTrackerPref", 0);
         int idVendedor = pref.getInt("id", 0);
@@ -109,6 +118,7 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
                     marker.title(client_name);
 
                     Marker googleMarker = _googleMap.addMarker(marker);
+                    markers.put(googleMarker.getId(), client);
 
                     // If theres a client specified to be focused, we positioned the camera
                     // over the marker.
@@ -134,13 +144,68 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
 
             @Override
             public void onFailure(Call<List<Client>> call, Throwable t) {
-                /*//Aca tenemos que agregar el msj de error a mostrar... puto el que lee
+                /*//Aca tenemos que agregar el msj de error a mostrar...
                 TextView textNoClients = (TextView) findViewById(R.id.text_no_clients);
                 textNoClients.setText("Hubo un error al cargar los clientes por favor reintente mas tarde");
                 textNoClients.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);*/
             }
         });
+    }
+
+    private class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
+
+        private View view;
+
+        public CustomInfoWindowAdapter() {
+            view = getLayoutInflater().inflate(R.layout.client_map_info_window,
+                    null);
+        }
+
+        @Override
+        public View getInfoContents(Marker marker) {
+
+            if (ClientsMapActivity.this.marker != null
+                    && ClientsMapActivity.this.marker.isInfoWindowShown()) {
+                ClientsMapActivity.this.marker.hideInfoWindow();
+                ClientsMapActivity.this.marker.showInfoWindow();
+            }
+            return null;
+        }
+
+        @Override
+        public View getInfoWindow(final Marker marker) {
+            ClientsMapActivity.this.marker = marker;
+
+            Client client = null;
+
+            if (marker.getId() != null && markers != null && markers.size() > 0) {
+                if ( markers.get(marker.getId()) != null &&
+                        markers.get(marker.getId()) != null) {
+                    client = markers.get(marker.getId());
+                }
+            }
+
+
+            final String title = marker.getTitle();
+            final TextView titleUi = ((TextView) view.findViewById(R.id.title));
+            if (title != null) {
+                titleUi.setText(title);
+            } else {
+                titleUi.setText("");
+            }
+
+            final String snippet = marker.getSnippet();
+            final TextView snippetUi = ((TextView) view
+                    .findViewById(R.id.snippet));
+            if (snippet != null) {
+                snippetUi.setText(snippet);
+            } else {
+                snippetUi.setText("");
+            }
+
+            return view;
+        }
     }
 
 }
