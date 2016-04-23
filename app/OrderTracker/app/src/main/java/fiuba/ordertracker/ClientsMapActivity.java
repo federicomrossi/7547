@@ -14,6 +14,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -110,12 +111,17 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
                 for (Client client : listClients) {
                     LatLng client_position = new LatLng(client.getLatitude(), client.getLongitude());
                     String client_name = client.getSocialReason();
+                    String client_address = client.getDireccion();
 
                     // Client marker
                     MarkerOptions marker = new MarkerOptions();
                     marker.position(client_position);
                     marker.flat(true);
                     marker.title(client_name);
+                    marker.snippet(client_address);
+
+                    if(client.getId().equals(_self.focusInClient))
+                        marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
 
                     Marker googleMarker = _googleMap.addMarker(marker);
                     markers.put(googleMarker.getId(), client);
@@ -135,6 +141,7 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
                     marker.position(centeredMarker);
                     marker.flat(true);
                     marker.title("Tu ubicación");
+                    marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                     _googleMap.addMarker(marker).showInfoWindow();
                     _googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centeredMarker, 15));
                     _googleMap.animateCamera(CameraUpdateFactory.zoomIn());
