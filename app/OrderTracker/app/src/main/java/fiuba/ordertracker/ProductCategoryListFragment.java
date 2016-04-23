@@ -104,7 +104,7 @@ public class ProductCategoryListFragment extends Fragment {
 
         // Create a call instance for looking up Retrofit contributors.
         //Call<List<Categorie>> call = cs.categories.Categories(intent.getStringExtra("nameFilter"),null,null);
-        Call<List<Categorie>> call = cs.categories.Categories("",null,null);
+        Call<List<Categorie>> call = cs.categories.Categories("","nombre","ASC");
 
         final FragmentActivity self_ = getActivity();
         final Fragment _parentFragment = this.getParentFragment();
