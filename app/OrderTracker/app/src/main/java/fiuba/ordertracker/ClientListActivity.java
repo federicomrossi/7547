@@ -68,12 +68,12 @@ public class ClientListActivity extends AppCompatActivity
 
         tabLayout.getTabAt(7).setIcon(R.drawable.ic_call_split_white_24dp);
 
-/*
+
         final SearchView razonFilterView = (SearchView)findViewById(R.id.searchView);
         final EditText clientCodeFilterView = (EditText)findViewById(R.id.editText_client_code);
         Fonts.changeSearchViewTextColorBlack(clientCodeFilterView);
         Fonts.changeSearchViewTextColorBlack(razonFilterView);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        /*progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
         setProgressBarIndeterminateVisibility(true);
@@ -123,7 +123,7 @@ public class ClientListActivity extends AppCompatActivity
                 textNoClients.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
             }
-        });
+        });*/
 
         razonFilterView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -153,7 +153,6 @@ public class ClientListActivity extends AppCompatActivity
 
             }
         });
-*/
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -224,7 +223,7 @@ public class ClientListActivity extends AppCompatActivity
 
     public void onClickShowHideFilters(View view) {
 
-        /*LinearLayout button_filter = (LinearLayout) findViewById(R.id.filters_container);
+        LinearLayout button_filter = (LinearLayout) findViewById(R.id.filters_container);
 
         if(button_filter.getVisibility() == View.GONE)
             button_filter.setVisibility(View.VISIBLE);
@@ -236,7 +235,7 @@ public class ClientListActivity extends AppCompatActivity
 
             EditText editText_client_code = (EditText) findViewById(R.id.editText_client_code);
             editText_client_code.clearFocus();
-        }*/
+        }
     }
 
     // When the user clicks the "Ver carrito" button
