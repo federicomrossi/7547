@@ -1,5 +1,6 @@
 package fiuba.ordertracker;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -30,12 +31,14 @@ public class AddProductToCartFragment extends DialogFragment {
         args.putString("product_id", p.getId());
         args.putString("product_name", p.getNombre());
         args.putString("product_brand", p.getMarca());
+        args.putString("product_stock", p.getStock());
 
         frag.setArguments(args);
         return frag;
     }
 
-    public static AddProductToCartFragment newInstance(String product_id, String product_name, String product_brand) {
+    public static AddProductToCartFragment newInstance(String product_id, String product_name, String product_brand,
+                                                       String product_stock) {
 
         AddProductToCartFragment frag = new AddProductToCartFragment();
         Bundle args = new Bundle();
@@ -43,6 +46,7 @@ public class AddProductToCartFragment extends DialogFragment {
         args.putString("product_id", product_id);
         args.putString("product_name", product_name);
         args.putString("product_brand", product_brand);
+        args.putString("product_stock", product_stock);
 
         frag.setArguments(args);
         return frag;
@@ -66,10 +70,11 @@ public class AddProductToCartFragment extends DialogFragment {
         String product_name = getArguments().getString("product_name");
         String product_brand = getArguments().getString("product_brand");
         String product_availability = getArguments().getString("product_availability");
+        final String product_stock = getArguments().getString("product_stock");
 
         order = ((TabActivity) getActivity()).getActiveOrder();
 
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+        final LayoutInflater inflater = getActivity().getLayoutInflater();
         View v = inflater.inflate(R.layout.fragment_add_product_to_cart, null);
 
         /**
@@ -86,6 +91,8 @@ public class AddProductToCartFragment extends DialogFragment {
         np.setMaxValue(1000);
         np.setWrapSelectorWheel(true);
 
+        final TabActivity _activity = (TabActivity) getActivity();
+
         return new AlertDialog.Builder(getActivity())
                 .setView(v)
                 .setTitle(R.string.add_product)
@@ -95,7 +102,38 @@ public class AddProductToCartFragment extends DialogFragment {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 //((ProductDetailActivity)getActivity()).doPositiveClick();
-                                createOrderCall( product_id, _order.getId(), new Integer(np.getValue()).toString());
+
+                                if (Integer.parseInt(product_stock) < np.getValue()) {
+                                    getDialog().dismiss();
+                                    // New dialog
+                                    View view = inflater.inflate(R.layout.fragment_not_enough_stock, null);
+
+                                    System.out.println("getActivity() = " + getActivity());
+                                    // Dialog that informs that there is not enough stock
+                                    new AlertDialog.Builder(getActivity())
+                                            .setView(view)
+                                            .setTitle("Producto sin stock suficiente")
+
+                                            // Confirm button
+                                            .setPositiveButton(R.string.confirm,
+                                                    new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                                            createOrderCall(_activity, product_id, _order.getId(), new Integer(np.getValue()).toString());
+                                                        }
+                                                    })
+                                            // Cancel button
+                                            .setNegativeButton(R.string.cancel,
+                                                    new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                                            dialog.dismiss();
+                                                        }
+                                                    }
+                                            ).create().show();
+
+
+                                } else {
+                                    createOrderCall((TabActivity) getActivity(), product_id, _order.getId(), new Integer(np.getValue()).toString());
+                                }
                             }
                         }
                 )
@@ -113,8 +151,8 @@ public class AddProductToCartFragment extends DialogFragment {
     }
 
 
-    public void createOrderCall(String idProd, String idOrd, String cantidad ){
-        final TabActivity tabsAct = (TabActivity) getActivity();
+    public void createOrderCall(TabActivity tabsAct, String idProd, String idOrd, String cantidad ){
+        final TabActivity _tabsAct = tabsAct;
         OrderService os = OrderService.getInstance();
         Call<Order> call = os.order.addProductToOrder(idProd, idOrd, cantidad);
 
@@ -122,7 +160,7 @@ public class AddProductToCartFragment extends DialogFragment {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
                 Order order = response.body();
-                tabsAct.productAdded();
+                _tabsAct.productAdded();
             }
 
             @Override

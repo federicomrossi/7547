@@ -114,6 +114,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 args.putString("price", currentClicked.getPrecio());
                 args.putString("category", category);
                 args.putString("availability", currentClicked.stockState());
+                args.putString("stock", currentClicked.getStock());
+                System.out.println("*** set the stock ");
                 ProductDetailFragment productDetailFragment = new ProductDetailFragment();
                 productDetailFragment.setArguments(args);
                 instanceFragment.replaceFragment(productDetailFragment, true); // it was false, I changed it

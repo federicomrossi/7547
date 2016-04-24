@@ -26,6 +26,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private String product_name;
     private String product_brand;
     private String product_availability;
+    private String product_stock;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         this.product_availability = i.getStringExtra("availability");
         this.product_name = i.getStringExtra("name");
         this.product_brand = i.getStringExtra("brand");
+        this.product_stock = i.getStringExtra("stock");
 
         TextView name = (TextView) findViewById(R.id.product_name);
         TextView brand = (TextView) findViewById(R.id.product_brand);
@@ -68,10 +70,9 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     public void addProductToCart(View view) {
-
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         AddProductToCartFragment newFragment = AddProductToCartFragment.newInstance(this.product_id,
-                this.product_name, this.product_brand);
+                this.product_name, this.product_brand, this.product_stock);
         newFragment.show(ft, "dialog");
     }
 }
