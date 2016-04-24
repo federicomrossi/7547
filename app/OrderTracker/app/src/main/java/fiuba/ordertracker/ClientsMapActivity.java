@@ -1,6 +1,7 @@
 
 package fiuba.ordertracker;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.support.v4.app.FragmentActivity;
@@ -76,7 +77,7 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
         mMap = googleMap;
 
         // Change the default info window with a custom info window
-        mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter());
+        //mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter());
 
         // Add a marker in Sydney and move the camera
         /*LatLng sydney = new LatLng(-34, 151);
@@ -89,6 +90,38 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
         mMap.setIndoorEnabled(true);
         mMap.setBuildingsEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
+
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+
+                Client client = null;
+
+                if (marker.getId() != null && markers != null && markers.size() > 0) {
+                    if ( markers.get(marker.getId()) != null &&
+                            markers.get(marker.getId()) != null) {
+                        client = markers.get(marker.getId());
+                    }
+                }
+
+                // TODO: Refactor here and in ClientListAdapter
+                GPSTracker gps = new GPSTracker(ClientsMapActivity.this);
+                Double currentLatitude = gps.getLatitude();
+                Double currentLongitude = gps.getLongitude();
+
+                Intent intent = new Intent(ClientsMapActivity.this, ClientDetailActivity.class);
+                intent.putExtra("clientID", client.getId());
+                intent.putExtra("name", client.getSocialReason());
+                intent.putExtra("clientCode", client.getCode());
+                intent.putExtra("address", client.getDireccion());
+                intent.putExtra("telephone", client.getTelefono());
+                intent.putExtra("distance", String.valueOf(client.getDistance(currentLatitude,currentLongitude)));
+                intent.putExtra("latitude", String.valueOf(client.getLatitude()));
+                intent.putExtra("longitude", String.valueOf(client.getLongitude()));
+
+                startActivity(intent);
+            }
+        });
     }
 
     private void loadClientsInMap(final GoogleMap googleMap) {
@@ -135,8 +168,7 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
                         _googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
                     }
                 }
-                if(centeredMarker != null)
-                {
+                if (centeredMarker != null) {
                     MarkerOptions marker = new MarkerOptions();
                     marker.position(centeredMarker);
                     marker.flat(true);
