@@ -1,12 +1,32 @@
 package fiuba.ordertracker;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.SearchView;
+import android.widget.TextView;
+
+import java.util.List;
+
+import fiuba.ordertracker.helpers.Fonts;
+import fiuba.ordertracker.pojo.Client;
+import fiuba.ordertracker.services.ClientService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -18,6 +38,12 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class ClientListFragment extends Fragment {
+
+    private RecyclerView recyclerView;
+    private ClientListAdapter clientListAdapter;
+    private ProgressBar progressBar;
+    private Intent intent ;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -64,7 +90,96 @@ public class ClientListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_client_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_client_list, container, false);
+
+
+        //final SearchView razonFilterView = (SearchView) view.findViewById(R.id.searchView);
+        //final EditText clientCodeFilterView = (EditText) view.findViewById(R.id.editText_client_code);
+        //Fonts.changeSearchViewTextColorBlack(clientCodeFilterView);
+        //Fonts.changeSearchViewTextColorBlack(razonFilterView);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+
+        getActivity().setProgressBarIndeterminateVisibility(true);
+
+        // Clients list
+        recyclerView = (RecyclerView) view.findViewById(R.id.clientsList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
+
+        ClientService cs = ClientService.getInstance();
+
+        intent = getActivity().getIntent();
+
+        SharedPreferences pref = getActivity().getApplicationContext().getSharedPreferences("OrderTrackerPref", 0);
+        int idVendedor = pref.getInt("id", 0);
+
+
+        // Create a call instance for looking up Retrofit contributors.
+        String orderBy = intent.getStringExtra("orderBy") != null ? intent.getStringExtra("orderBy") : "razon_social";
+        //Call<List<Client>> call = cs.clients.Clients(null,null,orderBy,null);
+        Call<List<Client>> call = cs.clients.Clients(Integer.toString(idVendedor), intent.getStringExtra("socialReasonFilter"), orderBy, null, intent.getStringExtra("codClientFilter"));
+        //Call<List<Client>> call = cs.clientsFromTodayByVendIdService.ClientsFromTodayByVendIdService(idVendedor,orderBy,null);
+
+        final ClientListActivity self_ = (ClientListActivity) getActivity();
+        final View _view = view;
+
+        call.enqueue(new Callback<List<Client>>() {
+            @Override
+            public void onResponse(Call<List<Client>> call, Response<List<Client>> response) {
+                // Get result Repo from response.body()
+                List<Client> listClients = response.body();
+                clientListAdapter = new ClientListAdapter(self_, listClients);
+                clientListAdapter.setOriginalData(listClients);
+                progressBar.setVisibility(View.GONE);
+
+                if (listClients.size() == 0) {
+                    TextView textNoClients = (TextView) _view.findViewById(R.id.text_no_clients);
+                    textNoClients.setVisibility(View.VISIBLE);
+                }
+
+                recyclerView.setAdapter(clientListAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<List<Client>> call, Throwable t) {
+                //Aca tenemos que agregar el msj de error a mostrar... puto el que lee
+                TextView textNoClients = (TextView) _view.findViewById(R.id.text_no_clients);
+                textNoClients.setText("Hubo un error al cargar los clientes por favor reintente mas tarde");
+                textNoClients.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+            }
+        });
+
+        /*razonFilterView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(newText.equals(""))
+                    onQueryTextSubmit("");
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //setRecycler();
+                return false;
+            }
+
+        });
+
+        clientCodeFilterView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((actionId == EditorInfo.IME_ACTION_DONE) || ((event.getKeyCode() == KeyEvent.KEYCODE_ENTER) && (event.getAction() == KeyEvent.ACTION_DOWN))) {
+                    //setRecycler();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });*/
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
