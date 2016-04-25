@@ -25,6 +25,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
 
     private Double currentLatitude ;
     private Double currentLongitude;
+    private String dateToFilter;
 
     private LayoutInflater inflater;
 
@@ -38,8 +39,9 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         return originalData;
     }
 
-    public void setOriginalData(List<Client> originalData) {
+    public void setOriginalData(List<Client> originalData, String dateFilter) {
         this.originalData = originalData;
+        this.dateToFilter = dateFilter;
     }
 
     List<Client> originalData = Collections.emptyList();
@@ -73,7 +75,9 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         holder.name.setText(current.getSocialReason());
         holder.address.setText(current.getDireccion());
         holder.clientCode.setText(current.getCode());
-        holder.distance.setText(String.valueOf(current.getDistance(currentLatitude,currentLongitude))+ " " + Constants.COMPLETE_UNIT);
+        holder.distance.setText(String.valueOf(current.getDistance(currentLatitude, currentLongitude)) + " " + Constants.COMPLETE_UNIT);
+
+        final String _dateToFilter = this.dateToFilter;
 
         // Set listener to manage clicks on items from the RecyclerView
         holder.setOnItemClickListener(new OnItemClickListener() {
@@ -87,10 +91,10 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
                 intent.putExtra("clientCode", selectedClient.getCode());
                 intent.putExtra("address", selectedClient.getDireccion());
                 intent.putExtra("telephone", selectedClient.getTelefono());
-                intent.putExtra("distance", String.valueOf(selectedClient.getDistance(currentLatitude,currentLongitude)));
+                intent.putExtra("distance", String.valueOf(selectedClient.getDistance(currentLatitude, currentLongitude)));
                 intent.putExtra("latitude", String.valueOf(selectedClient.getLatitude()));
                 intent.putExtra("longitude", String.valueOf(selectedClient.getLongitude()));
-
+                intent.putExtra("agendaDate", _dateToFilter);
                 view.getContext().startActivity(intent);
             }
         });

@@ -52,6 +52,7 @@ public class ClientListActivity extends AppCompatActivity
     private ClientListAdapter clientListAdapter;
     private ProgressBar progressBar;
     private Intent intent ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,9 +74,9 @@ public class ClientListActivity extends AppCompatActivity
         // Set current tab
         Calendar calendar = Calendar.getInstance();
         viewPager.setCurrentItem(getTabForCurrentDay(calendar.get(Calendar.DAY_OF_WEEK)));
+        viewPager.getCurrentItem();
 
         tabLayout.getTabAt(7).setIcon(R.drawable.ic_call_split_white_24dp);
-
 
         final SearchView razonFilterView = (SearchView)findViewById(R.id.searchView);
         final EditText clientCodeFilterView = (EditText)findViewById(R.id.editText_client_code);
@@ -295,10 +296,14 @@ public class ClientListActivity extends AppCompatActivity
 
     // Call when the user clicks the go map button
     public void onClickGoMap(View view) {
+
+        ClientListFragment currentTabFragment = (ClientListFragment) this.viewPager.getAdapter().instantiateItem(this.viewPager, this.viewPager.getCurrentItem());
+
         Intent intent = new Intent(view.getContext(), ClientsMapActivity.class);
 
         Bundle b = new Bundle();
         b.putString("clientID", null);
+        b.putString("agendaDate", currentTabFragment.getTabDate());
         intent.putExtras(b);
 
         view.getContext().startActivity(intent);

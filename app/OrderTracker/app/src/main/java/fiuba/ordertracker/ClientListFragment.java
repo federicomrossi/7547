@@ -131,6 +131,7 @@ public class ClientListFragment extends Fragment {
 
         final ClientListActivity self_ = (ClientListActivity) getActivity();
         final View _view = view;
+        final String _date = this.dayOfWeekFilter;
 
         call.enqueue(new Callback<List<Client>>() {
             @Override
@@ -138,7 +139,7 @@ public class ClientListFragment extends Fragment {
                 // Get result Repo from response.body()
                 List<Client> listClients = response.body();
                 clientListAdapter = new ClientListAdapter(self_, listClients);
-                clientListAdapter.setOriginalData(listClients);
+                clientListAdapter.setOriginalData(listClients, _date);
                 progressBar.setVisibility(View.GONE);
 
                 if (listClients.size() == 0) {
@@ -227,5 +228,9 @@ public class ClientListFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public String getTabDate() {
+        return this.dayOfWeekFilter;
     }
 }

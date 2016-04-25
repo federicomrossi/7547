@@ -37,6 +37,7 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
     private Hashtable<String, Client> markers;
     private ClientService clientService = ClientService.getInstance();
     private String focusInClient = "";
+    private String agendaDate = null;
     private LatLng centeredMarker = null;
 
     @Override
@@ -51,6 +52,8 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
         markers = new Hashtable<String, Client>();
 
         String clientFocusedId = getIntent().getExtras().getString("clientID");
+        this.agendaDate = getIntent().getExtras().getString("agendaDate");
+
         if(clientFocusedId == null)
         {
             GPSTracker gpsTracker = new GPSTracker(this);
@@ -129,7 +132,7 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
         SharedPreferences pref = getApplicationContext().getSharedPreferences("OrderTrackerPref", 0);
         int idVendedor = pref.getInt("id", 0);
 
-        Call<List<Client>> call = clientService.clients.Clients(Integer.toString(idVendedor),null,null,null,null, null);
+        Call<List<Client>> call = clientService.clients.Clients(Integer.toString(idVendedor), null, null, null, null, this.agendaDate);
         final ClientsMapActivity _self = this;
         final GoogleMap _googleMap = googleMap;
 
