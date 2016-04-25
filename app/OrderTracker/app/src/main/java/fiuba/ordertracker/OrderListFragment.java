@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import fiuba.ordertracker.helpers.Constants;
 import fiuba.ordertracker.pojo.Categorie;
 import fiuba.ordertracker.pojo.Order;
 import fiuba.ordertracker.pojo.OrderProduct;
@@ -159,6 +160,12 @@ public class OrderListFragment extends Fragment  implements Observer {
             }
         });
 
+        /*
+        final TabActivity tabsAct = (TabActivity) getActivity();
+        if(!tabsAct.getActiveOrder().getIdEstado().equals(Constants.ACTIVE_STATE)){
+            buttonConfirm.setEnabled(false);
+        }
+        */
         return view;
     }
 
@@ -205,7 +212,7 @@ public class OrderListFragment extends Fragment  implements Observer {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
                 final Order order = response.body();
-                if (order.getIdEstado().equals("1")) {
+                if (order.getIdEstado().equals(Constants.ACTIVE_STATE)) {
                     //no pudo actualizarlo por falta de stock hay q mostrar el popup
                     new AlertDialog.Builder(tabsAct)
                             .setTitle("El pedido contiene productos sin stock")
