@@ -53,9 +53,9 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         this.data = data;
 
         // Show message notifying there are no clients
-        if (this.data.size() == 0){
+        /*if (this.data.size() == 0){
             Toast.makeText(context, "No hay clientes en el sistema", Toast.LENGTH_LONG).show();
-        }
+        }*/
     }
 
     @Override
