@@ -25,7 +25,11 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.content.Intent;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import fiuba.ordertracker.helpers.FiltersHelper;
@@ -47,7 +51,7 @@ public class ClientListActivity extends AppCompatActivity
     private RecyclerView recyclerView;
     private ClientListAdapter clientListAdapter;
     private ProgressBar progressBar;
-    private  Intent intent ;
+    private Intent intent ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +69,10 @@ public class ClientListActivity extends AppCompatActivity
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        // Set current tab
+        Calendar calendar = Calendar.getInstance();
+        viewPager.setCurrentItem(getTabForCurrentDay(calendar.get(Calendar.DAY_OF_WEEK)));
 
         tabLayout.getTabAt(7).setIcon(R.drawable.ic_call_split_white_24dp);
 
@@ -157,15 +165,47 @@ public class ClientListActivity extends AppCompatActivity
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new ClientListFragment(), "D");
-        adapter.addFragment(new ClientListFragment(), "L");
-        adapter.addFragment(new ClientListFragment(), "M");
-        adapter.addFragment(new ClientListFragment(), "M");
-        adapter.addFragment(new ClientListFragment(), "J");
-        adapter.addFragment(new ClientListFragment(), "V");
-        adapter.addFragment(new ClientListFragment(), "S");
-        adapter.addFragment(new ClientListFragment(), "");
+
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        // Current date
+        Calendar calendar = Calendar.getInstance();
+
+        // Calculate current week's Sunday
+        while (calendar.get( Calendar.DAY_OF_WEEK ) != Calendar.SUNDAY)
+            calendar.add( Calendar.DAY_OF_WEEK, -1 );
+
+        // Set days of the current week for each tab
+        adapter.addFragment(ClientListFragment.newInstance(calendar), "D");
+        calendar.add(Calendar.DATE, 1);
+        adapter.addFragment(ClientListFragment.newInstance(calendar), "L");
+        calendar.add(Calendar.DATE, 1);
+        adapter.addFragment(ClientListFragment.newInstance(calendar), "M");
+        calendar.add(Calendar.DATE, 1);
+        adapter.addFragment(ClientListFragment.newInstance(calendar), "M");
+        calendar.add(Calendar.DATE, 1);
+        adapter.addFragment(ClientListFragment.newInstance(calendar), "J");
+        calendar.add(Calendar.DATE, 1);
+        adapter.addFragment(ClientListFragment.newInstance(calendar), "V");
+        calendar.add(Calendar.DATE, 1);
+        adapter.addFragment(ClientListFragment.newInstance(calendar), "S");
+        adapter.addFragment(ClientListFragment.newInstance(null), "");
+
         viewPager.setAdapter(adapter);
+    }
+
+    /**
+     * Returns the index of the tab to be selected (0 - 6)
+     * @param dayOfWeek
+     * @return the index of the tab to be selected
+     */
+    private int getTabForCurrentDay(int dayOfWeek){
+        //int intDayOfWeek = Integer.valueOf(dayOfWeek);
+        if (dayOfWeek > 0){
+            return dayOfWeek - 1;
+        } else{
+            return 6;
+        }
     }
 
     @Override

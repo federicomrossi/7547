@@ -19,6 +19,10 @@ import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import fiuba.ordertracker.helpers.Fonts;
@@ -43,15 +47,8 @@ public class ClientListFragment extends Fragment {
     private ClientListAdapter clientListAdapter;
     private ProgressBar progressBar;
     private Intent intent ;
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String dayOfWeekScreen;
+    private String dayOfWeekFilter; // null if option is 'Fuera de ruta'
 
     private OnFragmentInteractionListener mListener;
 
@@ -63,17 +60,25 @@ public class ClientListFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param calendar the day of the week the fragment belongs to
      * @return A new instance of fragment ClientListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ClientListFragment newInstance(String param1, String param2) {
+    public static ClientListFragment newInstance(Calendar calendar) {
         ClientListFragment fragment = new ClientListFragment();
+
+        DateFormat dateFormatScreen = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat dateFormatFilter = new SimpleDateFormat("yyyy-MM-dd");
+
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+        if (calendar != null) {
+            args.putString("day_of_week_screen", dateFormatScreen.format(calendar.getTime()));
+            args.putString("day_of_week_filter", dateFormatFilter.format(calendar.getTime()));
+            fragment.setArguments(args);
+        } else{
+            args.putString("day_of_week_screen", "Fuera de ruta");
+            fragment.setArguments(args);
+        }
         return fragment;
     }
 
@@ -81,8 +86,8 @@ public class ClientListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            dayOfWeekScreen = getArguments().getString("day_of_week_screen");
+            dayOfWeekFilter = getArguments().getString("day_of_week_filter");
         }
     }
 
@@ -92,6 +97,9 @@ public class ClientListFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_client_list, container, false);
 
+        // Set current date
+        TextView textDayOfWeek = (TextView) view.findViewById(R.id.day_of_week_text);
+        textDayOfWeek.setText(this.dayOfWeekScreen);
 
         //final SearchView razonFilterView = (SearchView) view.findViewById(R.id.searchView);
         //final EditText clientCodeFilterView = (EditText) view.findViewById(R.id.editText_client_code);
