@@ -91,7 +91,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="30dp"
-            android:text="No hay clientes en el sistema."
+            android:text="No hay clientes agendados para el día."
             android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:visibility="gone"
