@@ -21,8 +21,6 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-
-import fiuba.ordertracker.helpers.Constants;
 import fiuba.ordertracker.pojo.Categorie;
 import fiuba.ordertracker.pojo.Order;
 import fiuba.ordertracker.pojo.OrderProduct;
@@ -114,6 +112,7 @@ public class OrderListFragment extends Fragment  implements Observer {
         // Confirmation button
         final FragmentActivity self_ = getActivity();
         final Fragment _parentFragment = this.getParentFragment();
+
         Button buttonConfirm = (Button) view.findViewById(R.id.buttonConfirmOrder);
         buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,44 +196,58 @@ public class OrderListFragment extends Fragment  implements Observer {
 
 
     public void confirmOrderCall(){
+        final OrderListFragment self_ = this;
         final TabActivity tabsAct = (TabActivity) getActivity();
         OrderService os = OrderService.getInstance();
-        Call<Order> call = os.order.editOrder(tabsAct.getActiveOrder().getId());
+        Call<Order> call = os.order.editOrder(tabsAct.getActiveOrder().getId(),null);
 
         call.enqueue(new Callback<Order>() {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
-                if (response.code() == 500) {
+                final Order order = response.body();
+                if (order.getIdEstado().equals("1")) {
                     //no pudo actualizarlo por falta de stock hay q mostrar el popup
                     new AlertDialog.Builder(tabsAct)
                             .setTitle("El pedido contiene productos sin stock")
-                            .setMessage("¿Desea realizar el pedido de todas formas?")
+                            .setMessage(order.getComentarios() + "\n ¿Desea realizar el pedido de todas formas?")
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .setPositiveButton("Proseguir", new DialogInterface.OnClickListener() {
 
                                 public void onClick(DialogInterface dialog, int whichButton) {
-                                    // Force the order status to Completed (Confirmed)
-                                    //order.setIdEstado(Constants.COMPLETED_STATE);
-                                    Toast.makeText(tabsAct, "Se ha confirmado el pedido satisfactoriamente",
-                                            Toast.LENGTH_SHORT).show();
+                                    self_.forceConfirmCall();
                                 }
                             })
                             .setNegativeButton("Modificar", null).show();
                 } else {
-                    final Order order = response.body();
-
-                    if (order != null) {
-                        if (order.getIdEstado().equals(Constants.COMPLETED_STATE)) {
-                            //aca es completo entonces hay que mostralo como confirmado y se cambia el active order a este pero
-                            // esta fuera de la entrega asi que no hace nada por ahora
-                            //tabsAct.setActiveOrder(order);
-                            Toast.makeText(tabsAct, "Se ha confirmado el pedido satisfactoriamente", Toast.LENGTH_SHORT).show();
-                        } else {
-
-                        }
-                    }
-
+                    //aca es completo entonces hay que mostralo como confirmado y se cambia el active order a este pero
+                    tabsAct.setActiveOrder(order);
+                    Button buttonConfirm = (Button) view.findViewById(R.id.buttonConfirmOrder);
+                    buttonConfirm.setEnabled(false);
+                    Toast.makeText(tabsAct, "Se ha confirmado el pedido satisfactoriamente", Toast.LENGTH_SHORT).show();
                 }
+            }
+
+            @Override
+            public void onFailure(Call<Order> call, Throwable t) {
+                //Aca tenemos que agregar el msj de error a mostrar...
+                Toast.makeText(tabsAct, "Error de conexión, intente más tarde nuevamente", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void forceConfirmCall(){
+        final TabActivity tabsAct = (TabActivity) getActivity();
+        OrderService os = OrderService.getInstance();
+        Call<Order> call = os.order.editOrder(tabsAct.getActiveOrder().getId(),"si");
+
+        call.enqueue(new Callback<Order>() {
+            @Override
+            public void onResponse(Call<Order> call, Response<Order> response) {
+                final Order order = response.body();
+                tabsAct.setActiveOrder(order);
+                Button buttonConfirm = (Button) view.findViewById(R.id.buttonConfirmOrder);
+                buttonConfirm.setEnabled(false);
+                Toast.makeText(tabsAct, "Se ha confirmado el pedido satisfactoriamente", Toast.LENGTH_SHORT).show();
             }
 
             @Override

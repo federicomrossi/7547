@@ -20,4 +20,8 @@ public final class Constants {
     public static final String ACTIVE_STATE = "1";
     public static final String CANCELED_STATE = "2";
     public static final String COMPLETED_STATE ="3";
+    public static final String ON_CONFIRM ="4";
+    public static final String ON_BUILD ="5";
+    public static final String ON_SHIPPING ="6";
+
 }
