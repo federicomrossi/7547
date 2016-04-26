@@ -2,6 +2,7 @@ package fiuba.ordertracker;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -230,7 +231,9 @@ public class OrderListFragment extends Fragment  implements Observer {
                     tabsAct.setActiveOrder(order);
                     Button buttonConfirm = (Button) view.findViewById(R.id.buttonConfirmOrder);
                     buttonConfirm.setEnabled(false);
-                    Toast.makeText(tabsAct, "Se ha confirmado el pedido satisfactoriamente", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(tabsAct, ClientListActivity.class);
+                    startActivity(intent);
+                    Toast.makeText(tabsAct, "Se ha confirmado el pedido satisfactoriamente", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -254,7 +257,9 @@ public class OrderListFragment extends Fragment  implements Observer {
                 tabsAct.setActiveOrder(order);
                 Button buttonConfirm = (Button) view.findViewById(R.id.buttonConfirmOrder);
                 buttonConfirm.setEnabled(false);
-                Toast.makeText(tabsAct, "Se ha confirmado el pedido satisfactoriamente", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(tabsAct, ClientListActivity.class);
+                startActivity(intent);
+                Toast.makeText(tabsAct, "Se ha confirmado el pedido satisfactoriamente", Toast.LENGTH_LONG).show();
             }
 
             @Override
