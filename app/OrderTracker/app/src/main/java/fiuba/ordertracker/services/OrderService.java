@@ -68,8 +68,9 @@ public final class OrderService {
         @POST("orders/removeProductFromOrder")
         Call<List<OrderProduct>> removeProductFromOrder (@Field("id_producto") String id_producto, @Field("id_orden") String id_orden);
 
+        @FormUrlEncoded
         @POST("orders/confirmOrder/{id}")
-        Call<Order> editOrder(@Path("id") String id);
+        Call<Order> editOrder(@Path("id") String id, @Field("force") String force);
 
 
     }
