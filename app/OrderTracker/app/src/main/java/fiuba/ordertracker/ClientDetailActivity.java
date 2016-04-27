@@ -22,6 +22,7 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
     private String clientName;
     private Double clientLatitude;
     private Double clientLongitude;
+    private String agendaDate = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,8 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
         this.clientLatitude = Double.valueOf(i.getStringExtra("latitude"));
         this.clientLongitude = Double.valueOf(i.getStringExtra("longitude"));
 
+        this.agendaDate = i.getStringExtra("agendaDate");
+
         /**
          * Map to show client address
          */
@@ -75,6 +78,7 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
         Intent intent = new Intent(view.getContext(), TabActivity.class);
         intent.putExtra("clientName", this.clientName);
         intent.putExtra("clientID",this.clientID);
+        intent.putExtra("agendaDate",this.agendaDate);
         view.getContext().startActivity(intent);
     }
 
@@ -84,6 +88,7 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
 
         Bundle b = new Bundle();
         b.putString("clientID", this.clientID);
+        b.putString("agendaDate", this.agendaDate);
         intent.putExtras(b);
 
         view.getContext().startActivity(intent);

@@ -1,7 +1,13 @@
 package fiuba.ordertracker;
 
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +25,11 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.content.Intent;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import fiuba.ordertracker.helpers.FiltersHelper;
@@ -30,13 +41,18 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ClientListActivity extends AppCompatActivity {
+public class ClientListActivity extends AppCompatActivity
+        implements ClientListFragment.OnFragmentInteractionListener {
 
     private Toolbar toolbar;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+
     private RecyclerView recyclerView;
     private ClientListAdapter clientListAdapter;
     private ProgressBar progressBar;
-    private  Intent intent ;
+    private Intent intent ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,11 +64,25 @@ public class ClientListActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setSubtitle(getString(R.string.activity_client_list));
+
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
+
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
+        // Set current tab
+        Calendar calendar = Calendar.getInstance();
+        viewPager.setCurrentItem(getTabForCurrentDay(calendar.get(Calendar.DAY_OF_WEEK)));
+        viewPager.getCurrentItem();
+
+        tabLayout.getTabAt(7).setIcon(R.drawable.ic_call_split_white_24dp);
+
         final SearchView razonFilterView = (SearchView)findViewById(R.id.searchView);
         final EditText clientCodeFilterView = (EditText)findViewById(R.id.editText_client_code);
         Fonts.changeSearchViewTextColorBlack(clientCodeFilterView);
         Fonts.changeSearchViewTextColorBlack(razonFilterView);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        /*progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
         setProgressBarIndeterminateVisibility(true);
@@ -73,7 +103,7 @@ public class ClientListActivity extends AppCompatActivity {
         // Create a call instance for looking up Retrofit contributors.
         String orderBy = intent.getStringExtra("orderBy") != null ? intent.getStringExtra("orderBy") : "razon_social";
         //Call<List<Client>> call = cs.clients.Clients(null,null,orderBy,null);
-        Call<List<Client>> call = cs.clients.Clients(Integer.toString(idVendedor),intent.getStringExtra("socialReasonFilter"),orderBy,null,intent.getStringExtra("codClientFilter"));
+        Call<List<Client>> call = cs.clients.Clients(Integer.toString(idVendedor),intent.getStringExtra("socialReasonFilter"),orderBy,null,intent.getStringExtra("codClientFilter"), null);
         //Call<List<Client>> call = cs.clientsFromTodayByVendIdService.ClientsFromTodayByVendIdService(idVendedor,orderBy,null);
 
         final ClientListActivity self_ = this;
@@ -102,7 +132,7 @@ public class ClientListActivity extends AppCompatActivity {
                 textNoClients.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
             }
-        });
+        });*/
 
         razonFilterView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -132,7 +162,85 @@ public class ClientListActivity extends AppCompatActivity {
 
             }
         });
+    }
 
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        // Current date
+        Calendar calendar = Calendar.getInstance();
+
+        // Calculate current week's Sunday
+        while (calendar.get( Calendar.DAY_OF_WEEK ) != Calendar.SUNDAY)
+            calendar.add( Calendar.DAY_OF_WEEK, -1 );
+
+        // Set days of the current week for each tab
+        adapter.addFragment(ClientListFragment.newInstance(calendar), "D");
+        calendar.add(Calendar.DATE, 1);
+        adapter.addFragment(ClientListFragment.newInstance(calendar), "L");
+        calendar.add(Calendar.DATE, 1);
+        adapter.addFragment(ClientListFragment.newInstance(calendar), "M");
+        calendar.add(Calendar.DATE, 1);
+        adapter.addFragment(ClientListFragment.newInstance(calendar), "M");
+        calendar.add(Calendar.DATE, 1);
+        adapter.addFragment(ClientListFragment.newInstance(calendar), "J");
+        calendar.add(Calendar.DATE, 1);
+        adapter.addFragment(ClientListFragment.newInstance(calendar), "V");
+        calendar.add(Calendar.DATE, 1);
+        adapter.addFragment(ClientListFragment.newInstance(calendar), "S");
+        adapter.addFragment(ClientListFragment.newInstance(null), "");
+
+        viewPager.setAdapter(adapter);
+    }
+
+    /**
+     * Returns the index of the tab to be selected (0 - 6)
+     * @param dayOfWeek
+     * @return the index of the tab to be selected
+     */
+    private int getTabForCurrentDay(int dayOfWeek){
+        //int intDayOfWeek = Integer.valueOf(dayOfWeek);
+        if (dayOfWeek > 0){
+            return dayOfWeek - 1;
+        } else{
+            return 6;
+        }
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
     }
 
     @Override
@@ -178,20 +286,24 @@ public class ClientListActivity extends AppCompatActivity {
 
     public void setRecycler()
     {
-        String codeFilter = ((EditText) findViewById(R.id.editText_client_code)).getText().toString();
+        /*String codeFilter = ((EditText) findViewById(R.id.editText_client_code)).getText().toString();
         String nameFilter = ((SearchView) findViewById(R.id.searchView)).getQuery().toString();
         List<Client> listFiltered = FiltersHelper.filterClientsBySocialReason(clientListAdapter.getOriginalData(), nameFilter);
         listFiltered = FiltersHelper.filterClientsByCode(listFiltered, codeFilter);
         clientListAdapter.setData(listFiltered);
-        recyclerView.setAdapter(clientListAdapter);
+        recyclerView.setAdapter(clientListAdapter);*/
     }
 
     // Call when the user clicks the go map button
     public void onClickGoMap(View view) {
+
+        ClientListFragment currentTabFragment = (ClientListFragment) this.viewPager.getAdapter().instantiateItem(this.viewPager, this.viewPager.getCurrentItem());
+
         Intent intent = new Intent(view.getContext(), ClientsMapActivity.class);
 
         Bundle b = new Bundle();
         b.putString("clientID", null);
+        b.putString("agendaDate", currentTabFragment.getTabDate());
         intent.putExtras(b);
 
         view.getContext().startActivity(intent);

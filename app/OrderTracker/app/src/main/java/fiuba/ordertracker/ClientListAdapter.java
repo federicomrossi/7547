@@ -25,6 +25,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
 
     private Double currentLatitude ;
     private Double currentLongitude;
+    private String dateToFilter;
 
     private LayoutInflater inflater;
 
@@ -38,8 +39,9 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         return originalData;
     }
 
-    public void setOriginalData(List<Client> originalData) {
+    public void setOriginalData(List<Client> originalData, String dateFilter) {
         this.originalData = originalData;
+        this.dateToFilter = dateFilter;
     }
 
     List<Client> originalData = Collections.emptyList();
@@ -53,15 +55,15 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         this.data = data;
 
         // Show message notifying there are no clients
-        if (this.data.size() == 0){
+        /*if (this.data.size() == 0){
             Toast.makeText(context, "No hay clientes en el sistema", Toast.LENGTH_LONG).show();
-        }
+        }*/
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.client_list_row, null);
-        MyViewHolder holder = new MyViewHolder(view);
+        MyViewHolder holder = new MyViewHolder(view, this.dateToFilter);
         return holder;
     }
 
@@ -73,7 +75,9 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         holder.name.setText(current.getSocialReason());
         holder.address.setText(current.getDireccion());
         holder.clientCode.setText(current.getCode());
-        holder.distance.setText(String.valueOf(current.getDistance(currentLatitude,currentLongitude))+ " " + Constants.COMPLETE_UNIT);
+        holder.distance.setText(String.valueOf(current.getDistance(currentLatitude, currentLongitude)) + " " + Constants.COMPLETE_UNIT);
+
+        final String _dateToFilter = this.dateToFilter;
 
         // Set listener to manage clicks on items from the RecyclerView
         holder.setOnItemClickListener(new OnItemClickListener() {
@@ -87,10 +91,10 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
                 intent.putExtra("clientCode", selectedClient.getCode());
                 intent.putExtra("address", selectedClient.getDireccion());
                 intent.putExtra("telephone", selectedClient.getTelefono());
-                intent.putExtra("distance", String.valueOf(selectedClient.getDistance(currentLatitude,currentLongitude)));
+                intent.putExtra("distance", String.valueOf(selectedClient.getDistance(currentLatitude, currentLongitude)));
                 intent.putExtra("latitude", String.valueOf(selectedClient.getLatitude()));
                 intent.putExtra("longitude", String.valueOf(selectedClient.getLongitude()));
-
+                intent.putExtra("agendaDate", _dateToFilter);
                 view.getContext().startActivity(intent);
             }
         });
@@ -106,17 +110,19 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         TextView address;
         TextView clientCode;
         TextView distance;
+        private String dateToFilter;
         private OnItemClickListener clickListener;
 
         private Client client;
 
-        public MyViewHolder(View itemView) {
+        public MyViewHolder(View itemView, String agendaDate) {
             super(itemView);
 
             name = (TextView) itemView.findViewById(R.id.client_list_row_name);
             address = (TextView) itemView.findViewById(R.id.client_list_row_address);
             clientCode = (TextView) itemView.findViewById(R.id.client_list_row_client_code);
             distance = (TextView) itemView.findViewById(R.id.client_list_row_distance);
+            this.dateToFilter = agendaDate;
 
             // Set listener to the item view
             itemView.setOnClickListener(this);
@@ -125,6 +131,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         public void setClient(Client c) {
             this.client = c;
             final Client _client = this.client;
+            final String _dateToFilter = this.dateToFilter;
 
             Button button = (Button) itemView.findViewById(R.id.client_list_goto_order);
             button.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +142,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
                     Bundle b = new Bundle();
                     b.putString("clientName", _client.getSocialReason());
                     b.putString("clientID", _client.getId());
+                    b.putString("agendaDate", _dateToFilter);
                     intent.putExtras(b);
 
                     itemView.getContext().startActivity(intent);
