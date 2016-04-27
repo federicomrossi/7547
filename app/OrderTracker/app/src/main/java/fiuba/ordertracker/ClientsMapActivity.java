@@ -78,6 +78,7 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        final String _agendaDate = this.agendaDate;
 
         // Change the default info window with a custom info window
         //mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter());
@@ -118,9 +119,10 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
                 intent.putExtra("clientCode", client.getCode());
                 intent.putExtra("address", client.getDireccion());
                 intent.putExtra("telephone", client.getTelefono());
-                intent.putExtra("distance", String.valueOf(client.getDistance(currentLatitude,currentLongitude)));
+                intent.putExtra("distance", String.valueOf(client.getDistance(currentLatitude, currentLongitude)));
                 intent.putExtra("latitude", String.valueOf(client.getLatitude()));
                 intent.putExtra("longitude", String.valueOf(client.getLongitude()));
+                intent.putExtra("agendaDate", _agendaDate);
 
                 startActivity(intent);
             }
