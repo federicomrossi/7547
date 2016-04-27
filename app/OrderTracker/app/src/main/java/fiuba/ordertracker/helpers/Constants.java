@@ -16,8 +16,11 @@ public final class Constants {
     public static final Integer COLOR_TEXT_FILTER = Color.BLACK;
     public static final Integer COLOR_HINT_FILTER = Color.BLACK;
 
-    public static final String PENDING_STATE = "0";
+    // Orders possible states constants
     public static final String ACTIVE_STATE = "1";
-    public static final String CANCELED_STATE = "2";
-    public static final String COMPLETED_STATE ="3";
+    public static final String CONFIRM_STATE = "2";
+    public static final String BUILDING_STATE = "3";
+    public static final String SHIPPING_STATE = "4";
+    public static final String COMPLETED_STATE = "5";
+    public static final String CANCELED_STATE = "6";
 }
