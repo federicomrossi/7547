@@ -63,7 +63,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.client_list_row, null);
-        MyViewHolder holder = new MyViewHolder(view);
+        MyViewHolder holder = new MyViewHolder(view, this.dateToFilter);
         return holder;
     }
 
@@ -110,17 +110,19 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         TextView address;
         TextView clientCode;
         TextView distance;
+        private String dateToFilter;
         private OnItemClickListener clickListener;
 
         private Client client;
 
-        public MyViewHolder(View itemView) {
+        public MyViewHolder(View itemView, String agendaDate) {
             super(itemView);
 
             name = (TextView) itemView.findViewById(R.id.client_list_row_name);
             address = (TextView) itemView.findViewById(R.id.client_list_row_address);
             clientCode = (TextView) itemView.findViewById(R.id.client_list_row_client_code);
             distance = (TextView) itemView.findViewById(R.id.client_list_row_distance);
+            this.dateToFilter = agendaDate;
 
             // Set listener to the item view
             itemView.setOnClickListener(this);
@@ -129,6 +131,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         public void setClient(Client c) {
             this.client = c;
             final Client _client = this.client;
+            final String _dateToFilter = this.dateToFilter;
 
             Button button = (Button) itemView.findViewById(R.id.client_list_goto_order);
             button.setOnClickListener(new View.OnClickListener() {
@@ -139,6 +142,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
                     Bundle b = new Bundle();
                     b.putString("clientName", _client.getSocialReason());
                     b.putString("clientID", _client.getId());
+                    b.putString("agendaDate", _dateToFilter);
                     intent.putExtras(b);
 
                     itemView.getContext().startActivity(intent);
