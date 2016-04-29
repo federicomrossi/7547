@@ -232,6 +232,7 @@ public class OrderListFragment extends Fragment  implements Observer {
                     Button buttonConfirm = (Button) view.findViewById(R.id.buttonConfirmOrder);
                     buttonConfirm.setEnabled(false);
                     Intent intent = new Intent(tabsAct, ClientListActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     Toast.makeText(tabsAct, "Se ha confirmado el pedido satisfactoriamente", Toast.LENGTH_LONG).show();
                 }
@@ -258,6 +259,7 @@ public class OrderListFragment extends Fragment  implements Observer {
                 Button buttonConfirm = (Button) view.findViewById(R.id.buttonConfirmOrder);
                 buttonConfirm.setEnabled(false);
                 Intent intent = new Intent(tabsAct, ClientListActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 Toast.makeText(tabsAct, "Se ha confirmado el pedido satisfactoriamente", Toast.LENGTH_LONG).show();
             }
