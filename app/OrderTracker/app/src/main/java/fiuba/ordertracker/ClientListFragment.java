@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +25,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
+import fiuba.ordertracker.helpers.FiltersHelper;
 import fiuba.ordertracker.helpers.Fonts;
 import fiuba.ordertracker.pojo.Client;
 import fiuba.ordertracker.services.ClientService;
@@ -49,7 +52,6 @@ public class ClientListFragment extends Fragment {
     private Intent intent ;
     private String dayOfWeekScreen;
     private String dayOfWeekFilter; // null if option is 'Fuera de ruta'
-
     private OnFragmentInteractionListener mListener;
 
     public ClientListFragment() {
@@ -100,11 +102,7 @@ public class ClientListFragment extends Fragment {
         // Set current date
         TextView textDayOfWeek = (TextView) view.findViewById(R.id.day_of_week_text);
         textDayOfWeek.setText(this.dayOfWeekScreen);
-
-        //final SearchView razonFilterView = (SearchView) view.findViewById(R.id.searchView);
-        //final EditText clientCodeFilterView = (EditText) view.findViewById(R.id.editText_client_code);
-        //Fonts.changeSearchViewTextColorBlack(clientCodeFilterView);
-        //Fonts.changeSearchViewTextColorBlack(razonFilterView);
+        
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
@@ -132,6 +130,7 @@ public class ClientListFragment extends Fragment {
         final ClientListActivity self_ = (ClientListActivity) getActivity();
         final View _view = view;
         final String _date = this.dayOfWeekFilter;
+        final ClientListFragment _this = this;
 
         call.enqueue(new Callback<List<Client>>() {
             @Override
@@ -148,6 +147,8 @@ public class ClientListFragment extends Fragment {
                 }
 
                 recyclerView.setAdapter(clientListAdapter);
+
+                self_.filterClientsInCurrentTab();
             }
 
             @Override
@@ -160,36 +161,13 @@ public class ClientListFragment extends Fragment {
             }
         });
 
-        /*razonFilterView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if(newText.equals(""))
-                    onQueryTextSubmit("");
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                //setRecycler();
-                return false;
-            }
-
-        });
-
-        clientCodeFilterView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((actionId == EditorInfo.IME_ACTION_DONE) || ((event.getKeyCode() == KeyEvent.KEYCODE_ENTER) && (event.getAction() == KeyEvent.ACTION_DOWN))) {
-                    //setRecycler();
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        });*/
-
         return view;
     }
+
+    /*public void onResume() {
+        ClientListActivity self_ = (ClientListActivity) getActivity();
+        self_.filterClientsInCurrentTab();
+    }*/
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -232,5 +210,15 @@ public class ClientListFragment extends Fragment {
 
     public String getTabDate() {
         return this.dayOfWeekFilter;
+    }
+
+    public void executeFiltering(Map<String, String> filterValues) {
+
+        if(clientListAdapter == null) return;
+
+        List<Client> listFiltered = FiltersHelper.filterClientsBySocialReason(clientListAdapter.getOriginalData(), filterValues.get("name"));
+        listFiltered = FiltersHelper.filterClientsByCode(listFiltered, filterValues.get("code"));
+        clientListAdapter.setData(listFiltered);
+        recyclerView.setAdapter(clientListAdapter);
     }
 }
