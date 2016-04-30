@@ -25,6 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import fiuba.ordertracker.helpers.FiltersHelper;
 import fiuba.ordertracker.helpers.Fonts;
 import fiuba.ordertracker.pojo.Client;
 import fiuba.ordertracker.services.ClientService;
@@ -160,34 +161,6 @@ public class ClientListFragment extends Fragment {
             }
         });
 
-        /*razonFilterView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if(newText.equals(""))
-                    onQueryTextSubmit("");
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                //setRecycler();
-                return false;
-            }
-
-        });
-
-        clientCodeFilterView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if ((actionId == EditorInfo.IME_ACTION_DONE) || ((event.getKeyCode() == KeyEvent.KEYCODE_ENTER) && (event.getAction() == KeyEvent.ACTION_DOWN))) {
-                    //setRecycler();
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        });*/
-
         return view;
     }
 
@@ -232,5 +205,13 @@ public class ClientListFragment extends Fragment {
 
     public String getTabDate() {
         return this.dayOfWeekFilter;
+    }
+
+    public void executeFiltering(String codeFilter, String nameFilter) {
+
+        List<Client> listFiltered = FiltersHelper.filterClientsBySocialReason(clientListAdapter.getOriginalData(), nameFilter);
+        listFiltered = FiltersHelper.filterClientsByCode(listFiltered, codeFilter);
+        clientListAdapter.setData(listFiltered);
+        recyclerView.setAdapter(clientListAdapter);
     }
 }

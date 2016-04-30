@@ -82,57 +82,6 @@ public class ClientListActivity extends AppCompatActivity
         final EditText clientCodeFilterView = (EditText)findViewById(R.id.editText_client_code);
         Fonts.changeSearchViewTextColorBlack(clientCodeFilterView);
         Fonts.changeSearchViewTextColorBlack(razonFilterView);
-        /*progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.VISIBLE);
-
-        setProgressBarIndeterminateVisibility(true);
-
-        // Clients list
-        recyclerView = (RecyclerView) findViewById(R.id.clientsList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-
-        ClientService cs = ClientService.getInstance();
-
-        intent = getIntent();
-
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("OrderTrackerPref", 0);
-        int idVendedor = pref.getInt("id", 0);
-
-
-        // Create a call instance for looking up Retrofit contributors.
-        String orderBy = intent.getStringExtra("orderBy") != null ? intent.getStringExtra("orderBy") : "razon_social";
-        //Call<List<Client>> call = cs.clients.Clients(null,null,orderBy,null);
-        Call<List<Client>> call = cs.clients.Clients(Integer.toString(idVendedor),intent.getStringExtra("socialReasonFilter"),orderBy,null,intent.getStringExtra("codClientFilter"), null);
-        //Call<List<Client>> call = cs.clientsFromTodayByVendIdService.ClientsFromTodayByVendIdService(idVendedor,orderBy,null);
-
-        final ClientListActivity self_ = this;
-        call.enqueue(new Callback<List<Client>>() {
-            @Override
-            public void onResponse(Call<List<Client>> call, Response<List<Client>> response) {
-                // Get result Repo from response.body()
-                List<Client> listClients = response.body();
-                clientListAdapter = new ClientListAdapter(self_, listClients);
-                clientListAdapter.setOriginalData(listClients);
-                progressBar.setVisibility(View.GONE);
-
-                if (listClients.size() == 0) {
-                    TextView textNoClients = (TextView) findViewById(R.id.text_no_clients);
-                    textNoClients.setVisibility(View.VISIBLE);
-                }
-
-                recyclerView.setAdapter(clientListAdapter);
-            }
-
-            @Override
-            public void onFailure(Call<List<Client>> call, Throwable t) {
-                //Aca tenemos que agregar el msj de error a mostrar... puto el que lee
-                TextView textNoClients = (TextView) findViewById(R.id.text_no_clients);
-                textNoClients.setText("Hubo un error al cargar los clientes por favor reintente mas tarde");
-                textNoClients.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.GONE);
-            }
-        });*/
 
         razonFilterView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -144,7 +93,7 @@ public class ClientListActivity extends AppCompatActivity
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                setRecycler();
+                filterClientsInCurrentTab();
                 return false;
             }
 
@@ -154,7 +103,7 @@ public class ClientListActivity extends AppCompatActivity
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if ((actionId == EditorInfo.IME_ACTION_DONE) || ((event.getKeyCode() == KeyEvent.KEYCODE_ENTER) && (event.getAction() == KeyEvent.ACTION_DOWN))) {
-                    setRecycler();
+                    filterClientsInCurrentTab();
                     return true;
                 } else {
                     return false;
@@ -284,26 +233,27 @@ public class ClientListActivity extends AppCompatActivity
         System.out.println("**** View shopping cart ****");
     }
 
-    public void setRecycler()
+    public ClientListFragment getCurrentTab() {
+        ClientListFragment currentTabFragment = (ClientListFragment) this.viewPager.getAdapter().instantiateItem(this.viewPager, this.viewPager.getCurrentItem());
+        return currentTabFragment;
+    }
+
+    public void filterClientsInCurrentTab()
     {
-        /*String codeFilter = ((EditText) findViewById(R.id.editText_client_code)).getText().toString();
+        String codeFilter = ((EditText) findViewById(R.id.editText_client_code)).getText().toString();
         String nameFilter = ((SearchView) findViewById(R.id.searchView)).getQuery().toString();
-        List<Client> listFiltered = FiltersHelper.filterClientsBySocialReason(clientListAdapter.getOriginalData(), nameFilter);
-        listFiltered = FiltersHelper.filterClientsByCode(listFiltered, codeFilter);
-        clientListAdapter.setData(listFiltered);
-        recyclerView.setAdapter(clientListAdapter);*/
+
+        this.getCurrentTab().executeFiltering(codeFilter, nameFilter);
     }
 
     // Call when the user clicks the go map button
     public void onClickGoMap(View view) {
 
-        ClientListFragment currentTabFragment = (ClientListFragment) this.viewPager.getAdapter().instantiateItem(this.viewPager, this.viewPager.getCurrentItem());
-
         Intent intent = new Intent(view.getContext(), ClientsMapActivity.class);
 
         Bundle b = new Bundle();
         b.putString("clientID", null);
-        b.putString("agendaDate", currentTabFragment.getTabDate());
+        b.putString("agendaDate", this.getCurrentTab().getTabDate());
         intent.putExtras(b);
 
         view.getContext().startActivity(intent);
