@@ -56,6 +56,8 @@ public class ClientListActivity extends AppCompatActivity
     private ProgressBar progressBar;
     private Intent intent;
 
+    private Boolean filterWasUsed = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +87,7 @@ public class ClientListActivity extends AppCompatActivity
         final EditText clientCodeFilterView = (EditText) findViewById(R.id.editText_client_code);
         Fonts.changeSearchViewTextColorBlack(clientCodeFilterView);
         Fonts.changeSearchViewTextColorBlack(razonFilterView);
+        final ClientListActivity _this = this;
 
         razonFilterView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -96,6 +99,7 @@ public class ClientListActivity extends AppCompatActivity
 
             @Override
             public boolean onQueryTextSubmit(String query) {
+                _this.filterWasUsed = true;
                 filterClientsInCurrentTab();
                 return false;
             }
@@ -106,6 +110,7 @@ public class ClientListActivity extends AppCompatActivity
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if ((actionId == EditorInfo.IME_ACTION_DONE) || ((event.getKeyCode() == KeyEvent.KEYCODE_ENTER) && (event.getAction() == KeyEvent.ACTION_DOWN))) {
+                    _this.filterWasUsed = true;
                     filterClientsInCurrentTab();
                     return true;
                 } else {
@@ -117,6 +122,7 @@ public class ClientListActivity extends AppCompatActivity
     }
 
     private void setupViewPager(ViewPager viewPager) {
+
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -144,9 +150,11 @@ public class ClientListActivity extends AppCompatActivity
         adapter.addFragment(ClientListFragment.newInstance(calendar), "S");
         adapter.addFragment(ClientListFragment.newInstance(null), "");
 
+
         viewPager.setAdapter(adapter);
 
         final ClientListActivity _this = this;
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
@@ -268,6 +276,7 @@ public class ClientListActivity extends AppCompatActivity
     }
 
     public void filterClientsInCurrentTab() {
+        if(!this.filterWasUsed) return;
         this.getCurrentTab().executeFiltering(this.getFiltersValues());
     }
 

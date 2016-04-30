@@ -52,7 +52,6 @@ public class ClientListFragment extends Fragment {
     private Intent intent ;
     private String dayOfWeekScreen;
     private String dayOfWeekFilter; // null if option is 'Fuera de ruta'
-
     private OnFragmentInteractionListener mListener;
 
     public ClientListFragment() {
@@ -103,11 +102,7 @@ public class ClientListFragment extends Fragment {
         // Set current date
         TextView textDayOfWeek = (TextView) view.findViewById(R.id.day_of_week_text);
         textDayOfWeek.setText(this.dayOfWeekScreen);
-
-        //final SearchView razonFilterView = (SearchView) view.findViewById(R.id.searchView);
-        //final EditText clientCodeFilterView = (EditText) view.findViewById(R.id.editText_client_code);
-        //Fonts.changeSearchViewTextColorBlack(clientCodeFilterView);
-        //Fonts.changeSearchViewTextColorBlack(razonFilterView);
+        
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
 
@@ -132,10 +127,10 @@ public class ClientListFragment extends Fragment {
         Call<List<Client>> call = cs.clients.Clients(Integer.toString(idVendedor), intent.getStringExtra("socialReasonFilter"), orderBy, null, intent.getStringExtra("codClientFilter"), this.dayOfWeekFilter);
         //Call<List<Client>> call = cs.clientsFromTodayByVendIdService.ClientsFromTodayByVendIdService(idVendedor,orderBy,null);
 
-        final ClientListFragment _this = this;
         final ClientListActivity self_ = (ClientListActivity) getActivity();
         final View _view = view;
         final String _date = this.dayOfWeekFilter;
+        final ClientListFragment _this = this;
 
         call.enqueue(new Callback<List<Client>>() {
             @Override
@@ -152,6 +147,8 @@ public class ClientListFragment extends Fragment {
                 }
 
                 recyclerView.setAdapter(clientListAdapter);
+
+                self_.filterClientsInCurrentTab();
             }
 
             @Override
@@ -166,6 +163,11 @@ public class ClientListFragment extends Fragment {
 
         return view;
     }
+
+    /*public void onResume() {
+        ClientListActivity self_ = (ClientListActivity) getActivity();
+        self_.filterClientsInCurrentTab();
+    }*/
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -211,6 +213,9 @@ public class ClientListFragment extends Fragment {
     }
 
     public void executeFiltering(Map<String, String> filterValues) {
+
+        if(clientListAdapter == null) return;
+
         List<Client> listFiltered = FiltersHelper.filterClientsBySocialReason(clientListAdapter.getOriginalData(), filterValues.get("name"));
         listFiltered = FiltersHelper.filterClientsByCode(listFiltered, filterValues.get("code"));
         clientListAdapter.setData(listFiltered);
