@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,7 +31,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import fiuba.ordertracker.helpers.FiltersHelper;
 import fiuba.ordertracker.helpers.Fonts;
@@ -51,7 +54,7 @@ public class ClientListActivity extends AppCompatActivity
     private RecyclerView recyclerView;
     private ClientListAdapter clientListAdapter;
     private ProgressBar progressBar;
-    private Intent intent ;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,15 +81,15 @@ public class ClientListActivity extends AppCompatActivity
 
         tabLayout.getTabAt(7).setIcon(R.drawable.ic_call_split_white_24dp);
 
-        final SearchView razonFilterView = (SearchView)findViewById(R.id.searchView);
-        final EditText clientCodeFilterView = (EditText)findViewById(R.id.editText_client_code);
+        final SearchView razonFilterView = (SearchView) findViewById(R.id.searchView);
+        final EditText clientCodeFilterView = (EditText) findViewById(R.id.editText_client_code);
         Fonts.changeSearchViewTextColorBlack(clientCodeFilterView);
         Fonts.changeSearchViewTextColorBlack(razonFilterView);
 
         razonFilterView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(newText.equals(""))
+                if (newText.equals(""))
                     onQueryTextSubmit("");
                 return false;
             }
@@ -122,8 +125,8 @@ public class ClientListActivity extends AppCompatActivity
         Calendar calendar = Calendar.getInstance();
 
         // Calculate current week's Sunday
-        while (calendar.get( Calendar.DAY_OF_WEEK ) != Calendar.SUNDAY)
-            calendar.add( Calendar.DAY_OF_WEEK, -1 );
+        while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY)
+            calendar.add(Calendar.DAY_OF_WEEK, -1);
 
         // Set days of the current week for each tab
         adapter.addFragment(ClientListFragment.newInstance(calendar), "D");
@@ -142,18 +145,33 @@ public class ClientListActivity extends AppCompatActivity
         adapter.addFragment(ClientListFragment.newInstance(null), "");
 
         viewPager.setAdapter(adapter);
+
+        final ClientListActivity _this = this;
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
+
+            @Override
+            public void onPageSelected(int position) {
+                _this.filterClientsInCurrentTab();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) { }
+        });
     }
 
     /**
      * Returns the index of the tab to be selected (0 - 6)
+     *
      * @param dayOfWeek
      * @return the index of the tab to be selected
      */
-    private int getTabForCurrentDay(int dayOfWeek){
+    private int getTabForCurrentDay(int dayOfWeek) {
         //int intDayOfWeek = Integer.valueOf(dayOfWeek);
-        if (dayOfWeek > 0){
+        if (dayOfWeek > 0) {
             return dayOfWeek - 1;
-        } else{
+        } else {
             return 6;
         }
     }
@@ -215,7 +233,7 @@ public class ClientListActivity extends AppCompatActivity
 
         LinearLayout button_filter = (LinearLayout) findViewById(R.id.filters_container);
 
-        if(button_filter.getVisibility() == View.GONE)
+        if (button_filter.getVisibility() == View.GONE)
             button_filter.setVisibility(View.VISIBLE);
         else {
             button_filter.setVisibility(View.GONE);
@@ -229,7 +247,7 @@ public class ClientListActivity extends AppCompatActivity
     }
 
     // When the user clicks the "Ver carrito" button
-    public void onClickViewShoppingCart(View view){
+    public void onClickViewShoppingCart(View view) {
         System.out.println("**** View shopping cart ****");
     }
 
@@ -238,12 +256,19 @@ public class ClientListActivity extends AppCompatActivity
         return currentTabFragment;
     }
 
-    public void filterClientsInCurrentTab()
-    {
+    public Map<String, String> getFiltersValues() {
         String codeFilter = ((EditText) findViewById(R.id.editText_client_code)).getText().toString();
         String nameFilter = ((SearchView) findViewById(R.id.searchView)).getQuery().toString();
 
-        this.getCurrentTab().executeFiltering(codeFilter, nameFilter);
+        Map<String, String> filtersValues = new HashMap<String, String>();
+        filtersValues.put("code", codeFilter);
+        filtersValues.put("name", nameFilter);
+
+        return filtersValues;
+    }
+
+    public void filterClientsInCurrentTab() {
+        this.getCurrentTab().executeFiltering(this.getFiltersValues());
     }
 
     // Call when the user clicks the go map button

@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import fiuba.ordertracker.helpers.FiltersHelper;
 import fiuba.ordertracker.helpers.Fonts;
@@ -130,6 +132,7 @@ public class ClientListFragment extends Fragment {
         Call<List<Client>> call = cs.clients.Clients(Integer.toString(idVendedor), intent.getStringExtra("socialReasonFilter"), orderBy, null, intent.getStringExtra("codClientFilter"), this.dayOfWeekFilter);
         //Call<List<Client>> call = cs.clientsFromTodayByVendIdService.ClientsFromTodayByVendIdService(idVendedor,orderBy,null);
 
+        final ClientListFragment _this = this;
         final ClientListActivity self_ = (ClientListActivity) getActivity();
         final View _view = view;
         final String _date = this.dayOfWeekFilter;
@@ -207,10 +210,9 @@ public class ClientListFragment extends Fragment {
         return this.dayOfWeekFilter;
     }
 
-    public void executeFiltering(String codeFilter, String nameFilter) {
-
-        List<Client> listFiltered = FiltersHelper.filterClientsBySocialReason(clientListAdapter.getOriginalData(), nameFilter);
-        listFiltered = FiltersHelper.filterClientsByCode(listFiltered, codeFilter);
+    public void executeFiltering(Map<String, String> filterValues) {
+        List<Client> listFiltered = FiltersHelper.filterClientsBySocialReason(clientListAdapter.getOriginalData(), filterValues.get("name"));
+        listFiltered = FiltersHelper.filterClientsByCode(listFiltered, filterValues.get("code"));
         clientListAdapter.setData(listFiltered);
         recyclerView.setAdapter(clientListAdapter);
     }
