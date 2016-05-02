@@ -46,7 +46,7 @@ public final class OrderService {
     public interface OrderI {
         @FormUrlEncoded
         @POST("orders")
-        Call<Order> createOrder(@Field("id_cliente") String id_cliente, @Field("id_estado") String id_estado,  @Field("comentarios") String comentarios);
+        Call<Order> createOrder(@Field("id_cliente") String id_cliente, @Field("id_estado") String id_estado,  @Field("comentarios") String comentarios, @Field("id_vendedor") String id_vendedor);
 
         @FormUrlEncoded
         @POST("orders/addProductToOrder")
@@ -68,8 +68,9 @@ public final class OrderService {
         @POST("orders/removeProductFromOrder")
         Call<List<OrderProduct>> removeProductFromOrder (@Field("id_producto") String id_producto, @Field("id_orden") String id_orden);
 
+        @FormUrlEncoded
         @POST("orders/confirmOrder/{id}")
-        Call<Order> editOrder(@Path("id") String id);
+        Call<Order> editOrder(@Path("id") String id, @Field("force") String force);
 
 
     }
@@ -86,7 +87,7 @@ public final class OrderService {
 
 
         // Create a call instance for looking up Retrofit contributors.
-        Call<Order> call = loginService.order.createOrder("1","1","tuvieja");
+        Call<Order> call = loginService.order.createOrder("1","1","tuvieja","1");
 
         // Fetch and print a list of the contributors to the library.
         Order user = call.execute().body();

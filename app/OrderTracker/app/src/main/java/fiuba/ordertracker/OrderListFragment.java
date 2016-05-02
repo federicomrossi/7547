@@ -2,6 +2,7 @@ package fiuba.ordertracker;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,7 +21,6 @@ import android.widget.Toast;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-
 
 import fiuba.ordertracker.helpers.Constants;
 import fiuba.ordertracker.pojo.Categorie;
@@ -114,11 +114,11 @@ public class OrderListFragment extends Fragment  implements Observer {
         // Confirmation button
         final FragmentActivity self_ = getActivity();
         final Fragment _parentFragment = this.getParentFragment();
+
         Button buttonConfirm = (Button) view.findViewById(R.id.buttonConfirmOrder);
         buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("************* getItemCount()=" + orderProductListAdapter.getItemCount());
                 if(orderProductListAdapter.getItemCount() > 0){
                     new AlertDialog.Builder(self_)
                             .setTitle("Confirmar pedido")
@@ -132,14 +132,13 @@ public class OrderListFragment extends Fragment  implements Observer {
                             })
                             .setNegativeButton("Cancelar", null).show();
 
-                }else{
-                    System.out.println("************* ELSE no es posible confirmar");
+                }/*else{
                     new AlertDialog.Builder(self_)
                             .setTitle("No es posible confirmar")
                             .setMessage("El pedido está vacío y no puede ser enviado")
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .setPositiveButton("Ok", null).show();
-                }
+                }*/
             }
         });
 
@@ -162,6 +161,12 @@ public class OrderListFragment extends Fragment  implements Observer {
             }
         });
 
+        /*
+        final TabActivity tabsAct = (TabActivity) getActivity();
+        if(!tabsAct.getActiveOrder().getIdEstado().equals(Constants.ACTIVE_STATE)){
+            buttonConfirm.setEnabled(false);
+        }
+        */
         return view;
     }
 
@@ -199,49 +204,70 @@ public class OrderListFragment extends Fragment  implements Observer {
 
 
     public void confirmOrderCall(){
+        final OrderListFragment self_ = this;
         final TabActivity tabsAct = (TabActivity) getActivity();
         OrderService os = OrderService.getInstance();
-        Call<Order> call = os.order.editOrder(tabsAct.getActiveOrder().getId());
+        Call<Order> call = os.order.editOrder(tabsAct.getActiveOrder().getId(),null);
 
         call.enqueue(new Callback<Order>() {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
-                if (response.code() == 500) {
+                final Order order = response.body();
+                if (order.getIdEstado().equals(Constants.ACTIVE_STATE)) {
                     //no pudo actualizarlo por falta de stock hay q mostrar el popup
                     new AlertDialog.Builder(tabsAct)
                             .setTitle("El pedido contiene productos sin stock")
-                            .setMessage("¿Desea realizar el pedido de todas formas?")
+                            .setMessage(order.getComentarios() + "\n ¿Desea realizar el pedido de todas formas?")
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .setPositiveButton("Proseguir", new DialogInterface.OnClickListener() {
 
                                 public void onClick(DialogInterface dialog, int whichButton) {
-                                    // Force the order status to Completed (Confirmed)
-                                    //order.setIdEstado(Constants.COMPLETED_STATE);
-                                    Toast.makeText(tabsAct, "Se ha confirmado el pedido satisfactoriamente",
-                                            Toast.LENGTH_SHORT).show();
+                                    self_.forceConfirmCall();
                                 }
                             })
                             .setNegativeButton("Modificar", null).show();
                 } else {
-                    final Order order = response.body();
-
-                    if (order != null) {
-                        if (order.getIdEstado().equals(Constants.COMPLETED_STATE)) {
-                            //aca es completo entonces hay que mostralo como confirmado y se cambia el active order a este pero esta fuera de la entrega asi que no hace nada por ahora
-                            //tabsAct.setActiveOrder(order);
-                            Toast.makeText(tabsAct, "Se ha confirmado el pedido satisfactoriamente", Toast.LENGTH_SHORT).show();
-                        } else {
-
-                        }
-                    }
-
+                    //aca es completo entonces hay que mostralo como confirmado y se cambia el active order a este pero
+                    tabsAct.setActiveOrder(order);
+                    Button buttonConfirm = (Button) view.findViewById(R.id.buttonConfirmOrder);
+                    buttonConfirm.setEnabled(false);
+                    Intent intent = new Intent(tabsAct, ClientListActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    Toast.makeText(tabsAct, "Se ha confirmado el pedido satisfactoriamente", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Order> call, Throwable t) {
                 //Aca tenemos que agregar el msj de error a mostrar...
-                Toast.makeText(tabsAct, "Error de conexion, intente mas tarde nuevamente", Toast.LENGTH_SHORT).show();
+                Toast.makeText(tabsAct, "Error de conexión, intente más tarde nuevamente", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void forceConfirmCall(){
+        final TabActivity tabsAct = (TabActivity) getActivity();
+        OrderService os = OrderService.getInstance();
+        Call<Order> call = os.order.editOrder(tabsAct.getActiveOrder().getId(),"si");
+
+        call.enqueue(new Callback<Order>() {
+            @Override
+            public void onResponse(Call<Order> call, Response<Order> response) {
+                final Order order = response.body();
+                tabsAct.setActiveOrder(order);
+                Button buttonConfirm = (Button) view.findViewById(R.id.buttonConfirmOrder);
+                buttonConfirm.setEnabled(false);
+                Intent intent = new Intent(tabsAct, ClientListActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                Toast.makeText(tabsAct, "Se ha confirmado el pedido satisfactoriamente", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(Call<Order> call, Throwable t) {
+                //Aca tenemos que agregar el msj de error a mostrar...
+                Toast.makeText(tabsAct, "Error de conexión, intente más tarde nuevamente", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -262,7 +288,6 @@ public class OrderListFragment extends Fragment  implements Observer {
                 List<OrderProduct> listProducts = response.body();
                 final List<OrderProduct> _listProducts = listProducts;
 
-                ///////////////////////////////////
                 CategorieService cs = CategorieService.getInstance();
 
                 // Create a call instance for looking up Retrofit contributors.
@@ -280,11 +305,13 @@ public class OrderListFragment extends Fragment  implements Observer {
 
                         TextView textNoProducts = (TextView) _view.findViewById(R.id.text_no_products);
                         TextView subtotalText = (TextView) _view.findViewById(R.id.textView4);
+                        Button buttonConfirm = (Button) view.findViewById(R.id.buttonConfirmOrder);
 
                         if (_listProducts.size() == 0) {
                             textNoProducts.setVisibility(View.VISIBLE);
                             subtotalText.setText("$" + String.valueOf(0));
                             textNoProducts.setVisibility(View.VISIBLE);
+                            buttonConfirm.setEnabled(false);
                         } else {
                             float subtotal = 0;
                             for (OrderProduct orderProduct : _listProducts) {
@@ -292,6 +319,7 @@ public class OrderListFragment extends Fragment  implements Observer {
                             }
                             subtotalText.setText("$" + String.valueOf(subtotal));
                             textNoProducts.setVisibility(View.GONE);
+                            buttonConfirm.setEnabled(true);
                         }
                         recyclerView.setAdapter(orderProductListAdapter);
                     }

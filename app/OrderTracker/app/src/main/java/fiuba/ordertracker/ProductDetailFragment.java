@@ -113,6 +113,7 @@ public class ProductDetailFragment extends Fragment {
         final String productId = getArguments().getString("id");
         final String productName = getArguments().getString("name");
         final String productBrand = getArguments().getString("brand");
+        final String productStock = getArguments().getString("stock");
 
         Button button = (Button) view.findViewById(R.id.product_detail_add_to_cart);
         button.setOnClickListener(new View.OnClickListener() {
@@ -121,7 +122,7 @@ public class ProductDetailFragment extends Fragment {
                 System.out.println("******** AGREGAR button ********");
                 FragmentTransaction ft = ((Activity) view.getContext()).getFragmentManager().beginTransaction();
                 AddProductToCartFragment newFragment = AddProductToCartFragment.newInstance(productId,
-                        productName, productBrand);
+                        productName, productBrand, productStock);
                 newFragment.show(ft, "dialog");
             }
         });
