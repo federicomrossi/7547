@@ -1,6 +1,7 @@
 package fiuba.ordertracker;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.zxing.Result;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -109,7 +111,7 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
             // TODO Show field to add comment ?????
             System.out.println("****scanResult.getContents(): " + scanResult.getContents());
 
-            String clientID = this.clientID; //scanResult.getContents();
+            String clientID = scanResult.getContents();
             System.out.println("*** " + clientID);
 
             if (this.clientID.equals(clientID)){
