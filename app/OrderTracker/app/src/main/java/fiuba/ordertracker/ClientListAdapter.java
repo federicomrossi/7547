@@ -133,7 +133,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
             final Client _client = this.client;
             final String _dateToFilter = this.dateToFilter;
 
-            Button button = (Button) itemView.findViewById(R.id.client_list_goto_order);
+            /*Button button = (Button) itemView.findViewById(R.id.client_list_goto_order);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -147,7 +147,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
 
                     itemView.getContext().startActivity(intent);
                 }
-            });
+            });*/
         }
 
         public void setOnItemClickListener(OnItemClickListener clickListener) {
