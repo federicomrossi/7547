@@ -18,7 +18,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -313,11 +315,15 @@ public class OrderListFragment extends Fragment  implements Observer {
                             textNoProducts.setVisibility(View.VISIBLE);
                             buttonConfirm.setEnabled(false);
                         } else {
-                            float subtotal = 0;
+                            Double subtotal = 0d;
                             for (OrderProduct orderProduct : _listProducts) {
                                 subtotal += orderProduct.getSubtotal();
                             }
-                            subtotalText.setText("$" + String.valueOf(subtotal));
+
+                            NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("es_AR"));
+                            currencyFormatter.setMaximumFractionDigits(2);
+
+                            subtotalText.setText(currencyFormatter.format(subtotal));
                             textNoProducts.setVisibility(View.GONE);
                             buttonConfirm.setEnabled(true);
                         }

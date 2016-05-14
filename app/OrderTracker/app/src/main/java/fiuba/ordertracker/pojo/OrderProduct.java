@@ -309,14 +309,14 @@ public class OrderProduct{
         return res;
     }
 
-    public float getSubtotal()
+    public Double getSubtotal()
     {
         try
         {
-            return Float.parseFloat(this.precio) * Float.parseFloat(this.cantidad);
+            return Double.parseDouble(this.precio) * Double.parseDouble(this.cantidad);
         }catch (Exception e)
         {
-            return 0;
+            return 0d;
         }
     }
 }
