@@ -88,6 +88,9 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
         info.add(this.clientName);
 
         IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setCaptureActivity(QrScannerActivity.class);
+        integrator.setOrientationLocked(false);
+        integrator.addExtra("PROMPT_MESSAGE", "Posicione el código QR dentro del rectángulo para escanearlo");
         integrator.initiateScan(info);
 
         /*Intent intent = new Intent(view.getContext(), TabActivity.class);
