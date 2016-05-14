@@ -1,7 +1,6 @@
 package fiuba.ordertracker;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -17,11 +16,16 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.zxing.Result;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
+
+import fiuba.ordertracker.pojo.Order;
+import fiuba.ordertracker.services.OrderService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ClientDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -30,6 +34,7 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
     private Double clientLatitude;
     private Double clientLongitude;
     private String agendaDate = null;
+    private boolean pedidoActivoConfirmado = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,14 +86,47 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
     }
 
     //Call when the user clicks the button
-    public void onClickShoppingCart(View view){
-        // TODO Add logic to show QR scan or not !!
-        ArrayList<String> info = new ArrayList<String>();
+    public void onClickShoppingCart(final View view){
+        final ArrayList<String> info = new ArrayList<String>();
         info.add(this.clientID);
         info.add(this.clientName);
 
-        IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.initiateScan(info);
+        final Intent intent = new Intent(view.getContext(), TabActivity.class);
+        intent.putExtra("clientName", this.clientName);
+        intent.putExtra("clientID", this.clientID);
+        intent.putExtra("agendaDate", this.agendaDate);
+
+        final OrderService os = OrderService.getInstance();
+        Integer clientIntID = new Integer(this.clientID);
+
+        Call<Order> call = os.order.getActiveProductOrderByClient(clientIntID.intValue());
+
+        final ClientDetailActivity self_ = this;
+        call.enqueue(new Callback<Order>() {
+            @Override
+            public void onResponse(Call<Order> call, Response<Order> response) {
+                System.out.println("****************** onResponse TabActivity *********************");
+                Order activeOrder;
+                //progressBar.setVisibility(View.GONE);
+                if (response.code() == 500) {
+                    //no tiene pedido activo... entonces creo uno
+
+                    IntentIntegrator integrator = new IntentIntegrator(self_);
+                    integrator.initiateScan(info);
+
+                } else {
+                    view.getContext().startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Order> call, Throwable t) {
+                IntentIntegrator integrator = new IntentIntegrator(self_);
+                integrator.initiateScan(info);
+            }
+        });
+
+
 
         /*Intent intent = new Intent(view.getContext(), TabActivity.class);
         intent.putExtra("clientName", this.clientName);
