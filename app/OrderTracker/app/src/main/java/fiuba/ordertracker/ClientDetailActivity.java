@@ -23,6 +23,12 @@ import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
 
+import fiuba.ordertracker.pojo.Order;
+import fiuba.ordertracker.services.OrderService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ClientDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private String clientID;
@@ -87,17 +93,46 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
         info.add(this.clientID);
         info.add(this.clientName);
 
-        IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setCaptureActivity(QrScannerActivity.class);
-        integrator.setOrientationLocked(false);
-        integrator.addExtra("PROMPT_MESSAGE", "Posicione el código QR dentro del rectángulo para escanearlo");
-        integrator.initiateScan(info);
 
-        /*Intent intent = new Intent(view.getContext(), TabActivity.class);
-        intent.putExtra("clientName", this.clientName);
-        intent.putExtra("clientID",this.clientID);
-        intent.putExtra("agendaDate",this.agendaDate);
-        view.getContext().startActivity(intent);*/
+        final OrderService os = OrderService.getInstance();
+        Integer clientIntID = new Integer(this.clientID);
+
+        Call<Order> call = os.order.getActiveProductOrderByClient(clientIntID.intValue());
+
+        final ClientDetailActivity self_ = this;
+        final ArrayList<String> _info = info;
+        final View _view = view;
+
+        call.enqueue(new Callback<Order>() {
+            @Override
+            public void onResponse(Call<Order> call, Response<Order> response) {
+                System.out.println("****************** onResponse ClientDetailActivityActivity *********************");
+                Order activeOrder;
+
+                if (response.code() == 500) {
+                    // No se tiene un pedido activo...
+                    // Mostrar QR
+                    IntentIntegrator integrator = new IntentIntegrator(self_);
+                    integrator.setCaptureActivity(QrScannerActivity.class);
+                    integrator.setOrientationLocked(false);
+                    integrator.addExtra("PROMPT_MESSAGE", "Posicione el código QR dentro del rectángulo para escanearlo");
+                    integrator.initiateScan(_info);
+
+                } else {
+                    // No mostrar QR, ir directamente a tab
+                    Intent intent = new Intent(_view.getContext(), TabActivity.class);
+                    intent.putExtra("clientName", self_.clientName);
+                    intent.putExtra("clientID",self_.clientID);
+                    intent.putExtra("agendaDate",self_.agendaDate);
+                    _view.getContext().startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Order> call, Throwable t) {
+                // Actuar en caso de error. Una posibilidad: ir al login.
+            }
+        });
     }
 
     /**
