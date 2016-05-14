@@ -44,6 +44,7 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
     private final OrderProductListAdapter _self = this;
     private Fragment parentFragment;
     private Context context ;
+    private Boolean allowActions = false;
 
     public void setData(List<OrderProduct> data) {
         this.data = data;
@@ -63,17 +64,18 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
         this.parentFragment = parentFragment;
     }*/
 
-    public OrderProductListAdapter(Context context, List<OrderProduct> data, List<Categorie> listCategories, Fragment parentFragment) {
+    public OrderProductListAdapter(Context context, List<OrderProduct> data, List<Categorie> listCategories, Fragment parentFragment, Boolean allowActions) {
         inflater = LayoutInflater.from(context);
         this.data = data;
         this.dataCategories = listCategories;
         this.parentFragment = parentFragment;
+        this.allowActions = allowActions;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.order_product_list_row, null);
-        MyViewHolder holder = new MyViewHolder(view);
+        MyViewHolder holder = new MyViewHolder(view, this.allowActions);
         return holder;
     }
 
@@ -131,11 +133,17 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
 
         private OnItemClickListener clickListener;
         private OrderProduct product;
+        private Boolean allowActions;
 
-        public MyViewHolder(View itemView) {
+        public MyViewHolder(View itemView, Boolean allowActions) {
             super(itemView);
 
-            itemView.setOnCreateContextMenuListener(this);
+            this.allowActions = allowActions;
+
+            // Disallow context menu
+            if(allowActions)
+                itemView.setOnCreateContextMenuListener(this);
+
             /*itemView.setOnClickListener(this);
             this.mOverflowIcon = (ImageView) itemView.findViewById(R.id.orderProductContextMenu);
             mOverflowIcon.setOnClickListener(this);*/
