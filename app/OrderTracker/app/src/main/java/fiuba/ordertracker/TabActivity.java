@@ -41,7 +41,6 @@ public class TabActivity extends AppCompatActivity
     private Order activeOrder;
     private AddProductSubscriptor subscriptor;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,11 +62,7 @@ public class TabActivity extends AppCompatActivity
         //setProgressBarIndeterminateVisibility(true);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
-
         tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
-
 
         this.clientId = i.getStringExtra("clientID");
 
@@ -77,6 +72,9 @@ public class TabActivity extends AppCompatActivity
         Call<Order> call = os.order.getActiveProductOrderByClient(clientIntID.intValue());
 
         final TabActivity self_ = this;
+        final ViewPager _viewPager = viewPager;
+        final TabLayout _tabLayout = tabLayout;
+
         call.enqueue(new Callback<Order>() {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
@@ -90,6 +88,10 @@ public class TabActivity extends AppCompatActivity
                 }else {
                     self_.setActiveOrder(response.body());
                 }
+
+                // Initialize the tabs
+                self_.setupViewPager(_viewPager);
+                _tabLayout.setupWithViewPager(_viewPager);
             }
 
             @Override
@@ -142,7 +144,10 @@ public class TabActivity extends AppCompatActivity
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         ProductsFragment pf = new ProductsFragment();
+
+        //if(Constants.CONFIRM_STATE.equals(this.activeOrder.getIdEstado()))
         adapter.addFragment(new ProductsFragment(), "PRODUCTOS");
+
         adapter.addFragment(new OrderContainerFragment(), "PEDIDO");
         viewPager.setAdapter(adapter);
     }
