@@ -1,6 +1,7 @@
 package fiuba.ordertracker;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.zxing.Result;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -34,7 +36,6 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
     private Double clientLatitude;
     private Double clientLongitude;
     private String agendaDate = null;
-    private boolean pedidoActivoConfirmado = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,15 +87,12 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
     }
 
     //Call when the user clicks the button
-    public void onClickShoppingCart(final View view){
-        final ArrayList<String> info = new ArrayList<String>();
+    public void onClickShoppingCart(View view){
+        // TODO Add logic to show QR scan or not !!
+        ArrayList<String> info = new ArrayList<String>();
         info.add(this.clientID);
         info.add(this.clientName);
 
-        final Intent intent = new Intent(view.getContext(), TabActivity.class);
-        intent.putExtra("clientName", this.clientName);
-        intent.putExtra("clientID", this.clientID);
-        intent.putExtra("agendaDate", this.agendaDate);
 
         final OrderService os = OrderService.getInstance();
         Integer clientIntID = new Integer(this.clientID);
@@ -102,37 +100,39 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
         Call<Order> call = os.order.getActiveProductOrderByClient(clientIntID.intValue());
 
         final ClientDetailActivity self_ = this;
+        final ArrayList<String> _info = info;
+        final View _view = view;
+
         call.enqueue(new Callback<Order>() {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
-                System.out.println("****************** onResponse TabActivity *********************");
+                System.out.println("****************** onResponse ClientDetailActivityActivity *********************");
                 Order activeOrder;
-                //progressBar.setVisibility(View.GONE);
-                if (response.code() == 500) {
-                    //no tiene pedido activo... entonces creo uno
 
+                if (response.code() == 500) {
+                    // No se tiene un pedido activo...
+                    // Mostrar QR
                     IntentIntegrator integrator = new IntentIntegrator(self_);
-                    integrator.initiateScan(info);
+                    integrator.setCaptureActivity(QrScannerActivity.class);
+                    integrator.setOrientationLocked(false);
+                    integrator.addExtra("PROMPT_MESSAGE", "Posicione el código QR dentro del rectángulo para escanearlo");
+                    integrator.initiateScan(_info);
 
                 } else {
-                    view.getContext().startActivity(intent);
+                    // No mostrar QR, ir directamente a tab
+                    Intent intent = new Intent(_view.getContext(), TabActivity.class);
+                    intent.putExtra("clientName", self_.clientName);
+                    intent.putExtra("clientID",self_.clientID);
+                    intent.putExtra("agendaDate",self_.agendaDate);
+                    _view.getContext().startActivity(intent);
                 }
             }
 
             @Override
             public void onFailure(Call<Order> call, Throwable t) {
-                IntentIntegrator integrator = new IntentIntegrator(self_);
-                integrator.initiateScan(info);
+                // Actuar en caso de error. Una posibilidad: ir al login.
             }
         });
-
-
-
-        /*Intent intent = new Intent(view.getContext(), TabActivity.class);
-        intent.putExtra("clientName", this.clientName);
-        intent.putExtra("clientID",this.clientID);
-        intent.putExtra("agendaDate",this.agendaDate);
-        view.getContext().startActivity(intent);*/
     }
 
     /**

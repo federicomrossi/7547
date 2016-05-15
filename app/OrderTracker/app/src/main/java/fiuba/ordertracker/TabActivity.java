@@ -41,7 +41,6 @@ public class TabActivity extends AppCompatActivity
     private Order activeOrder;
     private AddProductSubscriptor subscriptor;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,11 +61,11 @@ public class TabActivity extends AppCompatActivity
 
         //setProgressBarIndeterminateVisibility(true);
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        /*viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setupWithViewPager(viewPager);*/
 
 
         this.clientId = i.getStringExtra("clientID");
@@ -89,6 +88,7 @@ public class TabActivity extends AppCompatActivity
 
                 }else {
                     self_.setActiveOrder(response.body());
+                    self_.initializeTabs();
                 }
             }
 
@@ -103,6 +103,14 @@ public class TabActivity extends AppCompatActivity
             }
         });
 
+    }
+
+    private void initializeTabs() {
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
+
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     public Order getActiveOrder() {
@@ -125,6 +133,7 @@ public class TabActivity extends AppCompatActivity
             public void onResponse(Call<Order> call, Response<Order> response) {
                 Order order = response.body();
                 self_.setActiveOrder(order);
+                self_.initializeTabs();
             }
 
             @Override
@@ -142,7 +151,13 @@ public class TabActivity extends AppCompatActivity
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         ProductsFragment pf = new ProductsFragment();
-        adapter.addFragment(new ProductsFragment(), "PRODUCTOS");
+
+        Boolean orderConfirmed = Constants.CONFIRM_STATE.equals(this.activeOrder.getIdEstado()) ? true : false;
+
+        // If the order wasn't confirmed yet, the products catalog is available.
+        if(!orderConfirmed)
+            adapter.addFragment(new ProductsFragment(), "PRODUCTOS");
+
         adapter.addFragment(new OrderContainerFragment(), "PEDIDO");
         viewPager.setAdapter(adapter);
     }
