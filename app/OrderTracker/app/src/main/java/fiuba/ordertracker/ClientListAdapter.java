@@ -54,6 +54,10 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         inflater = LayoutInflater.from(context);
         this.data = data;
 
+        for(int i = 0; i < this.data.size(); i++) {
+            this.data.get(i).setDistance(currentLatitude, currentLongitude);
+        }
+
         // Show message notifying there are no clients
         /*if (this.data.size() == 0){
             Toast.makeText(context, "No hay clientes en el sistema", Toast.LENGTH_LONG).show();

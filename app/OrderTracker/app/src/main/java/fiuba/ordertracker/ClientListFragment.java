@@ -23,6 +23,7 @@ import android.widget.TextView;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -139,6 +140,8 @@ public class ClientListFragment extends Fragment {
                 List<Client> listClients = response.body();
                 clientListAdapter = new ClientListAdapter(self_, listClients);
                 clientListAdapter.setOriginalData(listClients, _date);
+                Collections.sort(listClients);
+
                 progressBar.setVisibility(View.GONE);
 
                 if (listClients.size() == 0) {

@@ -11,7 +11,7 @@ import fiuba.ordertracker.helpers.Constants;
 import fiuba.ordertracker.helpers.DistanceCalculator;
 
 
-public class Client {
+public class Client implements Comparable<Client> {
 
     @SerializedName("id")
     @Expose
@@ -46,6 +46,8 @@ public class Client {
     @SerializedName("razon_social")
     @Expose
     private String socialReason;
+
+    private Double distance;
 
     /**
      * 
@@ -203,6 +205,10 @@ public class Client {
         return Math.round(distance * 100.0) / 100.0;
     }
 
+    public void setDistance(double currentLatitude, double currentLongitude) {
+        this.distance = this.getDistance(currentLatitude, currentLongitude);
+    }
+
     public String getCode() {
         return code;
     }
@@ -217,5 +223,12 @@ public class Client {
 
     public void setSocialReason(String socialReason) {
         this.socialReason = socialReason;
+    }
+
+    @Override
+    public int compareTo(Client another) {
+        if(this.distance > another.distance) return 1;
+        else if(this.distance < another.distance) return -1;
+        else return 0;
     }
 }
