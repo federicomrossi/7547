@@ -1,12 +1,14 @@
 package fiuba.ordertracker;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -15,6 +17,17 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.zxing.Result;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
+import java.util.ArrayList;
+
+import fiuba.ordertracker.pojo.Order;
+import fiuba.ordertracker.services.OrderService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ClientDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -75,11 +88,85 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
 
     //Call when the user clicks the button
     public void onClickShoppingCart(View view){
-        Intent intent = new Intent(view.getContext(), TabActivity.class);
-        intent.putExtra("clientName", this.clientName);
-        intent.putExtra("clientID",this.clientID);
-        intent.putExtra("agendaDate",this.agendaDate);
-        view.getContext().startActivity(intent);
+        // TODO Add logic to show QR scan or not !!
+        ArrayList<String> info = new ArrayList<String>();
+        info.add(this.clientID);
+        info.add(this.clientName);
+
+
+        final OrderService os = OrderService.getInstance();
+        Integer clientIntID = new Integer(this.clientID);
+
+        Call<Order> call = os.order.getActiveProductOrderByClient(clientIntID.intValue());
+
+        final ClientDetailActivity self_ = this;
+        final ArrayList<String> _info = info;
+        final View _view = view;
+
+        call.enqueue(new Callback<Order>() {
+            @Override
+            public void onResponse(Call<Order> call, Response<Order> response) {
+                System.out.println("****************** onResponse ClientDetailActivityActivity *********************");
+                Order activeOrder;
+
+                if (response.code() == 500) {
+                    // No se tiene un pedido activo...
+                    // Mostrar QR
+                    IntentIntegrator integrator = new IntentIntegrator(self_);
+                    integrator.setCaptureActivity(QrScannerActivity.class);
+                    integrator.setOrientationLocked(false);
+                    integrator.addExtra("PROMPT_MESSAGE", "Posicione el código QR dentro del rectángulo para escanearlo");
+                    integrator.initiateScan(_info);
+
+                } else {
+                    // No mostrar QR, ir directamente a tab
+                    Intent intent = new Intent(_view.getContext(), TabActivity.class);
+                    intent.putExtra("clientName", self_.clientName);
+                    intent.putExtra("clientID",self_.clientID);
+                    intent.putExtra("agendaDate",self_.agendaDate);
+                    _view.getContext().startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Order> call, Throwable t) {
+                // Actuar en caso de error. Una posibilidad: ir al login.
+            }
+        });
+    }
+
+    /**
+     * Handles the QR scan result
+     * @param requestCode
+     * @param resultCode
+     * @param intent
+     */
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        if (scanResult != null) {
+            System.out.println("******* SCAN OK *******");
+
+            // TODO Show field to add comment ?????
+            System.out.println("****scanResult.getContents(): " + scanResult.getContents());
+
+            String clientID = scanResult.getContents();
+            System.out.println("*** " + clientID);
+
+            if (this.clientID.equals(clientID)){
+                Intent intent2 = new Intent(getApplicationContext(), TabActivity.class);
+                intent2.putExtra("clientName", this.clientName);
+                intent2.putExtra("clientID",this.clientID);
+                intent2.putExtra("agendaDate",this.agendaDate);
+                startActivity(intent2);
+            } else{
+                Toast.makeText(getApplicationContext(), "El QR no corresponde al cliente", Toast.LENGTH_LONG).show();
+            }
+
+        } else{
+            System.out.println("******* SCAN NOT OK ? *******");
+            Toast.makeText(getApplicationContext(), "Error de lectura de código QR", Toast.LENGTH_LONG).show();
+            super.onActivityResult(requestCode, resultCode, intent);
+        }
     }
 
     // Call when the user clicks the go map button

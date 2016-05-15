@@ -54,6 +54,10 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         inflater = LayoutInflater.from(context);
         this.data = data;
 
+        for(int i = 0; i < this.data.size(); i++) {
+            this.data.get(i).setDistance(currentLatitude, currentLongitude);
+        }
+
         // Show message notifying there are no clients
         /*if (this.data.size() == 0){
             Toast.makeText(context, "No hay clientes en el sistema", Toast.LENGTH_LONG).show();
@@ -133,7 +137,8 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
             final Client _client = this.client;
             final String _dateToFilter = this.dateToFilter;
 
-            Button button = (Button) itemView.findViewById(R.id.client_list_goto_order);
+            // ELIMINAR!!!
+           /* Button button = (Button) itemView.findViewById(R.id.client_list_goto_order);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -147,7 +152,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
 
                     itemView.getContext().startActivity(intent);
                 }
-            });
+            });*/
         }
 
         public void setOnItemClickListener(OnItemClickListener clickListener) {

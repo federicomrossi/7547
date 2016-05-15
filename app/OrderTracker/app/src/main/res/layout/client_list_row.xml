@@ -109,13 +109,14 @@
 
             </LinearLayout>
 
-            <Button
+            <!-- ELIMINAR!!! -->
+           <!-- <Button
                 android:id="@+id/client_list_goto_order"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/place_autocomplete_powered_by_google_height"
                 android:textSize="10dp"
                 android:text="Ver pedido"
-                android:textColor="#555" />
+                android:textColor="#555" /> -->
 
         </LinearLayout>
 

@@ -14,11 +14,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -55,6 +58,9 @@ public class OrderListFragment extends Fragment  implements Observer {
     private RecyclerView recyclerView;
     private OrderProductListAdapter orderProductListAdapter;
     private ProgressBar progressBar;
+
+    private Order activeOrder;
+    private Boolean orderConfirmed = false;
 
     private OnFragmentInteractionListener mListener;
 
@@ -96,6 +102,19 @@ public class OrderListFragment extends Fragment  implements Observer {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_order_list, container, false);
+
+
+        // If the order was confirmed, the action buttons will be hidden.
+        TabActivity tabsAct = (TabActivity) getActivity();
+        this.activeOrder = tabsAct.getActiveOrder();
+        this.orderConfirmed = Constants.CONFIRM_STATE.equals(activeOrder.getIdEstado()) ? true : false;
+
+        // Disallow action buttons
+        if(this.orderConfirmed) {
+            LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.orderListActions);
+            linearLayout.setVisibility(View.GONE);
+        }
+
 
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
@@ -278,6 +297,7 @@ public class OrderListFragment extends Fragment  implements Observer {
         final FragmentActivity self_ = getActivity();
         final Fragment _parentFragment = this.getParentFragment();
         final View _view = view;
+        final OrderListFragment _this = this;
         final OrderService os = OrderService.getInstance();
         Call<List<OrderProduct>> call = os.order.getProductsFromActiveOrder(((TabActivity) self_).clientId);
 
@@ -287,12 +307,13 @@ public class OrderListFragment extends Fragment  implements Observer {
             public void onResponse(Call<List<OrderProduct>> call, Response<List<OrderProduct>> response) {
                 List<OrderProduct> listProducts = response.body();
                 final List<OrderProduct> _listProducts = listProducts;
-
+                final OrderListFragment __this = _this;
                 CategorieService cs = CategorieService.getInstance();
 
                 // Create a call instance for looking up Retrofit contributors.
                 //Call<List<Categorie>> call = cs.categories.Categories(intent.getStringExtra("nameFilter"),null,null);
                 Call<List<Categorie>> call1 = cs.categories.Categories("",null,null);
+
 
                 call1.enqueue(new Callback<List<Categorie>>() {
                     @Override
@@ -300,7 +321,7 @@ public class OrderListFragment extends Fragment  implements Observer {
                         // Get result Repo from response.body()
                         List<Categorie> listCategories = response1.body();
 
-                        orderProductListAdapter = new OrderProductListAdapter(self_, _listProducts, listCategories, _parentFragment);
+                        orderProductListAdapter = new OrderProductListAdapter(self_, _listProducts, listCategories, _parentFragment, !__this.orderConfirmed);
                         progressBar.setVisibility(View.GONE);
 
                         TextView textNoProducts = (TextView) _view.findViewById(R.id.text_no_products);
@@ -313,11 +334,15 @@ public class OrderListFragment extends Fragment  implements Observer {
                             textNoProducts.setVisibility(View.VISIBLE);
                             buttonConfirm.setEnabled(false);
                         } else {
-                            float subtotal = 0;
+                            Double subtotal = 0d;
                             for (OrderProduct orderProduct : _listProducts) {
                                 subtotal += orderProduct.getSubtotal();
                             }
-                            subtotalText.setText("$" + String.valueOf(subtotal));
+
+                            NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("es_AR"));
+                            currencyFormatter.setMaximumFractionDigits(2);
+
+                            subtotalText.setText(currencyFormatter.format(subtotal));
                             textNoProducts.setVisibility(View.GONE);
                             buttonConfirm.setEnabled(true);
                         }
