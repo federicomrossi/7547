@@ -2,12 +2,14 @@ package fiuba.ordertracker;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,6 +83,16 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         holder.clientCode.setText(current.getCode());
         holder.distance.setText(String.valueOf(current.getDistance(currentLatitude, currentLongitude)) + " " + Constants.COMPLETE_UNIT);
 
+        if(this.dateToFilter == null)
+            holder.hideIndicator();
+        else {
+            // Here we must compare the dates (visited and concreted)
+            //holder.setIndicatorStateAsNotVisited();
+            //holder.setIndicatorStateAsVisited();
+            //holder.setIndicatorStateAsVisitedOutOfTime();
+            holder.setIndicatorStateAsDefault();
+        }
+
         final String _dateToFilter = this.dateToFilter;
 
         // Set listener to manage clicks on items from the RecyclerView
@@ -116,6 +128,8 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         TextView distance;
         private String dateToFilter;
         private OnItemClickListener clickListener;
+        ImageView indicator;
+
 
         private Client client;
 
@@ -126,6 +140,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
             address = (TextView) itemView.findViewById(R.id.client_list_row_address);
             clientCode = (TextView) itemView.findViewById(R.id.client_list_row_client_code);
             distance = (TextView) itemView.findViewById(R.id.client_list_row_distance);
+            indicator = (ImageView) itemView.findViewById(R.id.indicatorClientVisited);
             this.dateToFilter = agendaDate;
 
             // Set listener to the item view
@@ -153,6 +168,37 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
                     itemView.getContext().startActivity(intent);
                 }
             });*/
+        }
+
+        private void changeIndicatorColor(String colorHex) {
+            int color = Color.parseColor(colorHex);
+            this.indicator.setColorFilter(color);
+        }
+
+        public void setIndicatorStateAsDefault() {
+            this.changeIndicatorColor(Constants.COLOR_INDICATOR_DEFAULT);
+        }
+
+        public void setIndicatorStateAsVisited() {
+            this.changeIndicatorColor(Constants.COLOR_INDICATOR_VISITED);
+        }
+
+        public void setIndicatorStateAsVisitedOutOfTime() {
+            int color = Color.parseColor(Constants.COLOR_INDICATOR_VISITED_OUT_OF_TIME);
+            this.indicator.setColorFilter(color);
+        }
+
+        public void setIndicatorStateAsNotVisited() {
+            int color = Color.parseColor(Constants.COLOR_INDICATOR_NOT_VISITED);
+            this.indicator.setColorFilter(color);
+        }
+
+        public void hideIndicator() {
+            this.indicator.setVisibility(View.GONE);
+        }
+
+        public void showIndicator() {
+            this.indicator.setVisibility(View.VISIBLE);
         }
 
         public void setOnItemClickListener(OnItemClickListener clickListener) {
