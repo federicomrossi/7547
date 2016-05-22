@@ -76,8 +76,6 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-
-
         Client current = this.data.get(position);
         holder.setClient(current);
         holder.name.setText(current.getSocialReason());
@@ -85,11 +83,15 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         holder.clientCode.setText(current.getCode());
         holder.distance.setText(String.valueOf(current.getDistance(currentLatitude, currentLongitude)) + " " + Constants.COMPLETE_UNIT);
 
-        // Here we must compare the dates (visited and concreted)
-        holder.setIndicatorStateAsNotVisited();
-        //holder.setIndicatorStateAsVisited();
-        //holder.setIndicatorStateAsVisitedOutOfTime();
-        //holder.setIndicatorStateAsDefault();
+        if(this.dateToFilter == null)
+            holder.hideIndicator();
+        else {
+            // Here we must compare the dates (visited and concreted)
+            //holder.setIndicatorStateAsNotVisited();
+            //holder.setIndicatorStateAsVisited();
+            //holder.setIndicatorStateAsVisitedOutOfTime();
+            holder.setIndicatorStateAsDefault();
+        }
 
         final String _dateToFilter = this.dateToFilter;
 
@@ -189,6 +191,14 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         public void setIndicatorStateAsNotVisited() {
             int color = Color.parseColor(Constants.COLOR_INDICATOR_NOT_VISITED);
             this.indicator.setColorFilter(color);
+        }
+
+        public void hideIndicator() {
+            this.indicator.setVisibility(View.GONE);
+        }
+
+        public void showIndicator() {
+            this.indicator.setVisibility(View.VISIBLE);
         }
 
         public void setOnItemClickListener(OnItemClickListener clickListener) {
