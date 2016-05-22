@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import fiuba.ordertracker.helpers.Constants;
@@ -83,14 +87,39 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         holder.clientCode.setText(current.getCode());
         holder.distance.setText(String.valueOf(current.getDistance(currentLatitude, currentLongitude)) + " " + Constants.COMPLETE_UNIT);
 
-        if(this.dateToFilter == null)
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date fechaVisitaProgramada = null;
+        Date fechaVisitaConcretada = null;
+
+        try {
+            fechaVisitaProgramada = (current.getFechaVisitaProgramada() != null) ? sdf.parse(current.getFechaVisitaProgramada()) : null;
+            fechaVisitaConcretada = (current.getFechaVisitaConcretada() != null) ? sdf.parse(current.getFechaVisitaConcretada()) : null;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Log.i("MAMUUUUU", (current.getFechaVisitaProgramada() != null) ? current.getFechaVisitaProgramada() : "PUTO");
+        Log.i("PAPUUUUU", (current.getFechaVisitaConcretada() != null) ? current.getFechaVisitaConcretada() : "CONCHUDO");
+
+        // Out of road
+        if(this.dateToFilter == null) {
             holder.hideIndicator();
+        }
+        // With a given appointment
         else {
-            // Here we must compare the dates (visited and concreted)
-            //holder.setIndicatorStateAsNotVisited();
-            //holder.setIndicatorStateAsVisited();
-            //holder.setIndicatorStateAsVisitedOutOfTime();
-            holder.setIndicatorStateAsDefault();
+            if((fechaVisitaProgramada != null) && (fechaVisitaConcretada == null)) {
+                holder.setIndicatorStateAsNotVisited();
+            }
+            else if(fechaVisitaProgramada == fechaVisitaConcretada) {
+                holder.setIndicatorStateAsVisited();
+            }
+            else if((fechaVisitaConcretada.before(fechaVisitaProgramada)) ||
+                    (fechaVisitaConcretada.after(fechaVisitaProgramada))) {
+                holder.setIndicatorStateAsVisitedOutOfTime();
+            }
+            else {
+                holder.setIndicatorStateAsDefault();
+            }
         }
 
         final String _dateToFilter = this.dateToFilter;
