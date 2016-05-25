@@ -16,6 +16,18 @@ public class Client implements Comparable<Client> {
     @SerializedName("id")
     @Expose
     private String id;
+    @SerializedName("fecha_visita_programada")
+    @Expose
+    private String fechaVisitaProgramada;
+    @SerializedName("fecha_visita_concretada")
+    @Expose
+    private String fechaVisitaConcretada;
+    @SerializedName("fecha_ultima_visita")
+    @Expose
+    private String fechaUltimaVisita;
+    @SerializedName("estado")
+    @Expose
+    private String estado;
     @SerializedName("apenom")
     @Expose
     private String apenom;
@@ -223,6 +235,38 @@ public class Client implements Comparable<Client> {
 
     public void setSocialReason(String socialReason) {
         this.socialReason = socialReason;
+    }
+
+    public String getFechaVisitaProgramada() {
+        return fechaVisitaProgramada;
+    }
+
+    public void setFechaVisitaProgramada(String fechaVisitaProgramada) {
+        this.fechaVisitaProgramada = fechaVisitaProgramada;
+    }
+
+    public String getFechaVisitaConcretada() {
+        return fechaVisitaConcretada;
+    }
+
+    public void setFechaVisitaConcretada(String fechaVisitaConcretada) {
+        this.fechaVisitaConcretada = fechaVisitaConcretada;
+    }
+
+    public String getFechaUltimaVisita() {
+        return fechaUltimaVisita;
+    }
+
+    public void setFechaUltimaVisita(String fechaUltimaVisita) {
+        this.fechaUltimaVisita = fechaUltimaVisita;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     @Override
