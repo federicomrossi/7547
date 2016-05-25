@@ -54,6 +54,7 @@ public class ClientListFragment extends Fragment {
     private String dayOfWeekScreen;
     private String dayOfWeekFilter; // null if option is 'Fuera de ruta'
     private OnFragmentInteractionListener mListener;
+    private View view;
 
     public ClientListFragment() {
         // Required empty public constructor
@@ -108,7 +109,7 @@ public class ClientListFragment extends Fragment {
         //Call<List<Client>> call = cs.clientsFromTodayByVendIdService.ClientsFromTodayByVendIdService(idVendedor,orderBy,null);
 
         final ClientListActivity self_ = (ClientListActivity) getActivity();
-        final View _view = this.getView();
+        final View _view = this.view;
         final String _date = this.dayOfWeekFilter;
         final ClientListFragment _this = this;
 
@@ -149,6 +150,7 @@ public class ClientListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_client_list, container, false);
+        this.view = view;
 
         // Set current date
         TextView textDayOfWeek = (TextView) view.findViewById(R.id.day_of_week_text);
