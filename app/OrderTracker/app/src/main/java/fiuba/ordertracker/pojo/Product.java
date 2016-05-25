@@ -241,6 +241,78 @@ public class Product {
         this.descuento1 = descuento1;
     }
 
+    public String getDescuento1Min() {
+        return descuento1Min;
+    }
+
+    public void setDescuento1Min(String descuento1Min) {
+        this.descuento1Min = descuento1Min;
+    }
+
+    public String getDescuento2() {
+        return descuento2;
+    }
+
+    public void setDescuento2(String descuento2) {
+        this.descuento2 = descuento2;
+    }
+
+    public String getDescuento2Min() {
+        return descuento2Min;
+    }
+
+    public void setDescuento2Min(String descuento2Min) {
+        this.descuento2Min = descuento2Min;
+    }
+
+    public String getDescuento3() {
+        return descuento3;
+    }
+
+    public void setDescuento3(String descuento3) {
+        this.descuento3 = descuento3;
+    }
+
+    public String getDescuento3Min() {
+        return descuento3Min;
+    }
+
+    public void setDescuento3Min(String descuento3Min) {
+        this.descuento3Min = descuento3Min;
+    }
+
+    public String getDescuento4() {
+        return descuento4;
+    }
+
+    public void setDescuento4(String descuento4) {
+        this.descuento4 = descuento4;
+    }
+
+    public String getDescuento4Min() {
+        return descuento4Min;
+    }
+
+    public void setDescuento4Min(String descuento4Min) {
+        this.descuento4Min = descuento4Min;
+    }
+
+    public String getDescuento5() {
+        return descuento5;
+    }
+
+    public void setDescuento5(String descuento5) {
+        this.descuento5 = descuento5;
+    }
+
+    public String getDescuento5Min() {
+        return descuento5Min;
+    }
+
+    public void setDescuento5Min(String descuento5Min) {
+        this.descuento5Min = descuento5Min;
+    }
+
     @Override
     public String toString(){
         return this.getId();
