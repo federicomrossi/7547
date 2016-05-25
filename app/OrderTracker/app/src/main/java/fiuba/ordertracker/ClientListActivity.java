@@ -25,6 +25,7 @@ import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.content.Intent;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -230,6 +231,21 @@ public class ClientListActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
+
+        // Report item
+        if(id == R.id.action_report) {
+            // Open the report activity
+            Intent intent = new Intent(this, ReportActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        // Logout item
+        else if (id == R.id.action_logout) {
+            Toast.makeText(this, "TODO: ahora debería cerrarse la sesión.", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

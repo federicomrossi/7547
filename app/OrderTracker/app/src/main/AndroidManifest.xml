@@ -59,11 +59,13 @@
         <activity
             android:name=".TabActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".QrScannerActivity"
+        <activity
+            android:name=".QrScannerActivity"
             android:screenOrientation="fullSensor"
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity android:name=".ReportActivity"></activity>
     </application>
 
 </manifest>
