@@ -57,11 +57,16 @@ public class ClientListActivity extends AppCompatActivity
     private Intent intent;
 
     private Boolean filterWasUsed = false;
+    boolean resumeFromCreate = false;
+
+    public static final int OPEN_NEW_ACTIVITY = 123456;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_list);
+
+        this.resumeFromCreate = true;
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -291,5 +296,24 @@ public class ClientListActivity extends AppCompatActivity
         intent.putExtras(b);
 
         view.getContext().startActivity(intent);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Check if is the first time the activity is created to avoid
+        // multiple creation of the fragments.
+        if(this.resumeFromCreate) {
+            this.resumeFromCreate = false;
+            return;
+        }
+
+        if(this.getCurrentTab() != null) {
+            // Reload the clients list
+            this.getCurrentTab().reloadClients();
+            // Apply the filters again
+            this.getCurrentTab().executeFiltering(this.getFiltersValues());
+        }
     }
 }

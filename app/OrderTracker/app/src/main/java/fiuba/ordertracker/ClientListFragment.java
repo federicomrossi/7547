@@ -94,33 +94,12 @@ public class ClientListFragment extends Fragment {
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_client_list, container, false);
-
-        // Set current date
-        TextView textDayOfWeek = (TextView) view.findViewById(R.id.day_of_week_text);
-        textDayOfWeek.setText(this.dayOfWeekScreen);
-        
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.VISIBLE);
-
-        getActivity().setProgressBarIndeterminateVisibility(true);
-
-        // Clients list
-        recyclerView = (RecyclerView) view.findViewById(R.id.clientsList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
+    public void reloadClients() {
 
         ClientService cs = ClientService.getInstance();
 
-        intent = getActivity().getIntent();
-
         SharedPreferences pref = getActivity().getApplicationContext().getSharedPreferences("OrderTrackerPref", 0);
         int idVendedor = pref.getInt("id", 0);
-
 
         // Create a call instance for looking up Retrofit contributors.
         String orderBy = intent.getStringExtra("orderBy") != null ? intent.getStringExtra("orderBy") : "razon_social";
@@ -129,7 +108,7 @@ public class ClientListFragment extends Fragment {
         //Call<List<Client>> call = cs.clientsFromTodayByVendIdService.ClientsFromTodayByVendIdService(idVendedor,orderBy,null);
 
         final ClientListActivity self_ = (ClientListActivity) getActivity();
-        final View _view = view;
+        final View _view = this.getView();
         final String _date = this.dayOfWeekFilter;
         final ClientListFragment _this = this;
 
@@ -163,6 +142,32 @@ public class ClientListFragment extends Fragment {
                 progressBar.setVisibility(View.GONE);
             }
         });
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_client_list, container, false);
+
+        // Set current date
+        TextView textDayOfWeek = (TextView) view.findViewById(R.id.day_of_week_text);
+        textDayOfWeek.setText(this.dayOfWeekScreen);
+        
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+
+        getActivity().setProgressBarIndeterminateVisibility(true);
+
+        // Clients list
+        recyclerView = (RecyclerView) view.findViewById(R.id.clientsList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
+
+        intent = getActivity().getIntent();
+
+        // Load the clients for the first time
+        this.reloadClients();
 
         return view;
     }

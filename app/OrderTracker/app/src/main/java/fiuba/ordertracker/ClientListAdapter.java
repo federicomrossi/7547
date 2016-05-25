@@ -110,12 +110,13 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
             if((fechaVisitaProgramada != null) && (fechaVisitaConcretada == null)) {
                 holder.setIndicatorStateAsNotVisited();
             }
-            else if(fechaVisitaProgramada == fechaVisitaConcretada) {
+            else if(fechaVisitaProgramada.equals(fechaVisitaConcretada)) {
                 holder.setIndicatorStateAsVisited();
             }
             else if((fechaVisitaConcretada.before(fechaVisitaProgramada)) ||
                     (fechaVisitaConcretada.after(fechaVisitaProgramada))) {
                 holder.setIndicatorStateAsVisitedOutOfTime();
+                Log.i("PAPUUUUU", "OUT OF TIMEEEEEEEE");
             }
             else {
                 holder.setIndicatorStateAsDefault();
