@@ -63,11 +63,6 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         for(int i = 0; i < this.data.size(); i++) {
             this.data.get(i).setDistance(currentLatitude, currentLongitude);
         }
-
-        // Show message notifying there are no clients
-        /*if (this.data.size() == 0){
-            Toast.makeText(context, "No hay clientes en el sistema", Toast.LENGTH_LONG).show();
-        }*/
     }
 
     @Override
@@ -90,16 +85,15 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date fechaVisitaProgramada = null;
         Date fechaVisitaConcretada = null;
+        Date today =  null;
 
         try {
             fechaVisitaProgramada = (current.getFechaVisitaProgramada() != null) ? sdf.parse(current.getFechaVisitaProgramada()) : null;
             fechaVisitaConcretada = (current.getFechaVisitaConcretada() != null) ? sdf.parse(current.getFechaVisitaConcretada()) : null;
+            today = sdf.parse(sdf.format(new Date()));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-        Log.i("MAMUUUUU", (current.getFechaVisitaProgramada() != null) ? current.getFechaVisitaProgramada() : "PUTO");
-        Log.i("PAPUUUUU", (current.getFechaVisitaConcretada() != null) ? current.getFechaVisitaConcretada() : "CONCHUDO");
 
         // Out of road
         if(this.dateToFilter == null) {
@@ -108,7 +102,10 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         // With a given appointment
         else {
             if((fechaVisitaProgramada != null) && (fechaVisitaConcretada == null)) {
-                holder.setIndicatorStateAsNotVisited();
+                if(fechaVisitaProgramada.equals(today))
+                    holder.setIndicatorStateAsNotVisited();
+                else
+                    holder.setIndicatorStateAsDefault();
             }
             else if(fechaVisitaProgramada.equals(fechaVisitaConcretada)) {
                 holder.setIndicatorStateAsVisited();
@@ -116,7 +113,6 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
             else if((fechaVisitaConcretada.before(fechaVisitaProgramada)) ||
                     (fechaVisitaConcretada.after(fechaVisitaProgramada))) {
                 holder.setIndicatorStateAsVisitedOutOfTime();
-                Log.i("PAPUUUUU", "OUT OF TIMEEEEEEEE");
             }
             else {
                 holder.setIndicatorStateAsDefault();
@@ -160,7 +156,6 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         private OnItemClickListener clickListener;
         ImageView indicator;
 
-
         private Client client;
 
         public MyViewHolder(View itemView, String agendaDate) {
@@ -181,23 +176,6 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
             this.client = c;
             final Client _client = this.client;
             final String _dateToFilter = this.dateToFilter;
-
-            // ELIMINAR!!!
-           /* Button button = (Button) itemView.findViewById(R.id.client_list_goto_order);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(itemView.getContext(), TabActivity.class);
-
-                    Bundle b = new Bundle();
-                    b.putString("clientName", _client.getSocialReason());
-                    b.putString("clientID", _client.getId());
-                    b.putString("agendaDate", _dateToFilter);
-                    intent.putExtras(b);
-
-                    itemView.getContext().startActivity(intent);
-                }
-            });*/
         }
 
         private void changeIndicatorColor(String colorHex) {
@@ -251,7 +229,5 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
          * @param position of the clicked item
          */
         public void onItemClick(View view, int position);
-
     }
-
 }
