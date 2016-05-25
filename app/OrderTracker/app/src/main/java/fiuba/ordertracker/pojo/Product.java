@@ -40,6 +40,36 @@ public class Product {
     @SerializedName("url_image_mini")
     @Expose
     private String urlImageMini;
+    @SerializedName("descuento_1")
+    @Expose
+    private String descuento1;
+    @SerializedName("descuento_1_min")
+    @Expose
+    private String descuento1Min;
+    @SerializedName("descuento_2")
+    @Expose
+    private String descuento2;
+    @SerializedName("descuento_2_min")
+    @Expose
+    private String descuento2Min;
+    @SerializedName("descuento_3")
+    @Expose
+    private String descuento3;
+    @SerializedName("descuento_3_min")
+    @Expose
+    private String descuento3Min;
+    @SerializedName("descuento_4")
+    @Expose
+    private String descuento4;
+    @SerializedName("descuento_4_min")
+    @Expose
+    private String descuento4Min;
+    @SerializedName("descuento_5")
+    @Expose
+    private String descuento5;
+    @SerializedName("descuento_5_min")
+    @Expose
+    private String descuento5Min;
 
     /**
      * 
@@ -201,6 +231,14 @@ public class Product {
      */
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getDescuento1() {
+        return descuento1;
+    }
+
+    public void setDescuento1(String descuento1) {
+        this.descuento1 = descuento1;
     }
 
     @Override
