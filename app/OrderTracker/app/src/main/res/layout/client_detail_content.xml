@@ -48,7 +48,7 @@
 
         </RelativeLayout>
 
-        <include layout="@layout/_reuse_item_divider" />
+        <!--<include layout="@layout/_reuse_item_divider" />-->
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -93,7 +93,7 @@
 
         </RelativeLayout>
 
-        <include layout="@layout/_reuse_item_divider" />
+        <!--<include layout="@layout/_reuse_item_divider" />-->
 
         <RelativeLayout
             android:layout_width="match_parent"
