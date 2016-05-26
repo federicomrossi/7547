@@ -88,7 +88,15 @@
                     android:layout_height="wrap_content"
                     android:text="99"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"/>
+
+                <TextView
+                    android:id="@+id/textDiscountAmount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textSize="15dp"
+                    android:layout_marginLeft="3dp"/>
 
 
             </LinearLayout>

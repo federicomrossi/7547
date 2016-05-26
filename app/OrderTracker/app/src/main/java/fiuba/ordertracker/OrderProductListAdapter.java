@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.PopupMenu;
@@ -90,6 +91,13 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
         holder.category.setText(getProductCategory(current.getCategoria()).getNombre());
         holder.price.setText(current.getPrecio());
         holder.productAmount.setText(current.getCantidad());
+
+        String appliedDiscount = current.getAppliedDiscount();
+        if (appliedDiscount.equals("0")){
+            holder.discountAmount.setText("");
+        } else {
+            holder.discountAmount.setText("($" + appliedDiscount + ")");
+        }
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -129,6 +137,7 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
         TextView nameAndBrand, description, category, price, stock;
         ImageView thumbnail;
         TextView productAmount;
+        TextView discountAmount;
         ImageView mOverflowIcon;
 
         private OnItemClickListener clickListener;
@@ -154,6 +163,10 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
             stock = (TextView) itemView.findViewById(R.id.product_list_row_stock);
             thumbnail = (ImageView) itemView.findViewById(R.id.product_list_row_thumbnail);
             productAmount = (TextView) itemView.findViewById(R.id.textProductAmount);
+
+            discountAmount = (TextView) itemView.findViewById(R.id.textDiscountAmount);
+            discountAmount.setPaintFlags(discountAmount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
             // Set listener to the item view
             itemView.setOnClickListener(this);
         }
