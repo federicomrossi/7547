@@ -89,14 +89,18 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
         holder.setProduct(current);
         holder.nameAndBrand.setText(current.getNombre() + ", " + current.getMarca());
         holder.category.setText(getProductCategory(current.getCategoria()).getNombre());
-        holder.price.setText(current.getPrecio());
         holder.productAmount.setText(current.getCantidad());
 
+        // Set price with discount
         String appliedDiscount = current.getAppliedDiscount();
+        Double priceWithDiscount = Double.parseDouble(current.getPrecio()) - Double.parseDouble(appliedDiscount);
+        holder.price.setText(String.valueOf(priceWithDiscount));
+
+        // Set price without discount
         if (appliedDiscount.equals("0")){
-            holder.discountAmount.setVisibility(View.GONE);
+            holder.noDiscountAmount.setVisibility(View.GONE);
         } else {
-            holder.discountAmount.setText("($" + appliedDiscount + ")");
+            holder.noDiscountAmount.setText("($" + current.getPrecio() + ")");
         }
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -137,7 +141,7 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
         TextView nameAndBrand, description, category, price, stock;
         ImageView thumbnail;
         TextView productAmount;
-        TextView discountAmount;
+        TextView noDiscountAmount;
         ImageView mOverflowIcon;
 
         private OnItemClickListener clickListener;
@@ -164,8 +168,8 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
             thumbnail = (ImageView) itemView.findViewById(R.id.product_list_row_thumbnail);
             productAmount = (TextView) itemView.findViewById(R.id.textProductAmount);
 
-            discountAmount = (TextView) itemView.findViewById(R.id.textDiscountAmount);
-            discountAmount.setPaintFlags(discountAmount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            noDiscountAmount = (TextView) itemView.findViewById(R.id.textNoDiscountAmount);
+            noDiscountAmount.setPaintFlags(noDiscountAmount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
             // Set listener to the item view
             itemView.setOnClickListener(this);
