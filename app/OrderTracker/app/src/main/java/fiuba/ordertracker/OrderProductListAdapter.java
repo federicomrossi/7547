@@ -93,14 +93,13 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
 
         // Set price with discount
         String appliedDiscount = current.getAppliedDiscount();
-        Double priceWithDiscount = Double.parseDouble(current.getPrecio()) - Double.parseDouble(appliedDiscount);
-        holder.price.setText(String.valueOf(priceWithDiscount));
+        holder.price.setText(current.getSubtotalWithDiscount());
 
         // Set price without discount
         if (appliedDiscount.equals("0")){
             holder.noDiscountAmount.setVisibility(View.GONE);
         } else {
-            holder.noDiscountAmount.setText("($" + current.getPrecio() + ")");
+            holder.noDiscountAmount.setText("($" + current.getSubtotalWithoutDiscount()+ ")");
         }
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
