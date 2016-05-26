@@ -94,9 +94,11 @@
                     android:id="@+id/textDiscountAmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                     android:textSize="15dp"
-                    android:layout_marginLeft="3dp"/>
+                    android:layout_marginLeft="3dp"
+                    android:text="($100)"
+                    android:textColor="#999" />
 
 
             </LinearLayout>

@@ -94,7 +94,7 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
 
         String appliedDiscount = current.getAppliedDiscount();
         if (appliedDiscount.equals("0")){
-            holder.discountAmount.setText("");
+            holder.discountAmount.setVisibility(View.GONE);
         } else {
             holder.discountAmount.setText("($" + appliedDiscount + ")");
         }
