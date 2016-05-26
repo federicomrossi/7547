@@ -6,11 +6,13 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import fiuba.ordertracker.helpers.ImageLoadTask;
@@ -36,6 +38,7 @@ public class ProductDetailFragment extends Fragment {
 
     private View view;
     private OnFragmentInteractionListener mListener;
+    private Boolean hasDiscount = false;
 
     public ProductDetailFragment() {
         // Required empty public constructor
@@ -102,6 +105,36 @@ public class ProductDetailFragment extends Fragment {
         TextView availability = (TextView) view.findViewById(R.id.product_availability);
         ImageView image = (ImageView) view.findViewById(R.id.detail_view);
 
+        LinearLayout discount_1_container = (LinearLayout) view.findViewById(R.id.discount_1_container);
+        TextView discount_1 = (TextView) view.findViewById(R.id.discount_1);
+        TextView discount_1_min = (TextView) view.findViewById(R.id.discount_1_min);
+        this.loadDiscount(discount_1_container, discount_1, discount_1_min, getArguments().getString("discount_1"), getArguments().getString("discount_1_min"));
+
+        LinearLayout discount_2_container = (LinearLayout) view.findViewById(R.id.discount_2_container);
+        TextView discount_2 = (TextView) view.findViewById(R.id.discount_2);
+        TextView discount_2_min = (TextView) view.findViewById(R.id.discount_2_min);
+        this.loadDiscount(discount_2_container, discount_2, discount_2_min, getArguments().getString("discount_2"), getArguments().getString("discount_2_min"));
+
+        LinearLayout discount_3_container = (LinearLayout) view.findViewById(R.id.discount_3_container);
+        TextView discount_3 = (TextView) view.findViewById(R.id.discount_3);
+        TextView discount_3_min = (TextView) view.findViewById(R.id.discount_3_min);
+        this.loadDiscount(discount_3_container, discount_3, discount_3_min, getArguments().getString("discount_3"), getArguments().getString("discount_3_min"));
+
+        LinearLayout discount_4_container = (LinearLayout) view.findViewById(R.id.discount_4_container);
+        TextView discount_4 = (TextView) view.findViewById(R.id.discount_4);
+        TextView discount_4_min = (TextView) view.findViewById(R.id.discount_4_min);
+        this.loadDiscount(discount_4_container, discount_4, discount_4_min, getArguments().getString("discount_4"), getArguments().getString("discount_4_min"));
+
+        LinearLayout discount_5_container = (LinearLayout) view.findViewById(R.id.discount_5_container);
+        TextView discount_5 = (TextView) view.findViewById(R.id.discount_5);
+        TextView discount_5_min = (TextView) view.findViewById(R.id.discount_5_min);
+        this.loadDiscount(discount_5_container, discount_5, discount_5_min, getArguments().getString("discount_5"), getArguments().getString("discount_5_min"));
+
+        // Hide discounts section if there's no discounts.
+        if(!this.hasDiscount) {
+            ((LinearLayout) view.findViewById(R.id.discounts_container)).setVisibility(View.GONE);
+        }
+
         name.setText(getArguments().getString("name"));
         brand.setText(getArguments().getString("brand"));
         description.setText(getArguments().getString("description"));
@@ -128,6 +161,19 @@ public class ProductDetailFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void loadDiscount(LinearLayout container, TextView discount_view,
+                              TextView discount_min_view, String discount, String discount_min) {
+
+        if(discount == null || discount_min == null || discount == "" || discount_min == "") {
+            container.setVisibility(View.GONE);
+            return;
+        }
+
+        discount_min_view.setText(discount_min + " prod. o más");
+        discount_view.setText(discount + "%");
+        this.hasDiscount = true;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
