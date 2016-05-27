@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 import fiuba.ordertracker.pojo.Report;
 import fiuba.ordertracker.services.ReportService;
 import retrofit2.Call;
@@ -34,6 +37,9 @@ public class ReportActivity extends AppCompatActivity {
         call.enqueue(new Callback<Report>() {
             @Override
             public void onResponse(Call<Report> call, Response<Report> response) {
+                NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("es_AR"));
+                currencyFormatter.setMaximumFractionDigits(2);
+
                 Report report = response.body();
                 TextView textAmountClientsOfDay = (TextView)findViewById(R.id.amountClientsOfDay);
                 TextView textAmountClientsOutOfRoad = (TextView)findViewById(R.id.amountClientsOutOfRoad);
@@ -44,7 +50,8 @@ public class ReportActivity extends AppCompatActivity {
                 textAmountClientsOfDay.setText(String.valueOf(report.getClientsOnRoute()));
                 textAmountClientsOutOfRoad.setText(String.valueOf(report.getClientsNotOnRoute()));
                 textAmountSold.setText(report.getTotalProductos());
-                textAmountMoney.setText(report.getTotalMoney());
+                Double totalMoney = Double.parseDouble(report.getTotalMoney());
+                textAmountMoney.setText(currencyFormatter.format(totalMoney));
             }
 
             @Override
