@@ -25,9 +25,13 @@ import com.google.zxing.Result;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
+import fiuba.ordertracker.pojo.Client;
 import fiuba.ordertracker.pojo.Order;
+import fiuba.ordertracker.services.ClientService;
 import fiuba.ordertracker.services.OrderService;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,6 +45,7 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
     private Double clientLongitude;
     private String agendaDate = null;
     private View view;
+    private Client client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +79,33 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
         this.clientLongitude = Double.valueOf(i.getStringExtra("longitude"));
 
         this.agendaDate = i.getStringExtra("agendaDate");
+
+        System.out.println("***** this.clientID: " + this.clientID);
+        System.out.println("***** this.agendaDate: " + this.agendaDate);
+
+        // Populate client attribute
+        ClientService clientService = ClientService.getInstance();
+        Call<List<Client>> call = clientService.clients.Clients(null, null, null, null, this.clientID, null, this.agendaDate, null);
+
+        call.enqueue(new Callback<List<Client>>() {
+            @Override
+            public void onResponse(Call<List<Client>> call, Response<List<Client>> response) {
+                List<Client> clientsList = response.body();
+                System.out.println("clientsList: " + clientsList);
+                /*for (Client client : clientsList) {
+                    System.out.println("Client: " + client);
+                    System.out.println("*** client.getApenom(): " + client.getApenom());
+                    System.out.println("*** client.getFechaVisitaProgramada(): " + client.getFechaVisitaProgramada());
+                    System.out.println("*** client.getId(): " + client.getId());
+                }*/
+            }
+
+            @Override
+            public void onFailure(Call<List<Client>> call, Throwable t) {
+                System.out.println("********** OnFailure");
+            }
+        });
+
 
         /**
          * Map to show client address
