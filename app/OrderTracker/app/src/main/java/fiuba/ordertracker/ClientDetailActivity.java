@@ -96,17 +96,14 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
             public void onResponse(Call<List<Client>> call, Response<List<Client>> response) {
                 List<Client> clientsList = response.body();
                 System.out.println("clientsList: " + clientsList);
-                for (Client client : clientsList) {
-                    System.out.println("Client: " + client);
-                    System.out.println("*** client.getApenom(): " + client.getApenom());
-                    System.out.println("*** client.getFechaVisitaProgramada(): " + client.getFechaVisitaProgramada());
-                    System.out.println("*** client.getId(): " + client.getId());
+                for (Client c : clientsList) {
+                    client = c;
                 }
             }
 
             @Override
             public void onFailure(Call<List<Client>> call, Throwable t) {
-                System.out.println("********** OnFailure");
+                t.printStackTrace();
             }
         });
 
@@ -193,6 +190,7 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
 
             final String _clientName = this.clientName;
             final String _clientID = this.clientID;
+            final Client _client = this.client;
             final String _agendaDate = this.agendaDate;
             final View _view = this.view;
 
@@ -221,7 +219,7 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
                                 System.out.println("*** Comment button ***");
 
                                 FragmentTransaction ft = ((Activity) _view.getContext()).getFragmentManager().beginTransaction();
-                                AddCommentFragment commentFragment = AddCommentFragment.newInstance();
+                                AddCommentFragment commentFragment = AddCommentFragment.newInstance(_client);
                                 commentFragment.show(ft, "dialog");
 
                             }

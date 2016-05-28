@@ -4,11 +4,15 @@ import java.io.IOException;
 import java.util.List;
 
 import fiuba.ordertracker.helpers.Constants;
+import fiuba.ordertracker.pojo.Agenda;
 import fiuba.ordertracker.pojo.Client;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -19,6 +23,7 @@ import retrofit2.http.Query;
 public final class ClientService {
     public ClientsFromTodayByVendIdService clientsFromTodayByVendIdService;
     public Clients  clients;
+    public Comment comment;
     private static ClientService instance = null;
 
     private ClientService(){
@@ -31,6 +36,7 @@ public final class ClientService {
         // Create an instance of our GitHub API interface.
         clientsFromTodayByVendIdService = retrofit.create(ClientsFromTodayByVendIdService.class);
         clients = retrofit.create(Clients.class);
+        comment = retrofit.create(Comment.class);
     }
 
     public static synchronized ClientService getInstance() {
@@ -57,6 +63,12 @@ public final class ClientService {
                                    @Query("fecha_visita_programada") String fecha_visita_programada, @Query("fecha_visita_concretada") String fecha_visita_concretada);
     }
 
+    //Store comment
+    public interface Comment {
+        @FormUrlEncoded
+        @POST("client/noOrderComment")
+        Call<Agenda> AddComment(@Field("id_agenda") String id_agenda, @Field("comentario") String comentario);
+    }
 
 
     public static void main(String... args) throws IOException {

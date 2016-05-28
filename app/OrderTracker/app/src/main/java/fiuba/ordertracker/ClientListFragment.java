@@ -136,7 +136,6 @@ public class ClientListFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Client>> call, Throwable t) {
-                //Aca tenemos que agregar el msj de error a mostrar... puto el que lee
                 TextView textNoClients = (TextView) _view.findViewById(R.id.text_no_clients);
                 textNoClients.setText("Hubo un error al cargar los clientes por favor reintente mas tarde");
                 textNoClients.setVisibility(View.VISIBLE);

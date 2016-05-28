@@ -10,13 +10,25 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.List;
+
+import fiuba.ordertracker.pojo.Agenda;
+import fiuba.ordertracker.pojo.Client;
+import fiuba.ordertracker.services.ClientService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 /**
  * Created by scampa on 27/5/2016.
  */
 public class AddCommentFragment extends DialogFragment {
 
-    public static AddCommentFragment newInstance() {
+    private static Client client;
+
+    public static AddCommentFragment newInstance(Client c) {
         AddCommentFragment fragment = new AddCommentFragment();
+        client = c;
         return fragment;
     }
 
@@ -36,8 +48,24 @@ public class AddCommentFragment extends DialogFragment {
                 .setPositiveButton(R.string.accept,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                System.out.println("******* Comentario ingresado: " + textComment.getText());
-                                // TODO Store comment!!
+
+                                // Store comment
+                                ClientService clientService = ClientService.getInstance();
+                                Call<Agenda> call = clientService.comment.AddComment(client.getAgendaId(),textComment.getText().toString());
+
+                                call.enqueue(new Callback<Agenda>() {
+                                    @Override
+                                    public void onResponse(Call<Agenda> call, Response<Agenda> response) {
+                                        Agenda agenda = response.body();
+                                        System.out.println("**** Stored comment: " + agenda.getComment());
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Agenda> call, Throwable t) {
+                                        t.printStackTrace();
+                                    }
+                                });
+
                             }
                         })
 
