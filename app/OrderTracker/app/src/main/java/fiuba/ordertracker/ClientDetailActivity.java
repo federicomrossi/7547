@@ -221,7 +221,6 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
                                 FragmentTransaction ft = ((Activity) _view.getContext()).getFragmentManager().beginTransaction();
                                 AddCommentFragment commentFragment = AddCommentFragment.newInstance(_client);
                                 commentFragment.show(ft, "dialog");
-
                             }
                         }
                 );

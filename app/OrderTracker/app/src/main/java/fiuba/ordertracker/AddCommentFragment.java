@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -39,6 +40,7 @@ public class AddCommentFragment extends DialogFragment {
 
         TextView textCommentLabel = (TextView) v.findViewById(R.id.textCommentLabel);
         final EditText textComment = (EditText) v.findViewById(R.id.textComment);
+        final View _view = v;
 
         return new AlertDialog.Builder(getActivity())
                 .setView(v)
@@ -65,7 +67,7 @@ public class AddCommentFragment extends DialogFragment {
                                         t.printStackTrace();
                                     }
                                 });
-
+                                Toast.makeText(_view.getContext(), "El comentario ha sido ingresado correctamente", Toast.LENGTH_LONG).show();
                             }
                         })
 
