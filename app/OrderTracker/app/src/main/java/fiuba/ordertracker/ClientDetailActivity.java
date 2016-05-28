@@ -161,45 +161,48 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
             final View _view = this.view;
 
             if (this.clientID.equals(clientID)){
-                new AlertDialog.Builder(this)
-                        .setTitle("Seleccione su acción")
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+                alertDialog.setTitle("Seleccione su acción");
 
-                        // Ingresar pedido button
-                        .setPositiveButton(R.string.new_order,
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                        System.out.println("*** New Order button ***");
-                                        dialog.dismiss();
-                                        Intent intent2 = new Intent(getApplicationContext(), TabActivity.class);
-                                        intent2.putExtra("clientName", _clientName);
-                                        intent2.putExtra("clientID", _clientID);
-                                        intent2.putExtra("agendaDate", _agendaDate);
-                                        startActivity(intent2);
-                                    }
-                                })
-                        // Ingresar comentario button
-                        .setNegativeButton(R.string.new_comment,
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                        System.out.println("*** Comment button ***");
+                // Ingresar pedido button
+                alertDialog.setPositiveButton(R.string.new_order,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                System.out.println("*** New Order button ***");
+                                dialog.dismiss();
+                                Intent intent2 = new Intent(getApplicationContext(), TabActivity.class);
+                                intent2.putExtra("clientName", _clientName);
+                                intent2.putExtra("clientID", _clientID);
+                                intent2.putExtra("agendaDate", _agendaDate);
+                                startActivity(intent2);
+                            }
+                        });
 
-                                        FragmentTransaction ft = ((Activity) _view.getContext()).getFragmentManager().beginTransaction();
-                                        AddCommentFragment commentFragment = AddCommentFragment.newInstance();
-                                        commentFragment.show(ft, "dialog");
+                // Ingresar comentario button
+                alertDialog.setNegativeButton(R.string.new_comment,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                System.out.println("*** Comment button ***");
 
-                                    }
-                                }
-                        )
-                        // Cancel button
-                        .setNeutralButton(R.string.cancel,
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                        System.out.println("*** Cancel button ***");
-                                        dialog.dismiss();
-                                    }
-                                }
-                        ).create().show();
+                                FragmentTransaction ft = ((Activity) _view.getContext()).getFragmentManager().beginTransaction();
+                                AddCommentFragment commentFragment = AddCommentFragment.newInstance();
+                                commentFragment.show(ft, "dialog");
 
+                            }
+                        }
+                );
+
+                // Cancel button
+                alertDialog.setNeutralButton(R.string.cancel,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                System.out.println("*** Cancel button ***");
+                                dialog.dismiss();
+                            }
+                        }
+                );
+
+                alertDialog.create().show();
 
             } else{
                 Toast.makeText(getApplicationContext(), "El QR no corresponde al cliente", Toast.LENGTH_LONG).show();

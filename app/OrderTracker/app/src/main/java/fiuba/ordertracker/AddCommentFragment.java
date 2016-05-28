@@ -30,7 +30,7 @@ public class AddCommentFragment extends DialogFragment {
 
         return new AlertDialog.Builder(getActivity())
                 .setView(v)
-                .setTitle(R.string.add_product)
+                .setTitle("Motivo de visita")
 
                 // Confirm button
                 .setPositiveButton(R.string.accept,
