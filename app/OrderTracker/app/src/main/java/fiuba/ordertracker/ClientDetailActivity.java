@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -79,25 +80,28 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
         this.clientLongitude = Double.valueOf(i.getStringExtra("longitude"));
 
         this.agendaDate = i.getStringExtra("agendaDate");
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("OrderTrackerPref", 0);
+        int vendedorID = pref.getInt("id", 0);
 
         System.out.println("***** this.clientID: " + this.clientID);
         System.out.println("***** this.agendaDate: " + this.agendaDate);
 
         // Populate client attribute
         ClientService clientService = ClientService.getInstance();
-        Call<List<Client>> call = clientService.clients.Clients(null, null, null, null, this.clientID, null, this.agendaDate, null);
+        Call<List<Client>> call = clientService.clients.Clients(this.clientID, String.valueOf(vendedorID), null, null, null,
+                null, null, this.agendaDate, null);
 
         call.enqueue(new Callback<List<Client>>() {
             @Override
             public void onResponse(Call<List<Client>> call, Response<List<Client>> response) {
                 List<Client> clientsList = response.body();
                 System.out.println("clientsList: " + clientsList);
-                /*for (Client client : clientsList) {
+                for (Client client : clientsList) {
                     System.out.println("Client: " + client);
                     System.out.println("*** client.getApenom(): " + client.getApenom());
                     System.out.println("*** client.getFechaVisitaProgramada(): " + client.getFechaVisitaProgramada());
                     System.out.println("*** client.getId(): " + client.getId());
-                }*/
+                }
             }
 
             @Override

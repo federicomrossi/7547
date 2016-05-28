@@ -105,7 +105,7 @@ public class ClientListFragment extends Fragment {
         // Create a call instance for looking up Retrofit contributors.
         String orderBy = intent.getStringExtra("orderBy") != null ? intent.getStringExtra("orderBy") : "razon_social";
         //Call<List<Client>> call = cs.clients.Clients(null,null,orderBy,null);
-        Call<List<Client>> call = cs.clients.Clients(Integer.toString(idVendedor), intent.getStringExtra("socialReasonFilter"), orderBy, null, intent.getStringExtra("codClientFilter"), this.dayOfWeekFilter, null, null);
+        Call<List<Client>> call = cs.clients.Clients(null, Integer.toString(idVendedor), intent.getStringExtra("socialReasonFilter"), orderBy, null, intent.getStringExtra("codClientFilter"), this.dayOfWeekFilter, null, null);
         //Call<List<Client>> call = cs.clientsFromTodayByVendIdService.ClientsFromTodayByVendIdService(idVendedor,orderBy,null);
 
         final ClientListActivity self_ = (ClientListActivity) getActivity();
