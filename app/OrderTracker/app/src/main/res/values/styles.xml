@@ -25,6 +25,13 @@
     <style name="CustomToolbar" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:textColorPrimary">#FFF</item>
         <item name="android:textColorSecondary">#FFF</item>
+        <item name="actionMenuTextColor">#555</item>
+    </style>
+
+    <style name="CustomToolbarMenu" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColorPrimary">#555</item>
+        <item name="android:textColorSecondary">#555</item>
+        <item name="actionMenuTextColor">#555</item>
     </style>
 
     <!-- Launcher -->

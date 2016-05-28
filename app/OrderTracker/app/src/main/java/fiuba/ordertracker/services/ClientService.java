@@ -53,7 +53,8 @@ public final class ClientService {
         @GET("client")
         //fecha_visita: YYYY-MM-DD Ej: '2016-04-22'
         Call<List<Client>> Clients(@Query("id_vendedor") String id_vendedor, @Query("razon_social%") String razon_social, @Query("orderby") String orderby,
-                                   @Query("orientation") String orientation, @Query("cod_cliente%") String codCliente, @Query("fecha_visita") String fecha_visita);
+                                   @Query("orientation") String orientation, @Query("cod_cliente%") String codCliente, @Query("fecha_visita") String fecha_visita,
+                                   @Query("fecha_visita_programada") String fecha_visita_programada, @Query("fecha_visita_concretada") String fecha_visita_concretada);
     }
 
 
@@ -72,7 +73,7 @@ public final class ClientService {
 
         System.out.println("||||||||||||||||||||||||||||||||||||||||");
 
-        call = cs.clients.Clients(null,null,null,null,null,null);
+        call = cs.clients.Clients(null,null,null,null,null,null,null,null);
 
         clientList = call.execute().body();
         for (Client client : clientList) {

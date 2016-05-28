@@ -145,6 +145,7 @@ public class LoginActivity extends AppCompatActivity {
                         User user = response.body();
                         Intent intent = new Intent(self_, ClientListActivity.class);
                         startActivity(intent);
+
                         SharedPreferences pref = getApplicationContext().getSharedPreferences("OrderTrackerPref", 0);
                         SharedPreferences.Editor editor = pref.edit();
                         editor.clear();
@@ -154,6 +155,7 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString("nombre",user.getNombreUsuario());
                         editor.putString("email",user.getEmail());
                         editor.commit();
+
                         finish();
                     }
                 }
