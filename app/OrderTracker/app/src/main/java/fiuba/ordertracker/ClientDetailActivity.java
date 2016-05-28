@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -25,9 +26,13 @@ import com.google.zxing.Result;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
+import fiuba.ordertracker.pojo.Client;
 import fiuba.ordertracker.pojo.Order;
+import fiuba.ordertracker.services.ClientService;
 import fiuba.ordertracker.services.OrderService;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,6 +46,7 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
     private Double clientLongitude;
     private String agendaDate = null;
     private View view;
+    private Client client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +80,33 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
         this.clientLongitude = Double.valueOf(i.getStringExtra("longitude"));
 
         this.agendaDate = i.getStringExtra("agendaDate");
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("OrderTrackerPref", 0);
+        int vendedorID = pref.getInt("id", 0);
+
+        System.out.println("***** this.clientID: " + this.clientID);
+        System.out.println("***** this.agendaDate: " + this.agendaDate);
+
+        // Populate client attribute
+        ClientService clientService = ClientService.getInstance();
+        Call<List<Client>> call = clientService.clients.Clients(this.clientID, String.valueOf(vendedorID), null, null, null,
+                null, null, this.agendaDate, null);
+
+        call.enqueue(new Callback<List<Client>>() {
+            @Override
+            public void onResponse(Call<List<Client>> call, Response<List<Client>> response) {
+                List<Client> clientsList = response.body();
+                System.out.println("clientsList: " + clientsList);
+                for (Client c : clientsList) {
+                    client = c;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Client>> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+
 
         /**
          * Map to show client address
@@ -157,6 +190,7 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
 
             final String _clientName = this.clientName;
             final String _clientID = this.clientID;
+            final Client _client = this.client;
             final String _agendaDate = this.agendaDate;
             final View _view = this.view;
 
@@ -185,9 +219,8 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
                                 System.out.println("*** Comment button ***");
 
                                 FragmentTransaction ft = ((Activity) _view.getContext()).getFragmentManager().beginTransaction();
-                                AddCommentFragment commentFragment = AddCommentFragment.newInstance();
+                                AddCommentFragment commentFragment = AddCommentFragment.newInstance(_client);
                                 commentFragment.show(ft, "dialog");
-
                             }
                         }
                 );
