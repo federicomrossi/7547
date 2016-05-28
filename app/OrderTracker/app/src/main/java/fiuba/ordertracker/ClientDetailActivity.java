@@ -1,9 +1,13 @@
 package fiuba.ordertracker;
 
+import android.app.Activity;
+import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -36,6 +40,7 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
     private Double clientLatitude;
     private Double clientLongitude;
     private String agendaDate = null;
+    private View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +98,7 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
         info.add(this.clientID);
         info.add(this.clientName);
 
+        this.view = view;
 
         final OrderService os = OrderService.getInstance();
         Integer clientIntID = new Integer(this.clientID);
@@ -146,18 +152,55 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
         if (scanResult != null) {
             System.out.println("******* SCAN OK *******");
 
-            // TODO Show field to add comment ?????
-            System.out.println("****scanResult.getContents(): " + scanResult.getContents());
-
             String clientID = scanResult.getContents();
-            System.out.println("*** " + clientID);
+            System.out.println("*** ClientID: " + clientID);
+
+            final String _clientName = this.clientName;
+            final String _clientID = this.clientID;
+            final String _agendaDate = this.agendaDate;
+            final View _view = this.view;
 
             if (this.clientID.equals(clientID)){
-                Intent intent2 = new Intent(getApplicationContext(), TabActivity.class);
-                intent2.putExtra("clientName", this.clientName);
-                intent2.putExtra("clientID",this.clientID);
-                intent2.putExtra("agendaDate",this.agendaDate);
-                startActivity(intent2);
+                new AlertDialog.Builder(this)
+                        .setTitle("Seleccione su acción")
+
+                        // Ingresar pedido button
+                        .setPositiveButton(R.string.new_order,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        System.out.println("*** New Order button ***");
+                                        dialog.dismiss();
+                                        Intent intent2 = new Intent(getApplicationContext(), TabActivity.class);
+                                        intent2.putExtra("clientName", _clientName);
+                                        intent2.putExtra("clientID", _clientID);
+                                        intent2.putExtra("agendaDate", _agendaDate);
+                                        startActivity(intent2);
+                                    }
+                                })
+                        // Ingresar comentario button
+                        .setNegativeButton(R.string.new_comment,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        System.out.println("*** Comment button ***");
+
+                                        FragmentTransaction ft = ((Activity) _view.getContext()).getFragmentManager().beginTransaction();
+                                        AddCommentFragment commentFragment = AddCommentFragment.newInstance();
+                                        commentFragment.show(ft, "dialog");
+
+                                    }
+                                }
+                        )
+                        // Cancel button
+                        .setNeutralButton(R.string.cancel,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        System.out.println("*** Cancel button ***");
+                                        dialog.dismiss();
+                                    }
+                                }
+                        ).create().show();
+
+
             } else{
                 Toast.makeText(getApplicationContext(), "El QR no corresponde al cliente", Toast.LENGTH_LONG).show();
             }
