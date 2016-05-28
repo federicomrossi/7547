@@ -1,5 +1,6 @@
 package fiuba.ordertracker;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,10 +10,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,26 +23,17 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.content.Intent;
 import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import fiuba.ordertracker.helpers.FiltersHelper;
 import fiuba.ordertracker.helpers.Fonts;
-import fiuba.ordertracker.pojo.Client;
-import fiuba.ordertracker.pojo.Product;
-import fiuba.ordertracker.services.ClientService;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class ClientListActivity extends AppCompatActivity
         implements ClientListFragment.OnFragmentInteractionListener {
@@ -247,7 +237,14 @@ public class ClientListActivity extends AppCompatActivity
 
         // Logout item
         else if (id == R.id.action_logout) {
-            Toast.makeText(this, "TODO: ahora debería cerrarse la sesión.", Toast.LENGTH_SHORT).show();
+            SharedPreferences pref = getApplicationContext().getSharedPreferences("OrderTrackerPref", 0);
+            SharedPreferences.Editor editor = pref.edit();
+            editor.clear();
+            editor.commit();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+            Toast.makeText(this, "Sesión cerrada!", Toast.LENGTH_SHORT).show();
             return true;
         }
 
