@@ -21,8 +21,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import fiuba.ordertracker.helpers.ImageLoadTask;
 import fiuba.ordertracker.pojo.Categorie;
@@ -91,15 +93,23 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
         holder.category.setText(getProductCategory(current.getCategoria()).getNombre());
         holder.productAmount.setText(current.getCantidad());
 
+        // Price formatter
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("es_AR"));
+        currencyFormatter.setMaximumFractionDigits(2);
+
         // Set price with discount
         String appliedDiscount = current.getAppliedDiscount();
-        holder.price.setText(current.getSubtotalWithDiscount());
+
+        // Format subtotal including discount
+        Double subtotalWithDiscount = Double.parseDouble(current.getSubtotalWithDiscount());
+        holder.price.setText(currencyFormatter.format(subtotalWithDiscount));
 
         // Set price without discount
         if (appliedDiscount.equals("0")){
             holder.noDiscountAmount.setVisibility(View.GONE);
         } else {
-            holder.noDiscountAmount.setText("($" + current.getSubtotalWithoutDiscount()+ ")");
+            Double subtotalWithoutDiscount = Double.parseDouble(current.getSubtotalWithoutDiscount());
+            holder.noDiscountAmount.setText("(" + currencyFormatter.format(subtotalWithoutDiscount) + ")");
         }
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
