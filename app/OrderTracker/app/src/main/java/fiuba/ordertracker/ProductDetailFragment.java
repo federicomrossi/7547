@@ -166,7 +166,8 @@ public class ProductDetailFragment extends Fragment {
     private void loadDiscount(LinearLayout container, TextView discount_view,
                               TextView discount_min_view, String discount, String discount_min) {
 
-        if(discount == null || discount_min == null || discount == "" || discount_min == "") {
+        if(discount == null || discount_min == null || discount == "" || discount_min == "" ||
+                (discount.equals("0") && discount_min.equals("0"))) {
             container.setVisibility(View.GONE);
             return;
         }

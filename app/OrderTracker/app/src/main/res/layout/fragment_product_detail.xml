@@ -139,7 +139,7 @@
 
                                     <TextView
                                         android:id="@+id/textView6"
-                                        android:layout_width="110dp"
+                                        android:layout_width="140dp"
                                         android:layout_height="wrap_content"
                                         android:text="Marca"
                                         android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -159,7 +159,7 @@
 
                                     <TextView
                                         android:id="@+id/textView8"
-                                        android:layout_width="110dp"
+                                        android:layout_width="140dp"
                                         android:layout_height="wrap_content"
                                         android:text="Categoría"
                                         android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -179,7 +179,7 @@
 
                                     <TextView
                                         android:id="@+id/textView10"
-                                        android:layout_width="110dp"
+                                        android:layout_width="140dp"
                                         android:layout_height="wrap_content"
                                         android:text="Disponibilidad"
                                         android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -222,7 +222,7 @@
 
                                     <TextView
                                         android:id="@+id/discount_1_min"
-                                        android:layout_width="110dp"
+                                        android:layout_width="140dp"
                                         android:layout_height="wrap_content"
                                         android:text="10 prod. o más"
                                         android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -242,7 +242,7 @@
 
                                     <TextView
                                         android:id="@+id/discount_2_min"
-                                        android:layout_width="110dp"
+                                        android:layout_width="140dp"
                                         android:layout_height="wrap_content"
                                         android:text="10 prod. o más"
                                         android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -262,7 +262,7 @@
 
                                     <TextView
                                         android:id="@+id/discount_3_min"
-                                        android:layout_width="110dp"
+                                        android:layout_width="140dp"
                                         android:layout_height="wrap_content"
                                         android:text="10 prod. o más"
                                         android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -282,7 +282,7 @@
 
                                     <TextView
                                         android:id="@+id/discount_4_min"
-                                        android:layout_width="110dp"
+                                        android:layout_width="140dp"
                                         android:layout_height="wrap_content"
                                         android:text="10 prod. o más"
                                         android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -302,7 +302,7 @@
 
                                     <TextView
                                         android:id="@+id/discount_5_min"
-                                        android:layout_width="110dp"
+                                        android:layout_width="140dp"
                                         android:layout_height="wrap_content"
                                         android:text="10 prod. o más"
                                         android:textAppearance="?android:attr/textAppearanceSmall" />
