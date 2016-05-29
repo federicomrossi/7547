@@ -67,7 +67,6 @@
                 android:layout_centerVertical="true"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="0"
                 android:textColor="#212121"
                 android:gravity="right"
                 android:layout_alignParentEnd="true"
@@ -113,7 +112,6 @@
                 android:layout_centerVertical="true"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="0"
                 android:textColor="#212121"
                 android:gravity="right"
                 android:layout_alignParentEnd="true"
@@ -159,7 +157,6 @@
                 android:layout_centerVertical="true"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="0"
                 android:textColor="#212121"
                 android:gravity="right"
                 android:layout_alignParentEnd="true"
@@ -217,7 +214,8 @@
                     android:gravity="right"
                     android:layout_alignParentEnd="false"
                     android:layout_alignParentRight="true"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/amountMoney"
@@ -226,7 +224,6 @@
                     android:layout_centerVertical="true"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="0"
                     android:textColor="#212121"
                     android:gravity="right"
                     android:layout_alignParentEnd="true"

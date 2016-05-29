@@ -244,7 +244,7 @@ public class ClientListActivity extends AppCompatActivity
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();
-            Toast.makeText(this, "Sesión cerrada!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Sesión cerrada!", Toast.LENGTH_SHORT).show();
             return true;
         }
 
