@@ -15,19 +15,5 @@ public class LauncherActivity extends AppCompatActivity {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
-
-        /*SharedPreferences pref = getApplicationContext().getSharedPreferences("OrderTrackerPref", 0);
-        int idVendedor = pref.getInt("id", 0);
-
-        if(idVendedor == 0){
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-        }else{
-            Intent intent = new Intent(this, ClientListActivity.class);
-            startActivity(intent);
-        }*/
-        /*Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);*/
-        //finish();
     }
 }

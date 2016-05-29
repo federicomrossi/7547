@@ -47,11 +47,13 @@ public class LoginActivity extends AppCompatActivity {
         if(idVendedor != 0){
             Intent intent = new Intent(this, ClientListActivity.class);
             startActivity(intent);
+            finish();
             return;
         }
 
         // If it's not, the login screen is shown.
         setContentView(R.layout.activity_login);
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
 
