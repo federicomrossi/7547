@@ -130,16 +130,24 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
     public void onClickShoppingCart(View view){
         // TODO Add logic to show QR scan or not !!
 
+        final String fechaVisitaConcretada;
+        final String comment;
+        final Boolean isOrderDone;
 
-        /*
-
+        // Bullshit to support the fucking model.
         if(this.agenda == null) {
-            // Use this.client
+            // Use the client
+            fechaVisitaConcretada = this.client.getFechaVisitaConcretada();
+            comment = this.client.getComment();
+            isOrderDone = this.client.getIsOrderGenerated();
+        } else {
+            // Use the agenda
+            fechaVisitaConcretada = this.agenda.getFechaVisitaConcretada();
+            comment = this.agenda.getComment();
+            isOrderDone = this.agenda.getIsOrderGenerated();
         }
 
-        // Use this.agenda
 
-        */
         ArrayList<String> info = new ArrayList<String>();
         info.add(this.clientID);
         info.add(this.clientName);
@@ -155,18 +163,20 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
         final ArrayList<String> _info = info;
         final View _view = view;
 
-        if (this.agenda != null) {
-            System.out.println("******************************* onClickShoppingCart **************************************************");
-            System.out.println("****************** this.agenda.getIsOrderDone(): " + this.agenda.getIsOrderDone());
-            System.out.println("****************** this.agenda.getComment(): " + this.agenda.getComment());
-            System.out.println("******************************************************************************************************");
-        }
-
         call.enqueue(new Callback<Order>() {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
                 System.out.println("****************** onResponse ClientDetailActivityActivity *********************");
                 Order activeOrder;
+
+                // Order validation
+                if(fechaVisitaConcretada != null && !isOrderDone && !comment.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "No es posible generar un pedido. La visita ya ha sido registrada previamente.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                /*if(!fechaVisitaConcretada.equals("") && isOrderDone) {
+
+                }*/
 
                 if (response.code() == 500) {
                     // No se tiene un pedido activo...
@@ -216,7 +226,7 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
 
             if (this.agenda != null) {
                 System.out.println("**************************** onActivityResult ********************************************************");
-                System.out.println("****************** this.agenda.getIsOrderDone(): " + this.agenda.getIsOrderDone());
+                System.out.println("****************** this.agenda.getIsOrderDone(): " + this.agenda.getIsOrderGenerated());
                 System.out.println("****************** this.agenda.getComment(): " + this.agenda.getComment());
                 System.out.println("******************************************************************************************************");
             }

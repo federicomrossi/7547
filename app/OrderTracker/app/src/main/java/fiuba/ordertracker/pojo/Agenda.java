@@ -30,7 +30,7 @@ public class Agenda{
 
     @SerializedName("pedido_hecho")
     @Expose
-    private Boolean isOrderDone;
+    private Boolean isOrderGenerated;
 
     @SerializedName("id_orden")
     @Expose
@@ -76,12 +76,12 @@ public class Agenda{
         this.comment = comment;
     }
 
-    public Boolean getIsOrderDone() {
-        return isOrderDone;
+    public Boolean getIsOrderGenerated() {
+        return isOrderGenerated;
     }
 
-    public void setIsOrderDone(Boolean isOrderDone) {
-        this.isOrderDone = isOrderDone;
+    public void setIsOrderGenerated(Boolean isOrderGenerated) {
+        this.isOrderGenerated = isOrderGenerated;
     }
 
     public String getOrderID() {
