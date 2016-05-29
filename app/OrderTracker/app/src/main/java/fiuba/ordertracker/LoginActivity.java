@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import fiuba.ordertracker.pojo.User;
 import fiuba.ordertracker.services.LoginService;
+import fiuba.ordertracker.services.RegistrationIntentService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -157,6 +158,8 @@ public class LoginActivity extends AppCompatActivity {
                         self_.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
                         User user = response.body();
+
+                        // Open main activity
                         Intent intent = new Intent(self_, ClientListActivity.class);
                         startActivity(intent);
 
@@ -169,6 +172,9 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString("nombre",user.getNombreUsuario());
                         editor.putString("email",user.getEmail());
                         editor.commit();
+
+                        // Register the GCM token
+                        startService(new Intent(self_, RegistrationIntentService.class));
 
                         finish();
                     }
