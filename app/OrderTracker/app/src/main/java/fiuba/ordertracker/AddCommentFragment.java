@@ -52,27 +52,15 @@ public class AddCommentFragment extends DialogFragment {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
+                                String comment = textComment.getText().toString();
+
+                                if(comment.equals("")) {
+                                    Toast.makeText(_activity.getApplicationContext(), "La visita no ha sido registrada. El comentario no puede estar vacío.", Toast.LENGTH_LONG).show();
+                                    getDialog().dismiss();
+                                    return;
+                                }
+
                                 _activity.saveComment(textComment.getText().toString());
-
-
-                                /*// Store comment
-                                ClientService clientService = ClientService.getInstance();
-                                Call<Agenda> call = clientService.comment.AddComment(client.getAgendaId(),textComment.getText().toString());
-
-                                call.enqueue(new Callback<Agenda>() {
-                                    @Override
-                                    public void onResponse(Call<Agenda> call, Response<Agenda> response) {
-                                        Agenda agenda = response.body();
-                                        System.out.println("**** Stored comment: " + agenda.getComment());
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<Agenda> call, Throwable t) {
-                                        t.printStackTrace();
-                                    }
-                                });
-                                Toast.makeText(_view.getContext(), "El comentario ha sido ingresado correctamente", Toast.LENGTH_LONG).show();
-                                */
                             }
                         })
 
