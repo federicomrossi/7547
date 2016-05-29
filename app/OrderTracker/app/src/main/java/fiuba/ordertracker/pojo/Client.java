@@ -58,11 +58,23 @@ public class Client implements Comparable<Client> {
     @SerializedName("razon_social")
     @Expose
     private String socialReason;
+    @SerializedName("id_agenda")
+    @Expose
+    private String agendaId;
+    @SerializedName("comentario")
+    @Expose
+    private String comment;
+    @SerializedName("pedido_hecho")
+    @Expose
+    private Boolean isOrderGenerated;
+    @SerializedName("id_orden")
+    @Expose
+    private String orderId;
 
     private Double distance;
 
     /**
-     * 
+     *
      * @return
      *     The id
      */
@@ -71,7 +83,7 @@ public class Client implements Comparable<Client> {
     }
 
     /**
-     * 
+     *
      * @param id
      *     The id
      */
@@ -80,7 +92,7 @@ public class Client implements Comparable<Client> {
     }
 
     /**
-     * 
+     *
      * @return
      *     The apenom
      */
@@ -89,7 +101,7 @@ public class Client implements Comparable<Client> {
     }
 
     /**
-     * 
+     *
      * @param apenom
      *     The apenom
      */
@@ -98,7 +110,7 @@ public class Client implements Comparable<Client> {
     }
 
     /**
-     * 
+     *
      * @return
      *     The direccion
      */
@@ -107,7 +119,7 @@ public class Client implements Comparable<Client> {
     }
 
     /**
-     * 
+     *
      * @param direccion
      *     The direccion
      */
@@ -116,7 +128,7 @@ public class Client implements Comparable<Client> {
     }
 
     /**
-     * 
+     *
      * @return
      *     The telefono
      */
@@ -125,7 +137,7 @@ public class Client implements Comparable<Client> {
     }
 
     /**
-     * 
+     *
      * @param telefono
      *     The telefono
      */
@@ -134,7 +146,7 @@ public class Client implements Comparable<Client> {
     }
 
     /**
-     * 
+     *
      * @return
      *     The observaciones
      */
@@ -143,7 +155,7 @@ public class Client implements Comparable<Client> {
     }
 
     /**
-     * 
+     *
      * @param observaciones
      *     The observaciones
      */
@@ -152,7 +164,7 @@ public class Client implements Comparable<Client> {
     }
 
     /**
-     * 
+     *
      * @return
      *     The idVendedor
      */
@@ -161,7 +173,7 @@ public class Client implements Comparable<Client> {
     }
 
     /**
-     * 
+     *
      * @param idVendedor
      *     The id_vendedor
      */
@@ -170,7 +182,7 @@ public class Client implements Comparable<Client> {
     }
 
     /**
-     * 
+     *
      * @return
      *     The fechaVisita
      */
@@ -179,7 +191,7 @@ public class Client implements Comparable<Client> {
     }
 
     /**
-     * 
+     *
      * @param fechaVisita
      *     The fecha_visita
      */
@@ -267,6 +279,38 @@ public class Client implements Comparable<Client> {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public String getAgendaId() {
+        return agendaId;
+    }
+
+    public void setAgendaId(String agendaId) {
+        this.agendaId = agendaId;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public Boolean getIsOrderGenerated() {
+        return isOrderGenerated;
+    }
+
+    public void setIsOrderGenerated(Boolean isOrderGenerated) {
+        this.isOrderGenerated = isOrderGenerated;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 
     @Override

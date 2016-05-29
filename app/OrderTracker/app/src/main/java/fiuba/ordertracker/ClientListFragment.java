@@ -105,7 +105,7 @@ public class ClientListFragment extends Fragment {
         // Create a call instance for looking up Retrofit contributors.
         String orderBy = intent.getStringExtra("orderBy") != null ? intent.getStringExtra("orderBy") : "razon_social";
         //Call<List<Client>> call = cs.clients.Clients(null,null,orderBy,null);
-        Call<List<Client>> call = cs.clients.Clients(Integer.toString(idVendedor), intent.getStringExtra("socialReasonFilter"), orderBy, null, intent.getStringExtra("codClientFilter"), this.dayOfWeekFilter, null, null);
+        Call<List<Client>> call = cs.clients.Clients(null, Integer.toString(idVendedor), intent.getStringExtra("socialReasonFilter"), orderBy, null, intent.getStringExtra("codClientFilter"), this.dayOfWeekFilter, null, null);
         //Call<List<Client>> call = cs.clientsFromTodayByVendIdService.ClientsFromTodayByVendIdService(idVendedor,orderBy,null);
 
         final ClientListActivity self_ = (ClientListActivity) getActivity();
@@ -136,7 +136,6 @@ public class ClientListFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Client>> call, Throwable t) {
-                //Aca tenemos que agregar el msj de error a mostrar... puto el que lee
                 TextView textNoClients = (TextView) _view.findViewById(R.id.text_no_clients);
                 textNoClients.setText("Hubo un error al cargar los clientes por favor reintente mas tarde");
                 textNoClients.setVisibility(View.VISIBLE);
