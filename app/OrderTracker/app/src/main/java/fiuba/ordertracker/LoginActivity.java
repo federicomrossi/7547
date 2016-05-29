@@ -39,7 +39,21 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Check if the user is already logged in.
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("OrderTrackerPref", 0);
+        int idVendedor = pref.getInt("id", 0);
+
+        if(idVendedor != 0){
+            Intent intent = new Intent(this, ClientListActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
+        // If it's not, the login screen is shown.
         setContentView(R.layout.activity_login);
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
 
@@ -145,6 +159,7 @@ public class LoginActivity extends AppCompatActivity {
                         User user = response.body();
                         Intent intent = new Intent(self_, ClientListActivity.class);
                         startActivity(intent);
+
                         SharedPreferences pref = getApplicationContext().getSharedPreferences("OrderTrackerPref", 0);
                         SharedPreferences.Editor editor = pref.edit();
                         editor.clear();
@@ -154,6 +169,7 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString("nombre",user.getNombreUsuario());
                         editor.putString("email",user.getEmail());
                         editor.commit();
+
                         finish();
                     }
                 }

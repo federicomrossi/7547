@@ -115,6 +115,18 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 args.putString("category", category);
                 args.putString("availability", currentClicked.stockState());
                 args.putString("stock", currentClicked.getStock());
+
+                args.putString("discount_1", currentClicked.getDescuento1());
+                args.putString("discount_1_min", currentClicked.getDescuento1Min());
+                args.putString("discount_2", currentClicked.getDescuento2());
+                args.putString("discount_2_min", currentClicked.getDescuento2Min());
+                args.putString("discount_3", currentClicked.getDescuento3());
+                args.putString("discount_3_min", currentClicked.getDescuento3Min());
+                args.putString("discount_4", currentClicked.getDescuento4());
+                args.putString("discount_4_min", currentClicked.getDescuento4Min());
+                args.putString("discount_5", currentClicked.getDescuento5());
+                args.putString("discount_5_min", currentClicked.getDescuento5Min());
+
                 System.out.println("*** set the stock ");
                 ProductDetailFragment productDetailFragment = new ProductDetailFragment();
                 productDetailFragment.setArguments(args);
