@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import fiuba.ordertracker.pojo.Agenda;
 import fiuba.ordertracker.pojo.Client;
 import fiuba.ordertracker.pojo.Order;
 import fiuba.ordertracker.services.ClientService;
@@ -47,6 +48,7 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
     private String agendaDate = null;
     private View view;
     private Client client;
+    private Agenda agenda = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +129,17 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
     //Call when the user clicks the button
     public void onClickShoppingCart(View view){
         // TODO Add logic to show QR scan or not !!
+
+
+        /*
+
+        if(this.agenda == null) {
+            // Use this.client
+        }
+
+        // Use this.agenda
+
+        */
         ArrayList<String> info = new ArrayList<String>();
         info.add(this.clientID);
         info.add(this.clientName);
@@ -141,6 +154,13 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
         final ClientDetailActivity self_ = this;
         final ArrayList<String> _info = info;
         final View _view = view;
+
+        if (this.agenda != null) {
+            System.out.println("******************************* onClickShoppingCart **************************************************");
+            System.out.println("****************** this.agenda.getIsOrderDone(): " + this.agenda.getIsOrderDone());
+            System.out.println("****************** this.agenda.getComment(): " + this.agenda.getComment());
+            System.out.println("******************************************************************************************************");
+        }
 
         call.enqueue(new Callback<Order>() {
             @Override
@@ -193,6 +213,13 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
             final Client _client = this.client;
             final String _agendaDate = this.agendaDate;
             final View _view = this.view;
+
+            if (this.agenda != null) {
+                System.out.println("**************************** onActivityResult ********************************************************");
+                System.out.println("****************** this.agenda.getIsOrderDone(): " + this.agenda.getIsOrderDone());
+                System.out.println("****************** this.agenda.getComment(): " + this.agenda.getComment());
+                System.out.println("******************************************************************************************************");
+            }
 
             if (this.clientID.equals(clientID)){
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
@@ -286,5 +313,30 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
         // Positioned camera to focus the marker
         CameraUpdate cu = CameraUpdateFactory.newLatLng(map_client_address);
         map.animateCamera(cu);
+    }
+
+    public void updateAgenda(Agenda agenda) {
+        this.agenda = agenda;
+    }
+
+    public void saveComment(String comment) {
+
+        ClientService clientService = ClientService.getInstance();
+        Call<Agenda> call = clientService.comment.AddComment(client.getAgendaId(), comment);
+        final ClientDetailActivity _this = this;
+
+        call.enqueue(new Callback<Agenda>() {
+            @Override
+            public void onResponse(Call<Agenda> call, Response<Agenda> response) {
+                _this.updateAgenda(response.body());
+                System.out.println("**** Stored comment: " + agenda.getComment());
+            }
+
+            @Override
+            public void onFailure(Call<Agenda> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+        Toast.makeText(this, "El comentario ha sido ingresado correctamente", Toast.LENGTH_LONG).show();
     }
 }

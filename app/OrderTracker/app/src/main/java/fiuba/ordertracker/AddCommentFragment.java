@@ -41,6 +41,7 @@ public class AddCommentFragment extends DialogFragment {
         TextView textCommentLabel = (TextView) v.findViewById(R.id.textCommentLabel);
         final EditText textComment = (EditText) v.findViewById(R.id.textComment);
         final View _view = v;
+        final ClientDetailActivity _activity = (ClientDetailActivity) this.getActivity();
 
         return new AlertDialog.Builder(getActivity())
                 .setView(v)
@@ -51,7 +52,10 @@ public class AddCommentFragment extends DialogFragment {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
-                                // Store comment
+                                _activity.saveComment(textComment.getText().toString());
+
+
+                                /*// Store comment
                                 ClientService clientService = ClientService.getInstance();
                                 Call<Agenda> call = clientService.comment.AddComment(client.getAgendaId(),textComment.getText().toString());
 
@@ -68,6 +72,7 @@ public class AddCommentFragment extends DialogFragment {
                                     }
                                 });
                                 Toast.makeText(_view.getContext(), "El comentario ha sido ingresado correctamente", Toast.LENGTH_LONG).show();
+                                */
                             }
                         })
 
