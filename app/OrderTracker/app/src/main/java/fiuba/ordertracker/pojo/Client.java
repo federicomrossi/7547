@@ -66,7 +66,7 @@ public class Client implements Comparable<Client> {
     private String comment;
     @SerializedName("pedido_hecho")
     @Expose
-    private String isOrderGenerated;
+    private Boolean isOrderGenerated;
     @SerializedName("id_orden")
     @Expose
     private String orderId;
@@ -297,11 +297,11 @@ public class Client implements Comparable<Client> {
         this.comment = comment;
     }
 
-    public String getIsOrderGenerated() {
+    public Boolean getIsOrderGenerated() {
         return isOrderGenerated;
     }
 
-    public void setIsOrderGenerated(String isOrderGenerated) {
+    public void setIsOrderGenerated(Boolean isOrderGenerated) {
         this.isOrderGenerated = isOrderGenerated;
     }
 

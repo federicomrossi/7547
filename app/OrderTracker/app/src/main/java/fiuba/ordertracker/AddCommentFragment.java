@@ -41,6 +41,7 @@ public class AddCommentFragment extends DialogFragment {
         TextView textCommentLabel = (TextView) v.findViewById(R.id.textCommentLabel);
         final EditText textComment = (EditText) v.findViewById(R.id.textComment);
         final View _view = v;
+        final ClientDetailActivity _activity = (ClientDetailActivity) this.getActivity();
 
         return new AlertDialog.Builder(getActivity())
                 .setView(v)
@@ -51,23 +52,15 @@ public class AddCommentFragment extends DialogFragment {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
 
-                                // Store comment
-                                ClientService clientService = ClientService.getInstance();
-                                Call<Agenda> call = clientService.comment.AddComment(client.getAgendaId(),textComment.getText().toString());
+                                String comment = textComment.getText().toString();
 
-                                call.enqueue(new Callback<Agenda>() {
-                                    @Override
-                                    public void onResponse(Call<Agenda> call, Response<Agenda> response) {
-                                        Agenda agenda = response.body();
-                                        System.out.println("**** Stored comment: " + agenda.getComment());
-                                    }
+                                if(comment.equals("")) {
+                                    Toast.makeText(_activity.getApplicationContext(), "La visita no ha sido registrada. El comentario no puede estar vacío.", Toast.LENGTH_LONG).show();
+                                    getDialog().dismiss();
+                                    return;
+                                }
 
-                                    @Override
-                                    public void onFailure(Call<Agenda> call, Throwable t) {
-                                        t.printStackTrace();
-                                    }
-                                });
-                                Toast.makeText(_view.getContext(), "El comentario ha sido ingresado correctamente", Toast.LENGTH_LONG).show();
+                                _activity.saveComment(textComment.getText().toString());
                             }
                         })
 
