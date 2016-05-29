@@ -128,7 +128,6 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
 
     //Call when the user clicks the button
     public void onClickShoppingCart(View view){
-        // TODO Add logic to show QR scan or not !!
 
         final String fechaVisitaConcretada;
         final String comment;
@@ -145,6 +144,12 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
             fechaVisitaConcretada = this.agenda.getFechaVisitaConcretada();
             comment = this.agenda.getComment();
             isOrderDone = this.agenda.getIsOrderGenerated();
+        }
+
+        // Order validation
+        if(fechaVisitaConcretada != null && !isOrderDone && !comment.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "No es posible generar un pedido. La visita ya ha sido registrada previamente.", Toast.LENGTH_LONG).show();
+            return;
         }
 
 
@@ -168,15 +173,6 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
             public void onResponse(Call<Order> call, Response<Order> response) {
                 System.out.println("****************** onResponse ClientDetailActivityActivity *********************");
                 Order activeOrder;
-
-                // Order validation
-                if(fechaVisitaConcretada != null && !isOrderDone && !comment.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "No es posible generar un pedido. La visita ya ha sido registrada previamente.", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                /*if(!fechaVisitaConcretada.equals("") && isOrderDone) {
-
-                }*/
 
                 if (response.code() == 500) {
                     // No se tiene un pedido activo...
