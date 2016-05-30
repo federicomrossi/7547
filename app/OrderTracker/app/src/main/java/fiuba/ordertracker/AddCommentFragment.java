@@ -68,7 +68,6 @@ public class AddCommentFragment extends DialogFragment {
                 .setNegativeButton(R.string.cancel,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                System.out.println("******* AddCommentFragment - Cancel Button");
                                 getDialog().dismiss();
                             }
                         }

@@ -85,9 +85,6 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
         SharedPreferences pref = getApplicationContext().getSharedPreferences("OrderTrackerPref", 0);
         int vendedorID = pref.getInt("id", 0);
 
-        System.out.println("***** this.clientID: " + this.clientID);
-        System.out.println("***** this.agendaDate: " + this.agendaDate);
-
         // Populate client attribute
         ClientService clientService = ClientService.getInstance();
         Call<List<Client>> call = clientService.clients.Clients(this.clientID, String.valueOf(vendedorID), null, null, null,
@@ -97,7 +94,7 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
             @Override
             public void onResponse(Call<List<Client>> call, Response<List<Client>> response) {
                 List<Client> clientsList = response.body();
-                System.out.println("clientsList: " + clientsList);
+
                 for (Client c : clientsList) {
                     client = c;
                 }
@@ -171,7 +168,7 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
         call.enqueue(new Callback<Order>() {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
-                System.out.println("****************** onResponse ClientDetailActivityActivity *********************");
+
                 Order activeOrder;
 
                 if (response.code() == 500) {
@@ -209,10 +206,8 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanResult != null) {
-            System.out.println("******* SCAN OK *******");
 
             String clientID = scanResult.getContents();
-            System.out.println("*** ClientID: " + clientID);
 
             final String _clientName = this.clientName;
             final String _clientID = this.clientID;
@@ -221,10 +216,7 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
             final View _view = this.view;
 
             if (this.agenda != null) {
-                System.out.println("**************************** onActivityResult ********************************************************");
-                System.out.println("****************** this.agenda.getIsOrderDone(): " + this.agenda.getIsOrderGenerated());
-                System.out.println("****************** this.agenda.getComment(): " + this.agenda.getComment());
-                System.out.println("******************************************************************************************************");
+
             }
 
             if (this.clientID.equals(clientID)){
@@ -235,7 +227,6 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
                 alertDialog.setPositiveButton(R.string.new_order,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                System.out.println("*** New Order button ***");
                                 dialog.dismiss();
                                 Intent intent2 = new Intent(getApplicationContext(), TabActivity.class);
                                 intent2.putExtra("clientName", _clientName);
@@ -249,7 +240,6 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
                 alertDialog.setNegativeButton(R.string.new_comment,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                System.out.println("*** Comment button ***");
 
                                 FragmentTransaction ft = ((Activity) _view.getContext()).getFragmentManager().beginTransaction();
                                 AddCommentFragment commentFragment = AddCommentFragment.newInstance(_client);
@@ -262,7 +252,6 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
                 alertDialog.setNeutralButton(R.string.cancel,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                System.out.println("*** Cancel button ***");
                                 dialog.dismiss();
                             }
                         }
@@ -275,7 +264,6 @@ public class ClientDetailActivity extends AppCompatActivity implements OnMapRead
             }
 
         } else{
-            System.out.println("******* SCAN NOT OK ? *******");
             Toast.makeText(getApplicationContext(), "Error de lectura de código QR", Toast.LENGTH_LONG).show();
             super.onActivityResult(requestCode, resultCode, intent);
         }

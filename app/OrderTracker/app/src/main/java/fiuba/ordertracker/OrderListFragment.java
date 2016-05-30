@@ -402,7 +402,6 @@ public class OrderListFragment extends Fragment  implements Observer {
 
     @Override
     public void update(Observable observable, Object data) {
-        System.out.println("notificadoooooo");
         this.getProductsFromActiveOrderCall();
     }
 

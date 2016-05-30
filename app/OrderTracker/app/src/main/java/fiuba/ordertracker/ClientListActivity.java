@@ -282,7 +282,7 @@ public class ClientListActivity extends AppCompatActivity
 
     // When the user clicks the "Ver carrito" button
     public void onClickViewShoppingCart(View view) {
-        System.out.println("**** View shopping cart ****");
+
     }
 
     public ClientListFragment getCurrentTab() {

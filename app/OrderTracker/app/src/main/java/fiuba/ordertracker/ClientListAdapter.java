@@ -82,11 +82,6 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         holder.clientCode.setText(current.getCode());
         holder.distance.setText(String.valueOf(current.getDistance(currentLatitude, currentLongitude)) + " " + Constants.COMPLETE_UNIT);
 
-        System.out.println("***** client.agendaId: " + current.getAgendaId());
-        System.out.println("***** client.comment: " + current.getComment());
-        System.out.println("***** client.isOrderGenerated: " + current.getIsOrderGenerated());
-        System.out.println("***** client.orderId: " + current.getOrderId());
-
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date fechaVisitaProgramada = null;
         Date fechaVisitaConcretada = null;
@@ -130,7 +125,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         holder.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                System.out.println("*********** Click on item ***********");
+
                 Client selectedClient = data.get(position);
                 Intent intent = new Intent(view.getContext(), ClientDetailActivity.class);
                 intent.putExtra("clientID", selectedClient.getId());

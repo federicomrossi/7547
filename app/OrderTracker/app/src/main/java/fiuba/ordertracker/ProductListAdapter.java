@@ -89,7 +89,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         holder.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                System.out.println("*********** Click on item ***********");
                 Product currentClicked = data.get(position);
 
                 /*Intent intent = new Intent(view.getContext(), ProductDetailActivity.class);
@@ -127,7 +126,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 args.putString("discount_5", currentClicked.getDescuento5());
                 args.putString("discount_5_min", currentClicked.getDescuento5Min());
 
-                System.out.println("*** set the stock ");
                 ProductDetailFragment productDetailFragment = new ProductDetailFragment();
                 productDetailFragment.setArguments(args);
                 instanceFragment.replaceFragment(productDetailFragment, true); // it was false, I changed it
@@ -169,7 +167,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    System.out.println("******** AGREGAR ********");
                     FragmentTransaction ft = ((Activity) itemView.getContext()).getFragmentManager().beginTransaction();
                     AddProductToCartFragment newFragment = AddProductToCartFragment.newInstance(_product);
                     newFragment.show(ft, "dialog");

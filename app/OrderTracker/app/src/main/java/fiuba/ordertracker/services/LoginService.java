@@ -55,7 +55,6 @@ public final class LoginService {
         // Fetch and print a list of the contributors to the library.
         User user = call.execute().body();
 
-        System.out.println(user);
 
 
     }

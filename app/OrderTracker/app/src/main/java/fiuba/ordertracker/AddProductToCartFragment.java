@@ -108,7 +108,6 @@ public class AddProductToCartFragment extends DialogFragment {
                                     // New dialog
                                     View view = inflater.inflate(R.layout.fragment_not_enough_stock, null);
 
-                                    System.out.println("getActivity() = " + getActivity());
                                     // Dialog that informs that there is not enough stock
                                     new AlertDialog.Builder(getActivity())
                                             .setView(view)

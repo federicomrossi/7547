@@ -80,16 +80,16 @@ public final class ClientService {
         // Fetch and print a list of the contributors to the library.
         List<Client> clientList = call.execute().body();
         for (Client client : clientList) {
-            System.out.println(client.getApenom() + " (" + client.getDireccion() + ")");
+            //System.out.println(client.getApenom() + " (" + client.getDireccion() + ")");
         }
 
-        System.out.println("||||||||||||||||||||||||||||||||||||||||");
+
 
         call = cs.clients.Clients(null, null,null,null,null,null,null,null,null);
 
         clientList = call.execute().body();
         for (Client client : clientList) {
-            System.out.println(client.getApenom() + " (" + client.getDireccion() + ")");
+            //System.out.println(client.getApenom() + " (" + client.getDireccion() + ")");
         }
     }
 }

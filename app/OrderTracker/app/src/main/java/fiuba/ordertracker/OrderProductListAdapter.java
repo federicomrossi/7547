@@ -126,7 +126,6 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
         holder.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                System.out.println("*********** Click on item ***********");
 
                 /*Intent intent = new Intent(view.getContext(), ProductDetailActivity.class);
                 intent.putExtra("url_image_normal", data.get(position).getUrlImageNormal()); // TODO show picture

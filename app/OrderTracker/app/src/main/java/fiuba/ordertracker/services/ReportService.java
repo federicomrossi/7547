@@ -53,9 +53,5 @@ public final class ReportService {
 
         // Fetch and print a list of the contributors to the library.
         Report report = call.execute().body();
-
-        System.out.println(report.getClientsNotOnRoute() + " (" + report.getTotalProductos() + ")" + " " + report.getClientsOnRoute() + " " + report.getTotalMoney());
-
-
     }
 }

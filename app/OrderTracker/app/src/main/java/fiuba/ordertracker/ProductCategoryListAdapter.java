@@ -69,7 +69,7 @@ public class ProductCategoryListAdapter extends RecyclerView.Adapter<ProductCate
         holder.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                System.out.println("*********** Click on item ***********");
+
                 Categorie currentClicked = data.get(position);
 
                 /*Intent intent = new Intent(view.getContext(), ProductListActivity.class);

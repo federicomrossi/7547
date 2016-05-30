@@ -79,7 +79,6 @@ public class TabActivity extends AppCompatActivity
         call.enqueue(new Callback<Order>() {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
-                System.out.println("****************** onResponse TabActivity *********************");
                 Order activeOrder;
                 //progressBar.setVisibility(View.GONE);
                 if(response.code() == 500){
@@ -95,7 +94,6 @@ public class TabActivity extends AppCompatActivity
             @Override
             public void onFailure(Call<Order> call, Throwable t) {
                 //Aca tenemos que agregar el msj de error a mostrar...
-                System.out.println("****************** onFailure TabActivity 1 *********************");
                 TextView textNoClients = (TextView) findViewById(R.id.text_no_products);
                 textNoClients.setText("Hubo un error al cargar el pedido, por favor reintente más tarde");
                 textNoClients.setVisibility(View.VISIBLE);
@@ -139,7 +137,6 @@ public class TabActivity extends AppCompatActivity
             @Override
             public void onFailure(Call<Order> call, Throwable t) {
                 //Aca tenemos que agregar el msj de error a mostrar...
-                System.out.println("****************** onFailure TabActivity 2 *********************");
                 TextView textNoClients = (TextView) findViewById(R.id.text_no_products);
                 textNoClients.setText("Hubo un error al cargar el pedido, por favor reintente más tarde");
                 textNoClients.setVisibility(View.VISIBLE);
@@ -194,7 +191,6 @@ public class TabActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        System.out.println("*********** onBackPressed() **************");
         // if there is a fragment and the back stack of this fragment is not empty,
         // then we have to emulate the 'onBackPressed' behaviour (BUG) :(
         FragmentManager fm = getSupportFragmentManager();

@@ -50,7 +50,6 @@ public class RegistrationIntentService extends IntentService {
                         // Get result Repo from response.body()
                         Log.i("Token registred", "Token: ");
                         TokenPush token = response.body();
-                        System.out.println("Token registred : " + token.getIdUser() + " " + token.getToken());
                     }
 
                     @Override

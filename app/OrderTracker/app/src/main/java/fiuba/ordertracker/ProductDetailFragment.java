@@ -152,7 +152,7 @@ public class ProductDetailFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("******** AGREGAR button ********");
+
                 FragmentTransaction ft = ((Activity) view.getContext()).getFragmentManager().beginTransaction();
                 AddProductToCartFragment newFragment = AddProductToCartFragment.newInstance(productId,
                         productName, productBrand, productStock);
