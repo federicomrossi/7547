@@ -13,6 +13,9 @@
     <string name="confirm">Confirmar</string>
     <string name="cancel">Cancelar</string>
     <string name="add_product">Agregar producto</string>
+    <string name="new_order">Ingresar pedido</string>
+    <string name="new_comment">Ingresar comentario</string>
+    <string name="accept">Aceptar</string>
 
     <string name="title_activity_login">Iniciar sesión</string>
 

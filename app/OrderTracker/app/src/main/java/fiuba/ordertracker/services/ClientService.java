@@ -4,11 +4,15 @@ import java.io.IOException;
 import java.util.List;
 
 import fiuba.ordertracker.helpers.Constants;
+import fiuba.ordertracker.pojo.Agenda;
 import fiuba.ordertracker.pojo.Client;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -19,6 +23,7 @@ import retrofit2.http.Query;
 public final class ClientService {
     public ClientsFromTodayByVendIdService clientsFromTodayByVendIdService;
     public Clients  clients;
+    public Comment comment;
     private static ClientService instance = null;
 
     private ClientService(){
@@ -31,6 +36,7 @@ public final class ClientService {
         // Create an instance of our GitHub API interface.
         clientsFromTodayByVendIdService = retrofit.create(ClientsFromTodayByVendIdService.class);
         clients = retrofit.create(Clients.class);
+        comment = retrofit.create(Comment.class);
     }
 
     public static synchronized ClientService getInstance() {
@@ -52,11 +58,17 @@ public final class ClientService {
     public interface Clients {
         @GET("client")
         //fecha_visita: YYYY-MM-DD Ej: '2016-04-22'
-        Call<List<Client>> Clients(@Query("id_vendedor") String id_vendedor, @Query("razon_social%") String razon_social, @Query("orderby") String orderby,
+        Call<List<Client>> Clients(@Query("id") String id, @Query("id_vendedor") String id_vendedor, @Query("razon_social%") String razon_social, @Query("orderby") String orderby,
                                    @Query("orientation") String orientation, @Query("cod_cliente%") String codCliente, @Query("fecha_visita") String fecha_visita,
                                    @Query("fecha_visita_programada") String fecha_visita_programada, @Query("fecha_visita_concretada") String fecha_visita_concretada);
     }
 
+    //Store comment
+    public interface Comment {
+        @FormUrlEncoded
+        @POST("client/noOrderComment")
+        Call<Agenda> AddComment(@Field("id_agenda") String id_agenda, @Field("comentario") String comentario);
+    }
 
 
     public static void main(String... args) throws IOException {
@@ -73,7 +85,7 @@ public final class ClientService {
 
         System.out.println("||||||||||||||||||||||||||||||||||||||||");
 
-        call = cs.clients.Clients(null,null,null,null,null,null,null,null);
+        call = cs.clients.Clients(null, null,null,null,null,null,null,null,null);
 
         clientList = call.execute().body();
         for (Client client : clientList) {

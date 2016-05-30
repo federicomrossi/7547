@@ -134,7 +134,7 @@ public class ClientsMapActivity extends FragmentActivity implements OnMapReadyCa
         SharedPreferences pref = getApplicationContext().getSharedPreferences("OrderTrackerPref", 0);
         int idVendedor = pref.getInt("id", 0);
 
-        Call<List<Client>> call = clientService.clients.Clients(Integer.toString(idVendedor), null, null, null, null, this.agendaDate, null, null);
+        Call<List<Client>> call = clientService.clients.Clients(null, Integer.toString(idVendedor), null, null, null, null, this.agendaDate, null, null);
         final ClientsMapActivity _self = this;
         final GoogleMap _googleMap = googleMap;
 
