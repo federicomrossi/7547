@@ -59,6 +59,15 @@ public class OrderProduct{
     @SerializedName("url_image_mini")
     @Expose
     private String urlImageMini;
+    @SerializedName("subtotal_sin_descuento")
+    @Expose
+    private String subtotalWithoutDiscount;
+    @SerializedName("descuento_realizado")
+    @Expose
+    private String appliedDiscount;
+    @SerializedName("subtotal_con_descuento")
+    @Expose
+    private String subtotalWithDiscount;
 
     public String getUrlImageNormal() {
         return urlImageNormal;
@@ -290,6 +299,30 @@ public class OrderProduct{
 
     public void setStock(String stock) {
         this.stock = stock;
+    }
+
+    public String getSubtotalWithoutDiscount() {
+        return subtotalWithoutDiscount;
+    }
+
+    public void setSubtotalWithoutDiscount(String subtotalWithoutDiscount) {
+        this.subtotalWithoutDiscount = subtotalWithoutDiscount;
+    }
+
+    public String getAppliedDiscount() {
+        return appliedDiscount;
+    }
+
+    public void setAppliedDiscount(String appliedDiscount) {
+        this.appliedDiscount = appliedDiscount;
+    }
+
+    public String getSubtotalWithDiscount() {
+        return subtotalWithDiscount;
+    }
+
+    public void setSubtotalWithDiscount(String subtotalWithDiscount) {
+        this.subtotalWithDiscount = subtotalWithDiscount;
     }
 
     public String stockState(){

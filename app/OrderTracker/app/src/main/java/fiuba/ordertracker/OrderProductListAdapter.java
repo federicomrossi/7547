@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.PopupMenu;
@@ -20,8 +21,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import fiuba.ordertracker.helpers.ImageLoadTask;
 import fiuba.ordertracker.pojo.Categorie;
@@ -88,8 +91,26 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
         holder.setProduct(current);
         holder.nameAndBrand.setText(current.getNombre() + ", " + current.getMarca());
         holder.category.setText(getProductCategory(current.getCategoria()).getNombre());
-        holder.price.setText(current.getPrecio());
         holder.productAmount.setText(current.getCantidad());
+
+        // Price formatter
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("es_AR"));
+        currencyFormatter.setMaximumFractionDigits(2);
+
+        // Set price with discount
+        String appliedDiscount = current.getAppliedDiscount();
+
+        // Format subtotal including discount
+        Double subtotalWithDiscount = Double.parseDouble(current.getSubtotalWithDiscount());
+        holder.price.setText(currencyFormatter.format(subtotalWithDiscount));
+
+        // Set price without discount
+        if (appliedDiscount.equals("0")){
+            holder.noDiscountAmount.setVisibility(View.GONE);
+        } else {
+            Double subtotalWithoutDiscount = Double.parseDouble(current.getSubtotalWithoutDiscount());
+            holder.noDiscountAmount.setText("(" + currencyFormatter.format(subtotalWithoutDiscount) + ")");
+        }
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -105,7 +126,6 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
         holder.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                System.out.println("*********** Click on item ***********");
 
                 /*Intent intent = new Intent(view.getContext(), ProductDetailActivity.class);
                 intent.putExtra("url_image_normal", data.get(position).getUrlImageNormal()); // TODO show picture
@@ -129,6 +149,7 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
         TextView nameAndBrand, description, category, price, stock;
         ImageView thumbnail;
         TextView productAmount;
+        TextView noDiscountAmount;
         ImageView mOverflowIcon;
 
         private OnItemClickListener clickListener;
@@ -154,6 +175,10 @@ public class OrderProductListAdapter extends RecyclerView.Adapter<OrderProductLi
             stock = (TextView) itemView.findViewById(R.id.product_list_row_stock);
             thumbnail = (ImageView) itemView.findViewById(R.id.product_list_row_thumbnail);
             productAmount = (TextView) itemView.findViewById(R.id.textProductAmount);
+
+            noDiscountAmount = (TextView) itemView.findViewById(R.id.textNoDiscountAmount);
+            noDiscountAmount.setPaintFlags(noDiscountAmount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
             // Set listener to the item view
             itemView.setOnClickListener(this);
         }

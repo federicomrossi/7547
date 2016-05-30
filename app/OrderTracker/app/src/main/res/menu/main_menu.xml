@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:theme="@style/CustomToolbarMenu">
+
+    <item android:id="@+id/action_report"
+    android:orderInCategory="100"
+    android:title="Reporte"
+    android:icon="@drawable/ic_trending_up_white_24dp"
+    app:showAsAction="ifRoom|collapseActionView" />
+
+    <item android:id="@+id/action_logout"
+        android:title="Cerrar sesión"
+        android:icon="@drawable/ic_exit_to_app_white_24dp"
+        app:showAsAction="never" />
 
     <!--<item android:id="@+id/action_search"
         android:orderInCategory="100"

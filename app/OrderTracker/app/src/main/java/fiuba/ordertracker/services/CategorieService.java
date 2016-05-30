@@ -54,7 +54,7 @@ public final class CategorieService {
         // Fetch and print a list of the contributors to the library.
         List<Categorie> clientList = call.execute().body();
         for (Categorie client : clientList) {
-            System.out.println(client.getDescripcion() + " (" + client.getId() + ")");
+
         }
 
     }

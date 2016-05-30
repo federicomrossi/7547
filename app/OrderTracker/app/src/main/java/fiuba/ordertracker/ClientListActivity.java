@@ -1,5 +1,8 @@
 package fiuba.ordertracker;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,7 +12,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -24,25 +26,22 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.content.Intent;
+import android.widget.Toast;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.iid.InstanceID;
+
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import fiuba.ordertracker.helpers.FiltersHelper;
 import fiuba.ordertracker.helpers.Fonts;
-import fiuba.ordertracker.pojo.Client;
-import fiuba.ordertracker.pojo.Product;
-import fiuba.ordertracker.services.ClientService;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import fiuba.ordertracker.services.RegistrationIntentService;
 
 public class ClientListActivity extends AppCompatActivity
         implements ClientListFragment.OnFragmentInteractionListener {
@@ -57,11 +56,16 @@ public class ClientListActivity extends AppCompatActivity
     private Intent intent;
 
     private Boolean filterWasUsed = false;
+    boolean resumeFromCreate = false;
+
+    public static final int OPEN_NEW_ACTIVITY = 123456;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_list);
+
+        this.resumeFromCreate = true;
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -230,6 +234,28 @@ public class ClientListActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
+
+        // Report item
+        if(id == R.id.action_report) {
+            // Open the report activity
+            Intent intent = new Intent(this, ReportActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        // Logout item
+        else if (id == R.id.action_logout) {
+            SharedPreferences pref = getApplicationContext().getSharedPreferences("OrderTrackerPref", 0);
+            SharedPreferences.Editor editor = pref.edit();
+            editor.clear();
+            editor.commit();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+            //Toast.makeText(this, "Sesión cerrada!", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -256,7 +282,7 @@ public class ClientListActivity extends AppCompatActivity
 
     // When the user clicks the "Ver carrito" button
     public void onClickViewShoppingCart(View view) {
-        System.out.println("**** View shopping cart ****");
+
     }
 
     public ClientListFragment getCurrentTab() {
@@ -292,4 +318,47 @@ public class ClientListActivity extends AppCompatActivity
 
         view.getContext().startActivity(intent);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Check if is the first time the activity is created to avoid
+        // multiple creation of the fragments.
+        if(this.resumeFromCreate) {
+            this.resumeFromCreate = false;
+            return;
+        }
+
+        if(this.getCurrentTab() != null) {
+            // Reload the clients list
+            this.getCurrentTab().reloadClients();
+            // Apply the filters again
+            this.getCurrentTab().executeFiltering(this.getFiltersValues());
+        }
+    }
+
+    /**
+     * Receiving push messages
+     * */
+    private final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String newMessage = intent.getExtras().getString("message");
+            // Waking up mobile if it is sleeping
+            WakeLocker.acquire(getApplicationContext());
+
+            /**
+             * Take appropriate action on this message
+             * depending upon your app requirement
+             * For now i am just displaying it on the screen
+             * */
+
+            // Showing received message
+            Toast.makeText(getApplicationContext(), "New Message: " + newMessage, Toast.LENGTH_LONG).show();
+
+            // Releasing wake lock
+            WakeLocker.release();
+        }
+    };
 }

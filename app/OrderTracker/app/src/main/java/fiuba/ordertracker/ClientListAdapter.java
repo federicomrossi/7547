@@ -2,16 +2,22 @@ package fiuba.ordertracker;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import fiuba.ordertracker.helpers.Constants;
@@ -57,11 +63,6 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         for(int i = 0; i < this.data.size(); i++) {
             this.data.get(i).setDistance(currentLatitude, currentLongitude);
         }
-
-        // Show message notifying there are no clients
-        /*if (this.data.size() == 0){
-            Toast.makeText(context, "No hay clientes en el sistema", Toast.LENGTH_LONG).show();
-        }*/
     }
 
     @Override
@@ -81,13 +82,50 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         holder.clientCode.setText(current.getCode());
         holder.distance.setText(String.valueOf(current.getDistance(currentLatitude, currentLongitude)) + " " + Constants.COMPLETE_UNIT);
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date fechaVisitaProgramada = null;
+        Date fechaVisitaConcretada = null;
+        Date today =  null;
+
+        try {
+            fechaVisitaProgramada = (current.getFechaVisitaProgramada() != null) ? sdf.parse(current.getFechaVisitaProgramada()) : null;
+            fechaVisitaConcretada = (current.getFechaVisitaConcretada() != null) ? sdf.parse(current.getFechaVisitaConcretada()) : null;
+            today = sdf.parse(sdf.format(new Date()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        // Out of road
+        if(this.dateToFilter == null) {
+            holder.hideIndicator();
+        }
+        // With a given appointment
+        else {
+            if((fechaVisitaProgramada != null) && (fechaVisitaConcretada == null)) {
+                if(fechaVisitaProgramada.equals(today))
+                    holder.setIndicatorStateAsNotVisited();
+                else
+                    holder.setIndicatorStateAsDefault();
+            }
+            else if(fechaVisitaProgramada.equals(fechaVisitaConcretada)) {
+                holder.setIndicatorStateAsVisited();
+            }
+            else if((fechaVisitaConcretada.before(fechaVisitaProgramada)) ||
+                    (fechaVisitaConcretada.after(fechaVisitaProgramada))) {
+                holder.setIndicatorStateAsVisitedOutOfTime();
+            }
+            else {
+                holder.setIndicatorStateAsDefault();
+            }
+        }
+
         final String _dateToFilter = this.dateToFilter;
 
         // Set listener to manage clicks on items from the RecyclerView
         holder.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                System.out.println("*********** Click on item ***********");
+
                 Client selectedClient = data.get(position);
                 Intent intent = new Intent(view.getContext(), ClientDetailActivity.class);
                 intent.putExtra("clientID", selectedClient.getId());
@@ -116,6 +154,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
         TextView distance;
         private String dateToFilter;
         private OnItemClickListener clickListener;
+        ImageView indicator;
 
         private Client client;
 
@@ -126,6 +165,7 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
             address = (TextView) itemView.findViewById(R.id.client_list_row_address);
             clientCode = (TextView) itemView.findViewById(R.id.client_list_row_client_code);
             distance = (TextView) itemView.findViewById(R.id.client_list_row_distance);
+            indicator = (ImageView) itemView.findViewById(R.id.indicatorClientVisited);
             this.dateToFilter = agendaDate;
 
             // Set listener to the item view
@@ -136,23 +176,37 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
             this.client = c;
             final Client _client = this.client;
             final String _dateToFilter = this.dateToFilter;
+        }
 
-            // ELIMINAR!!!
-           /* Button button = (Button) itemView.findViewById(R.id.client_list_goto_order);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(itemView.getContext(), TabActivity.class);
+        private void changeIndicatorColor(String colorHex) {
+            int color = Color.parseColor(colorHex);
+            this.indicator.setColorFilter(color);
+        }
 
-                    Bundle b = new Bundle();
-                    b.putString("clientName", _client.getSocialReason());
-                    b.putString("clientID", _client.getId());
-                    b.putString("agendaDate", _dateToFilter);
-                    intent.putExtras(b);
+        public void setIndicatorStateAsDefault() {
+            this.changeIndicatorColor(Constants.COLOR_INDICATOR_DEFAULT);
+        }
 
-                    itemView.getContext().startActivity(intent);
-                }
-            });*/
+        public void setIndicatorStateAsVisited() {
+            this.changeIndicatorColor(Constants.COLOR_INDICATOR_VISITED);
+        }
+
+        public void setIndicatorStateAsVisitedOutOfTime() {
+            int color = Color.parseColor(Constants.COLOR_INDICATOR_VISITED_OUT_OF_TIME);
+            this.indicator.setColorFilter(color);
+        }
+
+        public void setIndicatorStateAsNotVisited() {
+            int color = Color.parseColor(Constants.COLOR_INDICATOR_NOT_VISITED);
+            this.indicator.setColorFilter(color);
+        }
+
+        public void hideIndicator() {
+            this.indicator.setVisibility(View.GONE);
+        }
+
+        public void showIndicator() {
+            this.indicator.setVisibility(View.VISIBLE);
         }
 
         public void setOnItemClickListener(OnItemClickListener clickListener) {
@@ -175,7 +229,5 @@ public class ClientListAdapter extends RecyclerView.Adapter<ClientListAdapter.My
          * @param position of the clicked item
          */
         public void onItemClick(View view, int position);
-
     }
-
 }

@@ -3,22 +3,22 @@ package fiuba.ordertracker.services;
 import java.io.IOException;
 
 import fiuba.ordertracker.helpers.Constants;
-import fiuba.ordertracker.pojo.User;
+import fiuba.ordertracker.pojo.Report;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.POST;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
 
 /**
- * Created by pablo on 26/3/2016.
+ * Created by pablo on 25/5/2016.
  */
-public final class LoginService {
-    public Login  login;
-    private static LoginService instance = null;
 
-    private LoginService(){
+public final class ReportService {
+    public GetReport  getReport;
+    private static ReportService instance = null;
+
+    private ReportService(){
         // Create a very simple REST adapter which points the GitHub API.
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.URL_SERVER)
@@ -26,36 +26,32 @@ public final class LoginService {
                 .build();
 
         // Create an instance of our GitHub API interface.
-        login = retrofit.create(Login.class);
+        getReport = retrofit.create(GetReport.class);
     }
 
-    public static synchronized LoginService getInstance() {
+    public static synchronized ReportService getInstance() {
         if (instance == null) {
-            instance = new LoginService();
+            instance = new ReportService();
         }
 
         return instance;
     }
 
     //categorias
-    public interface Login {
-        @FormUrlEncoded
-        @POST("login")
-        Call<User> login(@Field("email") String username, @Field("password") String password);
+    public interface GetReport {
+        @GET("report/getReport/{id}")
+        Call<Report> GetReport(@Path("id") int vendId);
     }
 
 
 
     public static void main(String... args) throws IOException {
-        LoginService loginService = LoginService.getInstance();
+        ReportService cats = ReportService.getInstance();
 
         // Create a call instance for looking up Retrofit contributors.
-        Call<User> call = loginService.login.login("pabloqac87@gmail.com","12345");
+        Call<Report> call = cats.getReport.GetReport(1);
 
         // Fetch and print a list of the contributors to the library.
-        User user = call.execute().body();
-
-
-
+        Report report = call.execute().body();
     }
 }

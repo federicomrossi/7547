@@ -58,7 +58,7 @@ public final class ProductService {
         // Fetch and print a list of the contributors to the library.
         List<Product> clientList = call.execute().body();
         for (Product client : clientList) {
-            System.out.println(client.getDescripcion() + " (" + client.getId() + ")");
+            //System.out.println(client.getDescripcion() + " (" + client.getId() + ")");
         }
 
     }

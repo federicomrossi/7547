@@ -335,8 +335,17 @@ public class OrderListFragment extends Fragment  implements Observer {
                             buttonConfirm.setEnabled(false);
                         } else {
                             Double subtotal = 0d;
+                            Double subtotalDiscounts = 0d;
                             for (OrderProduct orderProduct : _listProducts) {
-                                subtotal += orderProduct.getSubtotal();
+                                //System.out.println("******* orderProduct.getAppliedDiscount(): " + orderProduct.getAppliedDiscount());
+                                //System.out.println("******* orderProduct.getSubtotalWithDiscount(): " + orderProduct.getSubtotalWithDiscount());
+                                //System.out.println("******* orderProduct.getSubtotalWithoutDiscount(): " + orderProduct.getSubtotalWithoutDiscount());
+
+                                subtotal += orderProduct.getSubtotal() - Double.parseDouble(orderProduct.getAppliedDiscount());
+                                subtotalDiscounts += Double.parseDouble(orderProduct.getAppliedDiscount());
+
+                                //System.out.println("******* Total producto: " + subtotal);
+                                //System.out.println("******* Subtotal acumulado de descuentos: " + subtotalDiscounts + "\n");
                             }
 
                             NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("es_AR"));
@@ -393,7 +402,6 @@ public class OrderListFragment extends Fragment  implements Observer {
 
     @Override
     public void update(Observable observable, Object data) {
-        System.out.println("notificadoooooo");
         this.getProductsFromActiveOrderCall();
     }
 
