@@ -337,4 +337,28 @@ public class ClientListActivity extends AppCompatActivity
             this.getCurrentTab().executeFiltering(this.getFiltersValues());
         }
     }
+
+    /**
+     * Receiving push messages
+     * */
+    private final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String newMessage = intent.getExtras().getString("message");
+            // Waking up mobile if it is sleeping
+            WakeLocker.acquire(getApplicationContext());
+
+            /**
+             * Take appropriate action on this message
+             * depending upon your app requirement
+             * For now i am just displaying it on the screen
+             * */
+
+            // Showing received message
+            Toast.makeText(getApplicationContext(), "New Message: " + newMessage, Toast.LENGTH_LONG).show();
+
+            // Releasing wake lock
+            WakeLocker.release();
+        }
+    };
 }
