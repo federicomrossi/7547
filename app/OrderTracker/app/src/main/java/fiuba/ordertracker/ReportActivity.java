@@ -58,8 +58,6 @@ public class ReportActivity extends AppCompatActivity {
             public void onFailure(Call<Report> call, Throwable t) {
                 // TODO
             }
-
         });
-
     }
 }

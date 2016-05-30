@@ -41,3 +41,5 @@ dependencies {
     compile 'com.android.support:design:23.2.1'
     compile 'com.android.support:multidex:1.0.1'
 }
+
+apply plugin: 'com.google.gms.google-services'
