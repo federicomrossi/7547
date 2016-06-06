@@ -16,8 +16,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.NumberFormat;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import fiuba.ordertracker.helpers.ImageLoadTask;
 import fiuba.ordertracker.pojo.Categorie;
@@ -79,7 +81,13 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         holder.setProduct(current);
         holder.nameAndBrand.setText(current.getNombre() + ", " + current.getMarca());
         holder.category.setText(this.category);
-        holder.price.setText(current.getPrecio());
+
+        // Price formatter
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("es_AR"));
+        currencyFormatter.setMaximumFractionDigits(2);
+        Double formattedPrice = Double.parseDouble(current.getPrecio());
+        holder.price.setText(currencyFormatter.format(formattedPrice));
+
         holder.stock.setText(current.stockState());
         new ImageLoadTask(current.getUrlImageMini(), holder.thumbnail).execute();
 
