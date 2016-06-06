@@ -15,6 +15,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 import fiuba.ordertracker.helpers.ImageLoadTask;
 
 
@@ -138,7 +141,13 @@ public class ProductDetailFragment extends Fragment {
         name.setText(getArguments().getString("name"));
         brand.setText(getArguments().getString("brand"));
         description.setText(getArguments().getString("description"));
-        price.setText("$ " + getArguments().getString("price"));
+
+        // Price formatter
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(new Locale("es_AR"));
+        currencyFormatter.setMaximumFractionDigits(2);
+        Double formattedPrice = Double.parseDouble(getArguments().getString("price"));
+        price.setText(currencyFormatter.format(formattedPrice));
+
         category.setText(getArguments().getString("category"));
         availability.setText(getArguments().getString("availability"));
         new ImageLoadTask(getArguments().getString("url_image_normal"), image).execute();
